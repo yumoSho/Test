@@ -1,0 +1,70 @@
+var $g = $('#datagrid').jqGrid({
+    url: 'list',
+    datatype: 'json',
+    colNames: ['操作', 'id','商品编号','商品名称','折扣','开始时间','结束时间','排序','添加时间'],
+    colModel: [
+        { template: 'actions2' },
+        { name: 'id', index: 'id', hidden: true, key: true ,align: 'center'},
+        { name: 'goods.sn', index: 'tg.sn', template: 'text', align: 'left',width:230},
+        { name: 'goods.title', index: 'tg.title', template: 'text', align: 'left',width:230},
+        { name: 'discount', index: 'ag.discount', template: 'text', align: 'left',width:220},
+        { name: 'startDate',index:'ag.startDate', template: 'date',search:false, formatter:"date", formatoptions: {newformat:'Y-m-d H:m:s'}, align: 'left'},
+        { name: 'endDate', index: 'ag.startDate', template: 'date',search:false, formatter:"date", formatoptions: {newformat:'Y-m-d H:m:s'}, align: 'left'},
+        { name: 'sort', index: 'ag.sort', template: 'text', align: 'left',width:220},
+        { name: 'createdDate', index: 'ag.createdDate', template: 'date',search:false, align: 'left'}
+    ],
+    multiselect: true,
+    autowidth: true,
+    shrinkToFit: true,
+    pager: '#pagination',
+    sortname: 'sort',
+    height: 'auto',
+    sortorder: 'asc'
+});
+
+$('.operateBar .operate-delete').click(function () {
+    var keys = $g.jqGrid('getGridParam', 'selarrrow');
+    1 > keys.length ? Glanway.Messager.alert("提示", "您至少应该选择一行记录") : Glanway.Messager.confirm("警告", "您确定要删除选择的" + keys.length + "行记录吗？", function (r) {
+        r && $.ajax({
+            url: 'delete',
+            type: 'post',
+            traditional: true,
+            data: { id: keys }
+        }).done(function (data) {
+            var removed;
+            if (data.success) {
+                removed = data.success || [];
+                $g.trigger("reloadGrid");
+                layer.alert('操作成功', {
+                    skin: 'layer-ext-message' //样式类名
+                    ,closeBtn:1
+                    ,time:3000
+                    ,title:'提示 [3秒后消失]'
+                    ,shade: 0
+                    ,offset:'rb'
+                    ,btn:''
+                });
+            }else{
+                layer.alert(data.message, {
+                    skin: 'layer-ext-message' //样式类名
+                    ,closeBtn:1
+                    ,time:3000
+                    ,title:'提示 [3秒后消失]'
+                    ,shade: 0
+                    ,offset:'rb'
+                    ,btn:''
+                });
+            }
+        }).fail(function () {
+            layer.alert('操作失败', {
+                skin: 'layer-ext-message' //样式类名
+                ,closeBtn:1
+                ,time:3000
+                ,title:'提示 [3秒后消失]'
+                ,shade: 0
+                ,offset:'rb'
+                ,btn:''
+            });
+        });
+    });
+});

@@ -1,0 +1,242 @@
+div.calendar-box {
+	margin-top: 10px;
+	position: absolute;
+	background: #FFF;
+	border: 1px solid #2a72b7;
+	display: none;
+	padding: 3px 4px;
+	z-index: 3000;
+}
+
+div.calendar-box tbody,thead,tr,th,td
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+div.calendar-box table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+div.calendar-box div.btn-bar .date-range input.date-invalid {
+	border: 1px solid #e2573a;
+}
+
+div.calendar-box div.btn-bar span {
+	color: #666;
+}
+
+div.calendar-box div.btn-bar input {
+	padding: 2px;
+	color:#333;
+}
+
+div.calendar-box div.date-select-tip {
+	color: #F00;
+	padding: 3px;
+	text-align: center;
+}
+
+div.calendar-box .bar {
+	height: 25px;
+	background: #c7d4ed;
+	margin: 4px 3px 2px 3px;
+	width: 480px;
+	padding-top: 7px;
+}
+
+div.calendar-box div.btn-bar {
+	margin: 3px 0 5px;
+	_display: inline;
+	height: 22px;
+}
+
+div.calendar-box div.btn-bar .date-change {
+	position: absolute;
+	right: 4px;
+}
+
+div.calendar-box div.btn-bar .date-range {
+	float: left;
+	margin-left: 35px;
+}
+
+div.calendar-box div.btn-bar .date-range input {
+	border: 1px solid #c2d3e5;
+	width: 80px;
+}
+
+div.btn-bar{
+	font-size: 10px;
+	font-family: 'Microsoft Yahei', Arial, '宋体';
+}
+
+.date-start {
+	margin: 0 5px 0 10px;
+}
+
+.date-end {
+	margin: 0 0 0 5px;
+}
+.date-start,.date-end{
+	font-size: 12px;
+}
+
+.date-start:focus,.date-end:focus {
+	outline: medium none;
+}
+
+.ds-wrap td {
+	font-size: 12px;
+}
+
+.ds-wrap .ds-date-othermonth {
+	cursor: default;
+}
+
+.ds-date-thismonth {
+	cursor: pointer;
+	color:#666;
+}
+.ds-week-color{
+	color:#666;
+}
+
+.ds-cal-head {
+	-webkit-transition: background-image .5s ease;
+	-moz-transition: background-image .5s ease;
+	-ms-transition: background-image .5s ease;
+	-o-transition: background-image .5s ease;
+	transition: background-image .5s ease;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2754px;
+	width: 148px;
+	height: 22px;
+	text-align: center;
+	margin: 0 0 2px;
+	cursor: pointer;
+	line-height: 21px;
+	color: #0965b8;
+	text-shadow: 0 1px 0 #fff;
+	font-family: 'Microsoft Yahei', Arial, '\5b8b\4f53';
+}
+
+.ds-cal-head:hover {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2796px;
+}
+
+.ds-cal-head-selected {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2838px;
+	width: 148px;
+	height: 22px;
+	text-align: center;
+	margin: 0 0 2px;
+	cursor: pointer;
+	line-height: 22px;
+	color: #fff;
+	text-shadow: 0 1px 0 #0965b8;
+}
+
+.ds-prevmonth {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2154px;
+	width: 22px;
+	height: 127px;
+	cursor: pointer;
+	margin: 0 2px 0 0;
+}
+
+div.ds-prevmonth-active {
+	background-image: url('images/calendar.png');
+	background-position: left -2304px;
+}
+
+.ds-nextmonth {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2454px;
+	width: 22px;
+	height: 127px;
+	cursor: pointer;
+	margin: 0 0 0 2px;
+}
+
+div.ds-nextmonth-active {
+	background-image: url('images/calendar.png');
+	background-position: left -2604px;
+}
+
+.ds-prevyear {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2070px;
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+	margin: 0 2px 2px 0;
+}
+.ds-nextyear {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-image: url('images/calendar.png');
+	background-position: left -2112px;
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+	margin: 0 0 2px 2px;
+}
+.ds-date-selected {
+	color: white;
+	background: #E2573A;
+}
+
+.ds-cal-wrap {
+	padding-right: 12px;
+}
+
+.ds-cal-wrap-last {
+	padding-right: 0;
+}
+
+.ds-cal-wrap td {
+	width: 20px;
+	text-align: center;
+	font-size: 10px;
+	font-family: Arial;
+	height: 20px;
+	line-height: 20px;
+}
+
+.ds-cal-wrap thead td {
+	background: #e8e8e8;
+	border: 1px solid #e8e8e8;
+	margin-bottom: 2px;
+	font-size: 12px;
+}
+
+.ds-cal-wrap tbody td {
+	cursor: pointer;
+	border: 1px solid #e0e0e0;
+}
+
+.ds-cal-wrap .single .ds-week {
+	background: none;
+}
+
+.ds-cal-wrap thead .ds-week {
+	background: none;
+}

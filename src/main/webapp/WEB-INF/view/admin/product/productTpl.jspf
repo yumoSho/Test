@@ -1,0 +1,327 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<%-- 属性模板 --%>
+<script type="x-tmpl-mustache" id="tpl-attrs">
+	{{#attributes.length}}
+	<%--
+	<tr>
+		<th colspan="2" style="text-align: center;">
+			属性
+		</th>
+	</tr>
+	--%>
+	{{#attributes}}
+    <tr>
+        <th width="160" align="right">
+            {{name}}：<b class="color-red">*</b>
+        </th>
+        <td style="text-align:left;">
+            {{#textMode}}
+                <input type="hidden" name="attributeValues[{{index}}].attribute.id" value="{{id}}" />
+                <select name="attributeValues[{{index}}].id" class="required">
+                    {{#attributeValues}}
+                        <option value="{{id}}">{{value}}</option>
+                    {{/attributeValues}}
+                </select>
+            <%--
+                <input type="hidden" name="attributeId" value="{{id}}" />
+                <select name="attributeValueId">
+                    {{#attributeValues}}
+                        <option value="{{id}}">{{value}}</option>
+                    {{/attributeValues}}
+                </select>
+                --%>
+            {{/textMode}}
+            {{^textMode}}
+                <input type="hidden" name="attributeValues[{{index}}].attribute.id" value="{{id}}" />
+                <input type="text" name="attributeValues[{{index}}].value" class="required" value="" />
+            <%--
+                <input type="hidden" name="attributeId" value="{{id}}" />
+                <input type="hidden" name="attributeValueId" value="" />
+                <input type="text" name="value" value="" />
+            --%>
+            {{/textMode}}
+        </td>
+    </tr>
+	{{/attributes}}
+	{{/attributes.length}}
+</script>
+<%-- 参数模板 --%>
+<script type="x-tmpl-mustache" id="tpl-params">
+    {{#parameters.length}}
+        <%--
+        <tr>
+            <th colspan="2" style="text-align: center;">
+                参数
+            </th>
+        </tr>
+        --%>
+        {{#parameters}}
+        {{#children.length}}
+        <tr>
+            <th colspan="2" style="text-align: left; padding-left: 20px;">
+                {{name}}
+            </th>
+        </tr>
+        {{#children}}
+            <tr>
+                <th width="130" align="right">
+                    {{name}}：<b class="color-red">*</b>
+                </th>
+                <td>
+                    <input type="hidden" name="parameterValues[{{index}}].parameter.id" value="{{id}}">
+                    <input type="text" name="parameterValues[{{index}}].value" class="required">
+                </td>
+            </tr>
+        {{/children}}
+        {{/children.length}}
+        {{/parameters}}
+	{{/parameters.length}}
+</script>
+<%-- 规格模板 --%>
+<script type="x-tmpl-mustache" id="tpl-specs">
+    {{#.}}
+    <tr>
+        <th colspan="2" style="text-align: left;">
+            <label><input type="checkbox" data-spec-id="{{id}}" data-target-name="{{id}}" class="js-select-all"> <span>{{name}}</span></label>
+        </th>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <ul style="margin:0;padding:0;list-style:none;">
+                {{#specValues}}
+                <li style="float: left; width: 100px;">
+                    <label><input type="checkbox" name="{{specId}}" value="{{id}}"> <span>{{name}}</span></label>
+                </li>
+                {{/specValues}}
+            </ul>
+        </td>
+    </tr>
+    {{/.}}
+</script>
+<%--规格值图片模板--%>
+<script type="x-tmpl-mustache" id="tpl-specs-img">
+{{#.}}
+<tr>
+    <td align="center" width="30%">
+        {{#specValues}}
+        {{spec.name}}:{{name}}
+        {{/specValues}}
+    </td>
+    <td align="center" width="40%" style="text-align:center;">
+        <ul class="upload-list clearfix" id="{{#specValues}}{{id}}{{/specValues}}">
+            <li class="js-plupload" name="" id="{{index}}-img0" data-list-target="{{index}}-img0:thumb:img" style="margin-left:37%;"></li>
+        </ul>
+    </td>
+    <td align="center" width="30%">
+        <img class="operater" style="cursor:pointer;" alt="删除" src="${ctx}/images/admin/icon_delete.gif" onclick="$(this).closest('tr').remove();">
+    </td>
+</tr>
+{{/.}}
+</script>
+<%--商品模版--%>
+<script type="x-tmpl-mustache" id="tpl-recommends">
+{{#.}}
+<tr>
+    <td colspan="8" style="padding:0 0 8px 0;">
+        <table width="100%" class="g_tab">
+            <tr>
+                <td align="left" width="26%">
+                    <div>
+                        {{product.title}}
+                    </div>
+                </td>
+                <td width="12%">
+                    <div>
+                        {{product.brand}}
+                    </div>
+                </td>
+                <%--<td width="10%">
+                    <div>
+                        <!-- 单品 ID -->
+                        <input type="hidden" name="goodsIds" value="{{id}}" >
+                        {{stock}}
+                    </div>
+                </td>--%>
+                <td width="16%">
+                    <div>
+                        {{promotePrice}}
+                    </div>
+                </td>
+                <td width="12%">
+                    <div>
+                        {{product.isPutaway}}
+                    </div>
+                </td>
+                <td width="7%">
+                    <img class="operater" style="cursor:pointer;" alt="删除" src="${ctx}/images/admin/icon_delete.gif" onclick="$(this).closest('table').closest('tr').remove();">
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+{{/.}}
+</script>
+<%-- 货品模板 --%>
+<script type="x-tmpl-mustache" id="tpl-goods">
+    {{#.}}
+	<tr>
+		<td colspan="8" style="padding:0 0 8px 0;">
+			<table width="100%" class="g_tab">
+				<tr>
+				    <td width="17%">
+				        <input type="text" name="goods[{{goodsIndex}}].title" value="{{title}}" class="required" placeholder="请输入商品标题" maxlength="200" minlength="2" style="width: 115px;"> <%-- 标题 --%>
+				    </td>
+				    <td width="16%">
+            			<input type="text" name="goods[{{goodsIndex}}].sn" value="{{sn}}" class="required" placeholder="请输入商品编号" maxlength="50" minlength="2" style="width: 117px;"> <%-- 货号 --%>
+        			</td>
+        			<td width="12%">
+        				{{#specValues}}
+            			<div>
+                			{{spec.name}}:{{name}}
+                			<input type="hidden" name="goods[{{goodsIndex}}].specValues[{{index}}].id" value="{{id}}">
+                			<input class="g-spec" type="hidden" name="goods[{{goodsIndex}}].specValues[{{index}}].productSpecValue.image" value="">
+            			</div>
+        				{{/specValues}}
+        			</td>
+        			<td width="16%">
+                        <span class="spinner">
+                            <input  name="goods[{{goodsIndex}}].stock" class="input required" value="{{stock}}"  maxlength="7" style="width:50px;">
+                            <span class="spin-buttons">
+                                <span class="btn-up"></span>
+                                <span class="btn-down"></span>
+                            </span>
+                         </span>
+                         <label for="goods[{{goodsIndex}}].stock" generated="true" class="error" style="display: none"></label>
+            			<%--<input type="text" name="goods[{{goodsIndex}}].stock" value="{{stock}}" class="required digits" maxlength="7" style="width:50px;"> &lt;%&ndash; 库存 &ndash;%&gt;--%>
+        			</td>
+	               <td width="16%">
+	                                <span class="spinner">
+                                        <input  name="goods[{{goodsIndex}}].alertStock" class="input required" value="{{alertStock}}"  maxlength="7" style="width:50px;">
+                                        <span class="spin-buttons">
+                                            <span class="btn-up"></span>
+                                            <span class="btn-down"></span>
+                                        </span>
+                                     </span>
+                                     <label for="goods[{{goodsIndex}}].alertStock" generated="true" class="error" style="display: none"></label>
+            			<%--<input type="text" name="goods[{{goodsIndex}}].alertStock" value="{{alertStock}}" class="required  " maxlength="10" style="width:50px;">  &lt;%&ndash; 销售价 &ndash;%&gt;--%>
+        			</td>
+        			<td width="16%">
+            			<input type="text" name="goods[{{goodsIndex}}].price" value="{{hopeCostPrice}}" class="required number decimalValidate" maxlength="10" style="width:50px;">    <%-- 市场价 --%>
+        			</td>
+        			<td width="7%">
+                        <img class="operater" style="cursor:pointer;" alt="删除" src="${ctx}/images/admin/icon_delete.gif" onclick="$(this).closest('table').closest('tr').remove();">
+        			</td>
+    			</tr>
+				<tr>
+					<%--<td colspan="7">
+					    <b class="color-red">上传图片最优宽度为533,最优高度为402</b>
+						<ul class="img_list upload-list clearfix" style="padding-left: 0;">
+							<li id="goodsList{{goodsIndex}}-img0" name="goods[{{goodsIndex}}].productImgs[0].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img0:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img1" name="goods[{{goodsIndex}}].productImgs[1].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img1:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img2" name="goods[{{goodsIndex}}].productImgs[2].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img2:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img3" name="goods[{{goodsIndex}}].productImgs[3].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img3:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img4" name="goods[{{goodsIndex}}].productImgs[4].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img4:thumb:img"></li>
+						</ul>
+					</td>--%>
+                    <td colspan="7">
+                        <div class="pro-uploader cz">
+                        <div class="upload-desc">请上传图片<span style="color:#dd0000">请上传450*490像素的图片</span></div>
+                            <ul class="upload-list">
+                                <li id="goodsList{{goodsIndex}}-img0" class="images" style="">
+                                    <span class="primary-img-txt">上传图片</span>
+
+                                </li>
+                                <li id="goodsList{{goodsIndex}}-img1" class="images" style="">
+                                    <span class="primary-img-txt">上传图片</span>
+
+                                </li>
+                                <li id="goodsList{{goodsIndex}}-img2" class="images" style="">
+                                    <span class="primary-img-txt">上传图片</span>
+                                    <c:if test="${not empty value.image}">
+                                        <div data-saved-url="${ctx}/${value.image}">
+                                            <input type="hidden" name="goods[{{goodsIndex}}].productImgs[2].path" value="${value.image}">
+                                        </div>
+                                    </c:if>
+                                </li>
+                                <li id="goodsList{{goodsIndex}}-img3" class="images" style="">
+                                    <span class="primary-img-txt">上传图片</span>
+                                    <c:if test="${not empty value.image}">
+                                        <div data-saved-url="${ctx}/${value.image}">
+                                            <input type="hidden" name="goods[{{goodsIndex}}].productImgs[3].path" value="${value.image}">
+                                        </div>
+                                    </c:if>
+                                </li>
+                                <li id="goodsList{{goodsIndex}}-img4" class="images" style="">
+                                    <span class="primary-img-txt">上传图片</span>
+                                    <c:if test="${not empty value.image}">
+                                        <div data-saved-url="${ctx}/${value.image}">
+                                            <input type="hidden" name="goods[{{goodsIndex}}].productImgs[4].path" value="${value.image}">
+                                        </div>
+                                    </c:if>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </td>
+
+
+				</tr>
+			</table>
+		</td>
+	</tr>
+    {{/.}}
+</script>
+
+
+<script type="x-tmpl-mustache" id="tpl-pingtai-goods">
+    {{#.}}
+	<tr>
+		<td colspan="8" style="padding:0 0 8px 0;">
+			<table width="100%" class="g_tab">
+				<tr>
+				    <td width="12%">
+				        <input type="text" name="goods[{{goodsIndex}}].title" value="{{title}}" class="required" placeholder="请输入商品标题" maxlength="50" minlength="2" style="width: 115px;"> <%-- 标题 --%>
+				    </td>
+				    <td width="10%">
+            			<input type="text" name="goods[{{goodsIndex}}].code" value="{{code}}" class="required" placeholder="请输入商品编号" maxlength="14" minlength="14" style="width: 117px;"> <%-- 货号 --%>
+        			</td>
+        			<td width="8%">
+        				{{#specValues}}
+            			<div>
+                			{{spec.name}}:{{name}}
+                			<input type="hidden" name="goods[{{goodsIndex}}].specValues[{{index}}].id" value="{{id}}">
+                			<input class="g-spec" type="hidden" name="goods[{{goodsIndex}}].specValues[{{index}}].productSpecValue.image" value="">
+            			</div>
+        				{{/specValues}}
+        			</td>
+        			<%--<td width="12%">
+            			<input type="text" name="goods[{{goodsIndex}}].stock" value="{{stock}}" class="required digits" maxlength="7" style="width:50px;"> &lt;%&ndash; 库存 &ndash;%&gt;
+        			</td>--%>
+        			<td width="12%">
+            			<input type="text" name="goods[{{goodsIndex}}].promotePrice" value="{{promotePrice}}" class="required number" maxlength="7" style="width:50px;">  <%-- 销售价 --%>
+        			</td>
+        			<td width="5%">
+            			<input type="text" name="goods[{{goodsIndex}}].marketPrice" value="{{marketPrice}}" class="required number" maxlength="7" style="width:50px;">    <%-- 市场价 --%>
+        			</td>
+
+        			<td width="10%">
+                        <img class="operater" style="cursor:pointer;" alt="删除" src="${ctx}/images/admin/icon_delete.gif" onclick="$(this).closest('table').closest('tr').remove();">
+        			</td>
+    			</tr>
+				<tr>
+					<td colspan="7">
+						<ul class="img_list upload-list clearfix" style="padding-left: 0;">
+							<li id="goodsList{{goodsIndex}}-img0" name="goods[{{goodsIndex}}].productImages[0].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img0:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img1" name="goods[{{goodsIndex}}].productImages[1].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img1:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img2" name="goods[{{goodsIndex}}].productImages[2].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img2:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img3" name="goods[{{goodsIndex}}].productImages[3].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img3:thumb:img"></li>
+							<li id="goodsList{{goodsIndex}}-img4" name="goods[{{goodsIndex}}].productImages[4].path" class="js-plupload" data-list-target="goodsList{{goodsIndex}}-img4:thumb:img"></li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+    {{/.}}
+</script>

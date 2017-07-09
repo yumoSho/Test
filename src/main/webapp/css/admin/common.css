@@ -1,0 +1,680 @@
+/*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+html {
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between images, videos, audio and canvas and the bottom of
+ * their containers: h5bp.com/i/440
+ */
+
+audio,
+canvas,
+img,
+video {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Browse Happy prompt
+   ========================================================================== */
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+
+/*
+ * 閹煎瓨娲熼崕鏉戔柦婢跺﹦淇�
+ */
+
+
+
+/*
+ * 闁搞儳鍋撻悥锟�
+ */
+.icon-login-name{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../.../images/admin/icon-login-name.png);background-repeat:no-repeat;}
+.icon-login-pwd{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../.../images/admin/icon-login-pwd.png);background-repeat:no-repeat;}
+
+.icon-gou-gray{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-gou-gray.png);background-repeat:no-repeat;}
+.icon-cancel-gray{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-cancel-gray.png);background-repeat:no-repeat;}
+.icon-delete-gray{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-delete-gray.png);background-repeat:no-repeat;}
+.icon-add-gray{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-add-gray.png);background-repeat:no-repeat;}
+.icon-export-gray{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-export-gray.png);background-repeat:no-repeat;}
+
+.icon-gou-red{display:inline-block;width:16px;height:16px;line-height:20px;background-image:url(../../images/admin/icon-gou-red.png);background-repeat:no-repeat;}
+.icon-cancel-yellow{display:inline-block;width:16px;height:16px;line-height:20px;background-image:url(../../images/admin/icon-cancel-yellow.png);background-repeat:no-repeat;}
+.icon-delete{display:inline-block;width:16px;height:16px;line-height:20px;background-image:url(../../images/admin/icon-delete.png);background-repeat:no-repeat;}
+.icon-add-green{display:inline-block;width:16px;height:16px;line-height:20px;background-image:url(../../images/admin/icon-add-green.png);background-repeat:no-repeat;}
+.icon-export-blue{display:inline-block;width:16px;height:16px;line-height:20px;background-image:url(../../images/admin/icon-export-blue.png);background-repeat:no-repeat;}
+
+.icon-close{display:inline-block;width:24px;height:24px;line-height:20px;background-image:url(../../images/admin/icon-close.png);background-repeat:no-repeat;}
+
+.icon-edit-alert{display:inline-block;width:42px;height:42px;line-height:20px;background-image:url(../../images/admin/icon-edit-alert.png);background-repeat:no-repeat;}
+
+.icon-setting{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-setting.png);background-repeat:no-repeat;}
+.icon-key{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-key.png);background-repeat:no-repeat;}
+.icon-shutdown{display:inline-block;width:20px;height:20px;line-height:20px;background-image:url(../../images/admin/icon-shutdown.png);background-repeat:no-repeat;}
+
+/*
+ * 閻忕偛鎳嶉懙鎴狅拷閻熺増鐝�
+ */
+.w980{margin-left:auto;margin-right:auto;width:980px;}
+.w1000{margin-left:auto;margin-right:auto;width:1000px;}
+
+/*
+ * 鐎规悶鍎遍崣璺ㄧ尵閿燂拷
+ */
+.fl{float:left;}
+.fr{float:right;}
+
+
+
+/*
+ * 闁圭顧侀幐锟�
+ */
+
+.btn-sure-wrap{display:inline-block;margin-right:15px;border:1px solid #a7c543;border-radius:2px;}
+
+.btn-sure{display:inline-block;padding:6px 14px;color:#FFF;border-radius:2px;border:1px solid #c4d466;cursor:pointer;background-color:#a7c543;text-decoration:none;font-size:14px;font-weight:700;}
+
+.btn-cancel-wrap{display:inline-block;border:1px solid #d9d9d9;border-radius:2px;line-height: 17px;}
+
+.btn-cancel{display:inline-block;padding:6px 14px;color:#2d3c54;border-radius:2px;border:1px solid #FFF;cursor:pointer;background-color:#f2f2f2;text-decoration:none;font-size:14px;font-weight:700;}
+
+
+.btn-sure.btn-upload{padding-left:32px;background:url(../../images/admin/icon-img.png) no-repeat 8px 50% #a7c543;}
+.btn-sure.btn-edit{padding-left:32px;background:url(../../images/admin/icon-edit.png) no-repeat 8px 50% #a7c543;}
+.btn-sure.btn-save{padding-left:32px;background:url(../../images/admin/icon-save.png) no-repeat 8px 50% #a7c543;}
+
+/* 闁哄倸娲ら悺褔骞愭径鎰唉 */
+.btn-text{padding:0 10px;font-size:12px;text-decoration:none;color:#008ad9;}
+.btn-text.disable{color:#a4a4a4;}
+
+/*
+ * 閻㈩垰鍟惇锟�
+ */
+.top{position:absolute;top:0;left:0;width:100%;height:60px;background-color:#172d3b;}
+.main{position:absolute;top:60px;bottom:0;left:0;right:0;}
+.leftBar{position:absolute;top:0;bottom:0;left:0;right:0;width:200px;height:100%;/*border-right:2px solid #d0cfd2;*/background-color:#f0efef;overflow:auto;}
+.content{position:absolute;top:0;bottom:0;left:200px;right:0;height:100%;overflow:auto;}
+
+/*
+ * 濠㈣埖鎸抽崕锟�
+ */
+.logo-anyforweb{width:158px;height:60px;}
+.logo-anyforweb table{width:100%;height:100%;}
+
+.top-account{position:relative;border-left:1px solid #081d2b;}
+
+.top-account-info a{display:block;padding:6px 10px;font-size:14px;text-decoration:none;color:#88adbe;border-left:1px solid #223f52;}
+.top-account-info a:hover{color:#FFF;}
+
+.top-account-dropdown{position:absolute;top:60px;left:9px/*-42px*/;display:none;width:/*135*/99px;border:1px solid #DDD;border-radius:2px;z-index:9;background-color:#FFF;}
+.top-account-dropdown ul{margin:0;padding:0;list-style:none;}
+.top-account-dropdown li{position:relative;height:34px;border-top:1px solid #DDD;}
+.top-account-dropdown li:first-child{border-top:0;}
+.top-account-dropdown li a{display:block;height:34px;line-height:34px;text-indent:/*40*/28px;font-size:14px;font-family:\5FAE\8F6F\96C5\9ED1;text-decoration:none;color:#666;}
+.top-account-dropdown li s{position:absolute;top:7px;left:4px;}
+.top-account-dropdown li a:hover{color:#172d3b;}
+.top-account-dropdown b{position:absolute;top:-6px;right:/*20*/55px;display:block;width:12px;height:6px;background:url(../../images/admin/img01.png) no-repeat;}
+
+/*
+ * 鐎归潻缂氶弲锟�
+ */
+
+.client-login-info{padding:20px 0 10px;text-align:center;background:url(../../images/admin/line-leftnav.png) repeat-x left bottom;}
+.client-login-info-name{padding:10px 0;font-size:14px;font-family:\5FAE\8F6F\96C5\9ED1;}
+.client-login-info-operate{font-size:12px;color:#0072ad;}
+.client-login-info-operate a{padding:0 5px;color:#0072ad;text-decoration:none;text-shadow:1px 1px 1px #FFF;}
+
+.subMenu{}
+.subMenu-t{text-align:center;}
+.sunMenu-list ul{padding:0;list-style:none;}
+.sunMenu-list li{height:47px;}
+.sunMenu-list li a{position:relative;display:block;padding-bottom:2px;height:45px;line-height:45px;text-decoration:none;font-size:14px;text-shadow:1px 1px 1px #FFF;color:#2d3c54;background:url(../../images/admin/line-leftnav.png) repeat-x left bottom;font-family:\5FAE\8F6F\96C5\9ED1;}
+.sunMenu-list li s{position:absolute;top:0;left:-43px;display:inline-block;width:45px;height:45px;background-color:#fb6b5b;transition:.5s;-webkit-transition:.5s;-moz-transition:.5s;-0-transition:.5s;}
+.sunMenu-list li img{position:absolute;left:11px;top:13px;}
+.sunMenu-list li span{display:inline-block;height:45px;margin-left:45px;padding-left:20px;border-left:1px solid #DDD;}
+.sunMenu-list li a:hover,.sunMenu-list li.on a{background-color:#FFF;}
+.sunMenu-list li a:hover s,.sunMenu-list li.on s{left:0;}
+
+/*
+ * 闁兼寧绮屽畷鐔煎冀閿燂拷
+ */
+.menuBar{position:relative;height:60px;border-bottom:1px solid #d6d5d5;}
+.menuBar ul{margin:0;padding:0;list-style:none;overflow:hidden;}
+.menuBar li{float:left;width:82px;height:60px;}
+.menuBar li a{display:block;width:100%;height:60px;line-height:60px;text-align:center;color:#465a7b;font-size:14px;text-decoration:none;color:#FFF;font-family:\5FAE\8F6F\96C5\9ED1;}
+.menuBar li a img{margin-bottom:10px;}
+.menuBar li a:hover,.menuBar li.on a{background-color:#2e424f;}
+
+.menuBar_slides{position:relative;width:auto;height:60px;overflow:hidden;}
+.menuBar_slides .JQ-slide-content{/*position:absolute;*/width:100%;}
+.menuBar .prev,.menuBar .next{position:absolute;top:32px;display:block;width:16px;height:27px;background-image:url(../../images/admin/btn-prev-next.png);background-repeat:no-repeat;}
+.menuBar .prev{left:0;}
+.menuBar .next{right:0;background-position:-16px 0;}
+
+
+/*
+ * 闁瑰灝绉崇紞鏃堝级閿燂拷
+ */
+.operateBar{padding:15px 0;height:26px;font-size:12px;/*border-bottom:1px solid #e8e8e8;*/}
+.operateBar ul{margin:0;padding:0;list-style:none;}
+.operateBar li{position:relative;float:left;margin-right:20px;height:26px;line-height:26px;}
+.operateBar li a{display:block;padding:0 15px 0 35px;height:26px;color:#FFF;text-decoration:none;border-radius:13px;}
+.operateBar li a:hover{}
+.operateBar li s{position:absolute;left:13px;top:5px;}
+
+.operate-all{background-color:#fb6b5b;}
+.operate-search{
+    background-color: #65bd77;
+    display:block;padding:0 15px 0 17px;height:26px;color:#FFF;text-decoration:none;border-radius:13px;
+    cursor:pointer;
+}
+.operate-cancel{background-color:#ffc333;}
+.operate-delete{background-color:#8ec165;}
+.operate-add{background-color:#65bd77;}
+.operate-export{background-color:#4cc0c1;}
+
+/*
+ * 鐟滅増鎸告晶鐘虫媴瀹ュ洨鏋�
+ */
+.position{padding-left:20px;height:30px;line-height:30px;border-top:1px solid #eaeaea;font-size:12px;color:#7a7a7a;background-color:#f5f5f5;}
+.position a{text-decoration:none;color:#7a7a7a;}
+
+/*
+ * 閻庡箍鍨洪崺娑㈠嫉瀹ュ懎顬�
+ */
+.img-reservation{position:fixed;right:0;top:30%;}
+
+/*
+ * 闁告帒妫濋妴锟�
+ */
+.pageList-wrap{margin:16px 2px;height:30px;font-size:12px;}
+.page-info{float:left;line-height:30px;}
+.page-info p{margin:0;}
+.page-info b{color:#3399d5;}
+.pageList a,.pageList span{float:left;margin-right:-1px;padding:5px 10px;color:#333;border:1px solid #DDD;text-decoration:none;}
+.pageList a:hover,.pageList span{text-decoration:none;color:#FFF;background-color:#65bd77;}
+
+/*
+ * 闁瑰吋绮庨崒锟�
+ */
+.search{position:absolute;right:0;top:12px;width:352px;height:32px;}
+.search .search-input{padding:5px 50px 5px 10px;width:290px;height:20px;line-height:20px;border:1px solid #e0e0e0;font-size:12px;}
+.search .search-btn{position:absolute;right:1px;top:1px;width:40px;height:30px;border:0;background:url(../../images/admin/icon-search.png) no-repeat 50% 50% #f0efef;outline:none;border-left:1px solid #e0e0e0;}
+
+/*
+ * 鐎殿喛顬冮、锟�
+ */
+.pop-mask{position:absolute;left:0;top:0;display:none;width:100%;height:100%;z-index:999;background:url(../../images/admin/bg-mask.png) repeat;}
+.cms-pop{position:fixed;left:50%;top:50%;display:none;margin:-135px 0 0 -240px;width:480px;height:270px;background-color:#FFF;box-shadow:0 0 5px #333;z-index:10000;border-radius:3px;}
+.cms-pop-t{position:relative;height:40px;background-color:#a6c542;border-radius:3px 3px 0 0;}
+.cms-pop-title{padding-left:20px;line-height:40px;color:#FFF;font-size:14px;}
+.cms-pop-t .icon-close{position:absolute;top:8px;right:10px;}
+.cms-pop-content{position:relative;padding-left:60px;margin:60px auto 40px;width:200px;}
+.cms-pop-content s{position:absolute;left:0;top:0;}
+.cms-pop-content h5{margin:0;font-size:14px;}
+.cms-pop-content p{margin:5px 0 0;font-size:12px;color:#858686;}
+.cms-pop-btns{text-align:center;}
+
+.table-changepwd{margin:15px 0;}
+.table-changepwd input{padding:3px 10px;height:20px;line-height:20px;}
+
+/*
+ * 闂侇偄顧侀妴宥夊础閿燂拷
+ */
+.tab-wrap{margin-top:1px;height:36px;background:url(../../images/admin/bg-tab-x.png) repeat-x #f5f5f5;}
+.tab{margin:0;padding:2px 0 0 35px;height:34px;list-style:none;}
+.tab li{float:left;width:110px;height:32px;}
+.tab li a{display:block;width:110px;height:32px;text-align:center;line-height:32px;font-size:14px;border-top:2px solid #f5f5f5;text-decoration:none;color:#2d3c54;font-size:12px;}
+.tab li a:hover,.tab li.on a{background-color:#FFF;border-color:#a0b937;font-weight:700;}
+
+/*
+ * 閻炴稏鍔屽畷锟�
+ */
+ 
+input,select,textarea{border:1px solid #d4d4d4;background-color:#FFF;}
+/*
+input[type="text"]{padding:3px 10px;height:20px;line-height:20px;}
+*/
+input{padding:0;}
+select{padding:3px;height:26px;}
+
+
+/*
+ * 閻炴稏鍔嶉悧锟�
+ */
+table{/*width:100%;*/font-size:12px;}
+th{font-weight:500;}
+th,td{/*padding:8px;*/}
+.color-red{color:#F00;}
+.tab-ct-wrap{padding:15px 15px 100px;}
+
+/* 闁告劕鎳庨鎰板礌閸濆嫮鍘�*/
+.listPage,.editPage,.indexPage{position:relative;margin-left:20px;width:90%;}
+
+/* 缂傚倹鐗炵欢顐ｃ亜閻㈠憡妗�*/
+.table-module01{width:100%;}
+.table-module01 td,.table-module01 th{padding:8px;}
+.table-module01 input[type="text"],.table-module01 input[type="number"]{padding:2px 0;/*padding:3px 10px;*/height:20px;line-height:20px;text-indent:10px;width: 200px;}
+
+/* 閻犱降鍨瑰畷鐔虹不閿涘嫭鍊為悶娑栧妽閻楋拷*/
+.table-module02{margin-top:20px;}
+.table-module02 thead th{border-bottom:1px solid #c5c3c3;}
+.table-module02 tbody th,.table-module02 tbody td{border-bottom:1px solid #e0dfdf;}
+.table-module02 th{background-color:#f8f8f8;}
+
+/* 闁告帗顨犻妴鍐偘閵婏妇澹�閻㈩垽绠戝ù姗�偋閿燂拷/
+.table-module03{/*border-top:1px solid #e0e0e0;border-left:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;border:1px solid #e0e0e0;}*/
+/*
+.table-module03 thead th{background-color:#f8f8f8;border-right:1px solid #e0e0e0;}
+.table-module03 tbody td{border-right:1px solid #e0e0e0;}
+.table-module03 h4{margin:5px 0;font-weight:500;}
+.table-module03 p{margin:0;color:#919191;}
+*/
+
+.datagrid-filter-c{padding:5px 0;text-align:center;}
+#data-pagination table{border-top:1px solid #DDD !important;border-bottom:1px solid #DDD !important;border-left:1px solid #DDD !important;}
+#data-pagination a{border-right:1px solid #DDD !important;}
+
+
+/*
+ * 闁搞儱澧芥晶鏍不閿涘嫭鍊�
+ */
+.gridList ul{margin:0;padding:0;list-style:none;overflow:hidden;}
+.gridList li{float:left;margin:12px;padding:8px;background-color:#f5f5f5;font-size:12px;text-align:center;}
+.gridList li div{margin:7px 0;height:16px;overflow:hidden;}
+.operateBox{text-align:center;}
+.operateBox img{margin:0 5px;cursor:pointer;}
+
+/*
+ * 404
+ */
+.errorPage{text-align:center;}
+.errorPage img{margin:70px 0 20px;}
+
+/*
+ * 濡絾鐗犻妴锟�
+ */
+.welcome{border-bottom:1px solid #DDD;}
+.welcome-word{padding:30px 0 8px 60px;height:33px;font-size:24px;background:url(../../images/admin/img-cloud.png) no-repeat 0 25px;}
+.login-time{padding-bottom:12px;font-size:12px;}
+.login-time a{color:#0072ad;text-decoration:none;}
+.login-time a:hover{text-decoration:underline;}
+
+.mod{margin-top:25px;}
+.mod-t{position:relative;height:20px;line-height:20px;}
+.mod-t .t{float:left;margin-left:10px;font-family:\5FAE\8F6F\96C5\9ED1;font-size:16px;}
+.mod-t s{position:absolute;top:1px;left:0;display:block;width:3px;height:18px;background-color:#fb6b5b;}
+.mod-bd{margin-top:10px;}
+
+#acce-list .em_list>h2{font-family:\5FAE\8F6F\96C5\9ED1;font-weight:normal;font-size:16px;margin:0 0 20px 0;}
+#acce-list .em_list>h2 span:first-child{}
+#acce-list .em_list>h2 a{text-decoration: none;color:#666;display:inline-block;padding-left:20px;padding-right:20px;background:url(../../images/admin/del_icon.gif) no-repeat 0 center;}
+#acce-list .em_list>h2 a:first-child{background:url(../../images/admin/deit_icon.gif) no-repeat 0 center;}
+.suits ul li s{width:23px;height:22px;margin-top:40px;float:right;background:url(../../images/admin/add_icon.png) no-repeat 0 0;}
+.p-img{width:99px;height:99px;padding:3px;border:1px solid #e5e5e5;overflow:hidden;}
+.p-name{width:106px;height:3em;overflow:hidden;line-height:17px;}
+.p-name a{text-decoration: none;font-size:14px;color:#666;}
+.suits{float:left;position:relative;width:970px;height:180px;overflow-y:hidden;overflow-x:auto;}
+#acce-list .suits ul{width:auto;}
+#acce-list .suits ul li{padding-left:10px;width:140px;float:left;}
+.suits .last_item{width:106px;}
+.suits .last_item s{display:none;}
+#acce-list .suits ul li:first-child{padding-left:0;}
+
+.table-module01{border:1px solid #ccc;}
+#spec-list input[type="checkbox"],.le_list input[type="checkbox"]{float:left;margin-top:1px;}
+#spec-list label span,.le_list label span{float:left;padding-left:4px;padding-right:4px;}
+.le_list input[type="radio"]{margin-top:2px;float:left;}
+#spec-list th{font-weight:bold;border-bottom:1px dotted #ccc;}
+.at_btn{width:300px;margin:10px auto;}
+#goods-list{text-align:center;}
+#goods-list .g_tab{border-bottom:1px dotted #ddd;}
+#goods-list .g_tab td{border-bottom:0;}
+#goods-list .img_list{padding-left:188px;}
+.editPage{margin-top:10px;}
+/*修改position:absolute 去掉**/
+.table-module01 label.error{display:block;line-height:14px;height:14px;margin-left:0px;top:38px;left:8px}
+#spec-value-list input[type="text"]{width:98%;}
+.table-module01 th{line-height:35px;}
+
+.error-p label.error{display:inline-block;padding-left:2px;line-height:20px;height:20px;}
+/* .error-p td{position:relative;} */
+.check_list{padding-top:6px;overflow:hidden;}
+.check_list>label input[type="checkbox"]{float:left;margin-top:2px;}
+.check_list>label span{float:left;padding-left:2px;padding-right:4px;}
+
+#spec-list td{text-align:center;line-height:24px;}
+#param-group-list label.error{display:inline-block;padding-left:4px;}
+
+/* 閺傛澘顤�by 閻滃鍤滈崝锟�0150115 */
+
+/*- 閺堝鍟跨粣锟�缁夎濮╅崚鎵鐎规岸銆夐棃銏狀樀閻烇拷
+.cms-pop{margin:-250px 0 0 -628px;width:1256px;height:500px;}
+.cms-pop-content{padding:0;margin:0;width:100%;}
+*/
+.layer_pub{position: relative;margin:20px 0;z-index:101;background-color:#fff;}
+.layer_pub ul{margin:0;padding:0;list-style:none;}
+.layer_pub a{text-decoration:none;}
+.layer_pub .hd{background-color:#2290ef;}
+.layer_pub .hd h3 {margin:0;padding-left: 50px;height: 40px;line-height: 40px;font-size: 14px;color: #FFF;font-weight: normal;}
+.layer_pub .icon{ background:url(../../images/choose_icon.png) left center no-repeat;}
+.layer_pub .hd .close_btn{position: absolute;right: 0px;_right: -1px;height: 40px;top: 0px;background:url(../../images/tip_box_01.png) left center no-repeat;width: 40px;line-height: 500px;overflow: hidden;}
+.layer_pub .show_area{clear: both;font-size: 14px;margin: 10px 20px;color: #9F9F9F;}
+.layer_pub .show_area strong {color: #666;font-weight: normal;padding-right: 5px;}
+.layer_pub .choose_area {float: left;position: relative;margin: 0 0 0 10px;width: 188px;}
+.layer_pub .arrow_icon {position: absolute;right: -5px;top: 160px;background: url(../../static_v1/img/lovecar/icon.png) -83px -355px no-repeat;width: 5px;height: 9px;line-height: 0px;font-size: 0px;}
+.layer_pub .list_area {margin-top:5px;border: 1px solid #D0D0D0;height:332px;overflow-y:scroll;position: relative;padding-left:5px;}
+.layer_pub .list_area li {font-size: 0px;line-height: 0px;height: auto!important;min-height: 25px;height: 25px;margin-top:5px}
+.layer_pub .list_area li strong {color: #a6c542;font-size: 14px;line-height: 24px;font-weight: normal;padding: 0 10px;}
+.layer_pub  li {position: relative;}
+.layer_pub  li.pl25{padding-left: 25px;}
+.layer_pub  li strong {position: absolute;left: 0;top: 0px;padding: 0;width: 10px;text-align: center;}
+h3{display: block;font-size: 1.17em;-webkit-margin-before: 1em;-webkit-margin-after: 1em;-webkit-margin-start: 0px;-webkit-margin-end: 0px;font-weight: bold;}
+.layer_pub .choose_area h3 {margin:0;color:#a6c542 ;font-size: 14px;font-weight: normal;}
+.submit_area {padding: 10px 20px;line-height: 59px;font-size: 14px;color: #6E6E6E;clear: both;}
+.layer_pub .list_area li a {display: inline-block;padding: 0 8px;margin:0 5px;font-size: 12px;line-height: 25px;color: #666;}
+.layer_pub .list_area li.on a,.layer_pub .list_area li a:hover,.layer_pub .list_area li a.active{background-color: #a6c542;color: #FFF;text-decoration: none;}
+.help_layer .hd h3 i {display: inline-block;width: 45px;height: 50px;background: url(../../images/choose_icon.png) 5px 10px no-repeat;position: absolute;left: 13px;top: 0px;}
+.jspContainer {overflow: hidden;position: relative;}
+.layer_pub .brand_area1{width:260px;}
+.layer_pub .brand_area2{width:100px;}
+.choose-operatebtn{margin-top:150px;text-align:center;font-size:14px;}
+
+.choose-operatebtn a{display:block;height:30px;line-height:30px;color:#a6c542;}
+
+/* End 閺傛澘顤�by 閻滃鍤滈崝锟�0150115 */
+
+/* Begin 閹殿偅寮垮鍦崶 by 娴滃海鎲洪弲锟�0150612 */
+
+.mask {position: fixed; width: 100%;height: 100%;  background-color: rgb(0, 0, 0);top: 0;left: 0; opacity: .15;z-index: 9998;  }
+.dialog-box { position: absolute;top: 150px; left: 50%; width: 700px;margin-left: -350px;background-color: #fff;z-index: 9999; border: 4px solid rgba(0,0,0,.2); border-radius: 5px;  -moz-border-radius: 5px; -webkit-border-radius: 5px;}
+.dialog-box h3 {margin: 0;padding: 5px 10px 5px;font-size: 14px;font-weight: 700;background-color: #f3f3f3;;  }
+.dialog-box table td { border: 1px solid #E6E6E6; padding: 5px 8px; word-break: normal;cursor: pointer;  }
+/* .dialog-box tr:nth-child(2n) td { background: #F9F9F9;  }*/
+.dialog-box thead td {background-color:#fff;}
+.dialog-box thead td:first-child{text-align:center}
+.dialog-box tbody tr:hover td {background-color: #e8e8e8;  }
+.dialog-box tbody tr.checked td {border: 1px solid #FADCCF;background-color: #FFFDE6; }
+.dialog-box .btns {text-align: center;height:35px;line-height: 35px;}
+.dialog-box .btn { display: inline-block;width:50px;text-align:center;height:25px;line-height: 25px;font-size: 14px; background-color:#ABB;color: #333;text-decoration: none;border-radius: 5px; }
+/* End 閹殿偅寮垮鍦崶 by 娴滃海鎲洪弲锟�0150612 */
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Image replacement
+ */
+
+.ir {
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    /* IE 6/7 fallback */
+    *text-indent: -9999px;
+}
+
+.ir:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+    *zoom: 1;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+.tips {
+    background-color: #FEF9F2;
+    border: 1px solid #CCC;
+    padding: 10px 10px 10px 10px;
+    font-size: 12px;
+    color: #C41411;
+}
+
+/*.table-module01 td {position: relative;}*/
+/*.table-module01 td .errorTip {position: absolute;left: 12px;top: 40px;}*/
+/*.table-module01 td .errorTip {top: 112px;}*/

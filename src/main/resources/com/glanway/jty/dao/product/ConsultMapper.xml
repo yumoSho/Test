@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.product.ConsultDao">
+    <resultMap id="ConsultRM" type="Consult">
+        <id column="ID" property="id"/>
+        <result column="QUESTION" property="question"/>
+        <result column="ASK_TIME" property="askTime"/>
+        <result column="ANSWER" property="answer"/>
+        <result column="REPLY_TIME" property="replyTime"/>
+        <result column="VISIBLE" property="visible"/>
+        <result column="DELETED" property="deleted"/>
+        <result column="CREATED_DATE" property="createdDate"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+        <result column="LAST_MODIFIED_BY" property="lastModifiedBy"/>
+        <association property="goods" javaType="Goods" columnPrefix="TG_">
+            <id column="ID" property="id"/>
+            <result column="TITLE" property="title"/>
+            <result column="IMAGE" property="image"/>
+            <result column="PRICE" property="price"/>
+            <association property="product" javaType="Product" columnPrefix="TP_">
+                <id column="ID" property="id"/>
+                <result column="TITLE" property="title"/>
+                <association property="store" javaType="Store" columnPrefix="TSH_">
+                    <id column="ID" property="id"/>
+                    <result column="NAME" property="name"/>
+                </association>
+            </association>
+            <association property="activityGoods" javaType="ActivityGoods" columnPrefix="">
+                <id property="id" column="GID"/>
+                <result property="discount"  column="DISCOUNT"/>
+                <result property="startDate" column="START_DATE"/>
+                <result property="endDate" column="END_DATE"/>
+            </association>
+        </association>
+        <association property="member" javaType="Member" columnPrefix="TM_">
+            <id column="ID" property="id"/>
+            <result column="MEMBER_NAME" property="memberName"/>
+        </association>
+    </resultMap>
+
+	<sql id="baseQuery">
+        SELECT * FROM (SELECT
+          TC.*,
+          TG.ID         TG_ID,
+          TG.TITLE      TG_TITLE,
+          TG.PRICE      TG_PRICE,
+          TP.ID         TG_TP_ID,
+          TP.TITLE      TG_TP_TITLE,
+          TSH.ID        TG_TP_TSH_ID,
+          TSH.NAME      TG_TP_TSH_NAME,
+          TM.ID         TM_ID,
+          TM.MEMBER_NAME TM_MEMBER_NAME,
+          TAG.ID              TG_GID,
+        TAG.DISCOUNT        TG_DISCOUNT,
+        TAG.START_DATE      TG_START_DATE,
+        TAG.END_DATE        TG_END_DATE
+        FROM T_CONSULT TC
+        INNER JOIN  T_GOODS TG ON TC.GOODS_ID=TG.ID
+        INNER JOIN  T_PRODUCT TP ON TG.PRODUCT_ID=TP.ID
+        INNER JOIN T_STORE TSH ON TP.STORE_ID=TSH.ID
+        INNER JOIN T_MEMBER TM ON TC.MEMBER_ID=TM.ID
+        LEFT JOIN T_ACTIVITY_GOODS TAG ON TAG.GOODS_ID = TG.ID AND TAG.DELETED=0) B
+    </sql>
+
+    <select id="find" parameterType="long" resultMap="ConsultRM">
+        SELECT
+        R.*
+        FROM (
+        <include refid="baseQuery" />
+        WHERE ID = #{id} AND DELETED = 0
+        ) R
+
+    </select>
+
+	<sql id="baseFilter">
+        <if test="goods != null and goods.id != null">
+            AND GOODS_ID = #{goods.id}
+        </if>
+        <if test="member != null and member.id != null">
+            AND MEMBER_ID = #{member.id}
+        </if>
+        <if test="question != null">
+            AND QUESTION = #{question}
+        </if>
+        <if test="askTime != null">
+            AND ASK_TIME = #{askTime}
+        </if>
+        <if test="answer != null">
+            AND ANSWER = #{answer}
+        </if>
+        <if test="replyTime != null">
+            AND REPLY_TIME = #{replyTime}
+        </if>
+        <if test="visible != null">
+            AND VISIBLE = #{visible}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        AND DELETED = 0
+    </sql>
+	
+	<select id="findMany" parameterType="map" resultMap="ConsultRM">
+    	<include refid="support.ph"/>
+        <include refid="baseQuery"/>
+        <where>
+           <trim prefixOverrides="AND">
+           		<include refid="support.dynamicFilters"/>
+           		<include refid="baseFilter"/>
+           </trim>
+        </where>
+        ORDER BY
+	       <trim prefixOverrides=",">
+	           <include refid="support.dynamicSort"/>, LAST_MODIFIED_DATE DESC
+	       </trim>
+        <include refid="support.pf"/>
+    </select>
+    
+    <select id="count" parameterType="map" resultType="int">
+        SELECT
+          COUNT(1)
+        FROM (
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/> AND DELETED = 0
+        </where>
+        ) A
+    </select>
+    
+    <select id="getConsultById" parameterType="long" resultMap="ConsultRM">
+        <include refid="baseQuery"/>
+        WHERE ID = #{ID} AND DELETED = 0
+    </select>
+
+    <insert id="save" parameterType="Consult" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_CONSULT (
+        ID,
+        MEMBER_ID,
+        GOODS_ID,
+        QUESTION,
+        ASK_TIME,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE,
+        DELETED
+        ) VALUES (
+        #{id}
+        ,#{member.id}
+        ,#{goods.id}
+        ,#{question}
+        ,#{askTime}
+        ,#{createdBy}
+        ,#{createdDate}
+        ,#{lastModifiedBy}
+        ,#{lastModifiedDate}
+        ,#{deleted}
+        )
+    </insert>
+    
+    <update id="update" parameterType="Consult">
+    	UPDATE T_CONSULT SET 
+    	<trim prefixOverrides=",">
+    		<if test="goods != null and goods.id != null">
+	            , GOODS_ID = #{goods.id}
+	        </if>
+	        <if test="member != null and member.id != null">
+	            , MEMBER_ID = #{member.id}
+	        </if>
+	        <if test="question != null">
+	            , QUESTION = #{question}
+	        </if>
+	        <if test="askTime != null">
+	            , ASK_TIME = #{askTime}
+	        </if>
+	        <if test="answer != null">
+	            , ANSWER = #{answer}
+	        </if>
+	        <if test="replyTime != null">
+	            , REPLY_TIME = #{replyTime}
+	        </if>
+	        <if test="visible != null">
+	            , VISIBLE = #{visible}
+	        </if>
+	        <if test="createdDate != null">
+	            , CREATED_DATE = #{createdDate}
+	        </if>
+	        <if test="createdBy != null">
+	            , CREATED_BY = #{createdBy}
+	        </if>
+	        <if test="lastModifiedDate != null">
+	            , LAST_MODIFIED_DATE = #{lastModifiedDate}
+	        </if>
+	        <if test="lastModifiedBy != null">
+	            , LAST_MODIFIED_BY = #{lastModifiedBy}
+	        </if>
+    	</trim>
+    	WHERE ID = #{id}
+    </update>
+
+    <!--咨询列表-->
+    <select id="findConsultByIdList" parameterType="map" resultMap="ConsultRM">
+        <include refid="support.ph"/>
+            SELECT
+              TC.*,
+              TG.ID         TG_ID,
+              TG.TITLE      TG_TITLE,
+              TG.IMAGE      TG_IMAGE,
+              TM.ID         TM_ID,
+              TM.MEMBER_NAME TM_MEMBER_NAME
+            FROM T_CONSULT TC
+            INNER JOIN  T_GOODS TG ON TC.GOODS_ID = TG.ID AND TG.DELETED=0
+            INNER JOIN T_MEMBER TM ON TC.MEMBER_ID = TM.ID AND TM.DELETED = 0
+            <where>
+                TC.DELETED = 0
+                <if test="goodsId != null">
+                    AND TC.GOODS_ID = #{goodsId}
+                </if>
+                <if test="memberId != null">
+                    AND TC.MEMBER_ID = #{memberId}
+                </if>
+                AND TC.VISIBLE = 1
+            </where>
+            ORDER  BY
+                TC.CREATED_DATE DESC
+        <include refid="support.pf"/>
+    </select>
+    <select id="findConsultByIdCount" parameterType="map" resultType="int">
+        SELECT
+           COUNT(1)
+        FROM (
+            SELECT
+            TC.*,
+            TG.ID TG_ID,
+            TG.TITLE TG_TITLE,
+            TG.IMAGE TG_IMAGE,
+            TM.ID TM_ID,
+            TM.MEMBER_NAME TM_MEMBER_NAME
+            FROM T_CONSULT TC
+            INNER JOIN  T_GOODS TG ON TC.GOODS_ID = TG.ID AND TG.DELETED=0
+            INNER JOIN T_MEMBER TM ON TC.MEMBER_ID = TM.ID AND TM.DELETED = 0
+            <where>
+                TC.DELETED = 0
+                <if test="goodsId != null">
+                    AND TC.GOODS_ID = #{goodsId}
+                </if>
+                <if test="memberId != null">
+                    AND TC.MEMBER_ID = #{memberId}
+                </if>
+                AND TC.VISIBLE = 1
+            </where>
+            ORDER  BY
+            TC.CREATED_DATE DESC
+        ) C
+    </select>
+
+    <update id="delete" parameterType="Consult">
+        UPDATE T_CONSULT SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+</mapper>

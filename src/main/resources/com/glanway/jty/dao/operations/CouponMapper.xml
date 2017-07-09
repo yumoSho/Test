@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.operations.CouponDao">
+    <select id="find" parameterType="long" resultType="Coupon">
+      SELECT * FROM T_COUPON
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="Coupon">
+        <include refid="support.ph"/>
+        SELECT * FROM (
+        SELECT
+        TC.*,
+        M.MEMBER_NAME
+        FROM
+        T_COUPON TC
+        LEFT JOIN T_MEMBER M ON TC.MEMBER_ID = M.ID
+        ) A
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND DELETED = 0
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+
+    <select id="count" parameterType="map" resultType="int">
+       SELECT COUNT(*) FROM (
+        SELECT
+        TC.*,
+        M.MEMBER_NAME
+        FROM
+        T_COUPON TC
+        LEFT JOIN T_MEMBER M ON TC.MEMBER_ID = M.ID
+        ) A
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND DELETED = 0
+        </where>
+    </select>
+
+    <insert id="save" parameterType="Coupon" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+			T_COUPON(
+					MEMBER_ID,TEMPLATE_ID,COUPON_NAME
+					,AMOUNT,BEGIN_DATE
+					,END_DATE,CODE,CREATED_DATE,GRANT_DATE,STATUS
+					,DISCOUNT,MIN_PRICE,AUTO_SEND,AUTO_MIN_PRICE,AUTO_MAX_PRICE,DELETED)
+ 		VALUES(#{memberId },#{templateId},#{couponName},#{amount},#{beginDate},#{endDate}
+ 		,#{code},#{createdDate},#{grantDate},${status}
+ 		,#{discount},#{minPrice},#{autoSend},#{autoMinPrice}
+ 		,#{autoMaxPrice},0)
+	</insert>
+
+    <update id="update" parameterType="Coupon">
+        UPDATE T_COUPON
+        <set>
+            <if test="memberId != null">
+                MEMBER_ID=#{memberId},
+            </if>
+            <if test="templateId != null">
+                TEMPLATE_ID=#{templateId},
+            </if>
+            <if test="couponName != null">
+                COUPON_NAME=#{couponName},
+            </if>
+            <if test="amount != null">
+                AMOUNT=#{amount},
+            </if>
+            <if test="beginDate != null">
+                BEGIN_DATE=#{beginDate},
+            </if>
+
+            <if test="endDate != null">
+                END_DATE=#{endDate},
+            </if>
+            <if test="grantDate != null">
+                GRANT_DATE=#{grantDate},
+            </if>
+            <if test="code != null">
+                CODE=#{code},
+            </if>
+            <if test="grantDate != null">
+                CREATED_DATE=#{grantDate},
+            </if>
+            <if test="status != null">
+                STATUS=#{status},
+            </if>
+        </set>
+        WHERE ID=#{id} AND DELETED = 0
+    </update>
+
+
+    <update id="delete" parameterType="long">
+		UPDATE T_COUPON SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+
+    <!--批量删除-->
+    <update id="deleteBatch">
+        UPDATE T_COUPON SET DELETED = 1 WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findByStore" parameterType="map" resultType="Coupon">
+       SELECT
+	A.*
+FROM
+	(
+		SELECT
+			COUPON_NAME ,
+            TEMPLATE_ID,
+			COUNT(*) AS STATUS
+		FROM
+			T_COUPON TC
+		WHERE
+			NOW() &lt; END_DATE
+		AND DELETED = 0
+		AND STATUS = 1
+		GROUP BY
+            COUPON_NAME,
+			TEMPLATE_ID
+	) A
+<where>
+    <if test="templateId !=null">
+       AND A.TEMPLATE_ID = #{templateId}
+    </if>
+</where>
+    </select>
+
+    <select id="findList" parameterType="map" resultType="Coupon">
+        SELECT
+        *
+        FROM
+        T_COUPON
+        WHERE
+        NOW() &lt; END_DATE
+        AND DELETED = 0
+
+            <if test="templateId !=null">
+                AND TEMPLATE_ID = #{templateId}
+            </if>
+            <if test="couponName !=null">
+                AND COUPON_NAME = #{couponName}
+            </if>
+            <if test="memberId != null">
+                AND MEMBER_ID = #{memberId}
+            </if>
+            <if test="status != null">
+                AND STATUS = #{status}
+            </if>
+    </select>
+
+</mapper>

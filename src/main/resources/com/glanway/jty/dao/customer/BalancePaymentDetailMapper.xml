@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.customer.BalancePaymentDetailDao">
+    
+    <resultMap id="balancePaymentDetailRM" type="BalancePaymentDetail">
+        <id property="id" column="ID" />
+        <result property="memberId" column="MEMBER_ID" />
+        <result property="rechargeCode" column="RECHARGE_CODE" />
+        <result property="type" column="TYPE" />
+        <result property="amount" column="AMOUNT" />
+        <result property="giftAmount" column="GIFT_AMOUNT" />
+        <result property="balance" column="BALANCE" />
+        <result property="costWay" column="COST_WAY" />
+        <result property="remark" column="REMARK" />
+        <result property="startTime" column="START_TIME" />
+        <result property="deleted" column="DELETED" />        
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+       
+        <association property="consumeMember" javaType="Member">
+            <id property="id" column="TM_ID" />
+            <result property="memberName" column="TM_MEMBER_NAME" />
+        </association>
+
+    </resultMap>
+    
+    <select id="find" parameterType="long" resultType="BalancePaymentDetail">
+        SELECT
+        B.*
+        FROM
+          T_BANLANCE_PAYMENT_DETAIL B
+        WHERE B.DELETED = 0
+        AND B.ID = #{id}
+    </select>
+
+    <select id="findOne" parameterType="map" resultType="BalancePaymentDetail">
+        SELECT
+        B.*
+        FROM
+        T_BANLANCE_PAYMENT_DETAIL B
+        <where>
+            <if test="null != rechargeCode">
+                RECHARGE_CODE = #{rechargeCode}
+            </if>
+            <if test="id != null">
+                AND ID = #{id}
+            </if>
+            AND B.DELETED = 0
+        </where>
+    </select>
+
+    
+
+    <select id="findMany" parameterType="map" resultMap="balancePaymentDetailRM">
+        <include refid="support.ph"/>
+        SELECT 
+        B.*,
+        TM.ID TM_ID,
+        TM.MEMBER_NAME TM_MEMBER_NAME
+        FROM
+        T_BANLANCE_PAYMENT_DETAIL B
+        LEFT JOIN T_MEMBER TM ON TM.ID=B.CONSUME_MEMBER_ID AND TM.DELETED=0
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND B.DELETED = 0
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM
+        T_BANLANCE_PAYMENT_DETAIL B
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND B.DELETED = 0
+        </where>
+
+    </select>
+
+    <insert id="save" parameterType="BalancePaymentDetail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_BANLANCE_PAYMENT_DETAIL (
+        <!-- self columns -->
+        ID
+        ,CREATED_BY
+        ,CREATED_DATE
+        ,LAST_MODIFIED_BY
+        ,LAST_MODIFIED_DATE
+        ,MEMBER_ID
+        ,TYPE
+        ,AMOUNT
+        ,REMARK
+        ,START_TIME
+        ,DELETED
+        ,BALANCE
+        ,COST_WAY
+        ,RECHARGE_CODE
+        ,CONSUME_MEMBER_ID
+        ,GIFT_AMOUNT
+        <!-- one to one fk -->
+        <!-- many to one fk -->
+        )
+        VALUES (
+        <!-- self columns -->
+        #{id},
+        #{createdBy},
+        #{createdDate},
+        #{lastModifiedBy},
+        #{lastModifiedDate},
+        #{memberId},
+        #{type},
+        #{amount},
+        #{remark},
+        #{startTime},
+        #{deleted},
+        #{balance},
+        #{costWay},
+        #{rechargeCode},
+        #{consumeMemberId},
+        #{giftAmount}
+        <!-- one to one fk -->
+        <!-- may to one fk -->
+        )
+    </insert>
+
+    <update id="update" parameterType="BalancePaymentDetail">
+        update T_BANLANCE_PAYMENT_DETAIL
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="memberId != null">
+                MEMBER_ID = #{memberId},
+            </if>
+            <if test="type != null">
+                TYPE = #{type},
+            </if>
+            <if test="amount != null">
+                AMOUNT = #{amount},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+
+            <if test="balance != null">
+                BALANCE = #{balance},
+            </if>
+            <if test="costWay != null">
+                COST_WAY = #{costWay},
+            </if>
+
+            <if test="rechargeCode != null">
+                RECHARGE_CODE = #{rechargeCode},
+            </if>
+            <if test="consumeMemberId != null">
+                CONSUME_MEMBER_ID = #{consumeMemberId},
+            </if>
+			<if test="giftAmount != null">
+                GIFT_AMOUNT = #{giftAmount},
+            </if>
+        </set>
+        where ID=#{id} AND DELETED = 0
+    </update>
+
+    <update id="delete" parameterType="long">
+		UPDATE T_BANLANCE_PAYMENT_DETAIL SET DELETED = 1 WHERE ID = #{id}
+	</update>
+    
+</mapper>

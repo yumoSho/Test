@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--  -->
+
+<mapper namespace="com.glanway.jty.dao.marketing.CategoryRecommendDao">
+
+
+   <resultMap id="categoryRecommendRM" type="CategoryRecommend">
+        <id property="id" column="ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="url" column="URL"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="sort" column="SORT"/>
+
+    </resultMap>
+    
+    <!--广告表的所有字段 -->
+    <sql id="adCols">
+        ID,
+        TITLE,
+        URL,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE,
+        DELETED,
+        SORT
+    </sql>
+
+
+	<sql id="baseFilter">
+			<if test="id != null">
+				AND ID = #{id}
+			</if>
+			<if test="title != null">
+				AND TITLE = #{title}
+			</if>
+			<if test="url != null">
+				AND URL = #{url}
+			</if>
+			
+			<if test="createdBy != null">
+				AND CREATED_BY = #{createdBy}
+			</if>
+			<if test="createdDate != null">
+				AND CREATED_DATE = #{createdDate}
+			</if>
+			<if test="lastModifiedBy != null">
+				AND LAST_MODIFIED_BY = #{lastModifiedBy}
+			</if>
+			<if test="lastModifiedDate != null">
+				AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+			</if>
+			<if test="sort != null">
+				SORT = #{sort},
+			</if>
+			AND A.DELETED = 0
+	</sql>
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+	<insert id="save" parameterType="Link">
+		INSERT INTO T_RECOMMEND (
+		TITLE,
+        URL,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE,
+        DELETED,
+        SORT
+		) VALUES (
+			#{title},
+			#{url},
+			#{createdBy},
+			#{createdDate},
+			#{lastModifiedBy},
+			#{lastModifiedDate},
+			#{deleted},
+			#{sort}
+		)
+	</insert>
+	
+	<!-- 查询数量 -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) 
+		FROM T_RECOMMEND A
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+	
+	
+	<select id="findMany" parameterType="map" resultMap="categoryRecommendRM">
+		SELECT
+			A.*
+		FROM T_RECOMMEND A
+
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim>
+	</select>
+	
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="categoryRecommendRM">
+    	SELECT
+			A.*
+		FROM T_RECOMMEND A
+    	WHERE A.ID = #{id} AND A.DELETED = 0
+    </select>
+    
+	 <!-- 搜索全部 -->
+    <select id="findAll" parameterType="long" resultMap="categoryRecommendRM">
+    	SELECT 
+    		<include refid="adCols"/>
+    	FROM
+		T_RECOMMEND WHERE DELETED = 0
+    </select>
+    
+
+    
+    <!-- 更新数据 -->
+    <update id="update" parameterType="CategoryRecommend">
+		UPDATE T_RECOMMEND
+		<set>
+			<if test="title != null">
+				TITLE = #{title},
+			</if>
+			<if test="url != null">
+				URL = #{url},
+			</if>
+			<if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="sort != null">
+				SORT = #{sort},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 删除 -->
+    <update id="delete" parameterType="CategoryRecommend">
+    	UPDATE T_RECOMMEND SET DELETED = 1 WHERE ID = #{id}
+    </update>
+</mapper>

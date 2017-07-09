@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Created on 2014-08-04 13:48:57 @author crud generated -->
+<mapper namespace="com.glanway.jty.dao.product.FileImportDao">
+
+	<sql id="baseCols">
+		ID,
+		TITLE,
+		NAME,
+		ERROR,
+		TOTAL,
+		STATUS,
+		DELETED,
+		CREATED_BY,
+		CREATED_DATE,
+		LAST_MODIFIED_BY,
+		LAST_MODIFIED_DATE
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+			ID,
+			TITLE,
+			NAME,
+			ERROR,
+			TOTAL,
+			STATUS,
+			DELETED,
+			CREATED_BY,
+			CREATED_DATE,
+			LAST_MODIFIED_BY,
+			LAST_MODIFIED_DATE
+		FROM
+			T_FILE_IMPORT
+	</sql>
+
+	<sql id="baseFilter">
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="title != null">
+			AND TITLE = #{title}
+		</if>
+		<if test="name != null">
+			AND name = #{name}
+		</if>
+		<if test="error != null">
+			AND ERROR = #{error}
+		</if>
+		<if test="total != null">
+			AND TOTAL = #{total}
+		</if>
+		<if test="status != null">
+			AND STATUS = #{status}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		AND DELETED = 0
+	</sql>
+
+	<!-- - - - - - - - - - Retrieve - - - - - - - - - -->
+	<select id="find" parameterType="long" resultType="FileImport">
+		SELECT * FROM T_FILE_IMPORT WHERE ID = #{id} AND DELETED = 0
+	</select>
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultType="FileImport">
+		<include refid="support.ph" />
+			<include refid="baseQuery" />
+		<where>
+			<include refid="support.dynamicFilters" />
+			<include refid="baseFilter" />
+		</where>
+		<!-- TODO default sort -->
+		ORDER BY
+		<trim prefixOverrides=",">
+			<include refid="support.dynamicSort" />
+			, LAST_MODIFIED_DATE DESC
+		</trim>
+		<include refid="support.pf" />
+		<!-- ORDER BY ROWID -->
+	</select>
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM T_FILE_IMPORT
+		<where>
+			<include refid="support.dynamicFilters" />
+			<include refid="baseFilter" />
+		</where>
+	</select>
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="FileImport"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_FILE_IMPORT (
+		<include refid="baseCols" />
+		) VALUES (
+		#{id},
+		#{title},
+		#{name},
+		#{error},
+		#{total},
+		#{status},
+		0,
+		#{createdBy},
+		#{createdDate},
+		#{lastModifiedBy},
+		#{lastModifiedDate}
+		)
+	</insert>
+
+
+	<!-- - - - - - - - - - - Delete - - - - - - - - - -->
+	<update id="delete" parameterType="FileImport">
+		UPDATE T_FILE_IMPORT SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+</mapper>

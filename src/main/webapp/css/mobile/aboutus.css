@@ -1,0 +1,99 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.head a img {
+  width: .49rem;
+}
+.newsList {
+  font-size: 0.24rem;
+  color: #757574;
+}
+.newsList .module-list-01 {
+  overflow: hidden;
+}
+.newsList .module-list-01 dl {
+  margin: 0;
+  padding: 0.21rem 0;
+  border-top: 1px solid #efefef;
+  overflow: hidden;
+}
+.newsList .module-list-01 dl:first-child {
+  border-top: 0;
+  margin-top: 0.04rem;
+}
+.newsList .module-list-01 dt {
+  float: left;
+}
+.newsList .module-list-01 dt img {
+  margin-right: 0.15rem;
+  width: 1.95rem;
+  height: 1.5rem;
+  border: 1px #e3e3e3 solid;
+}
+.newsList .module-list-01 dd {
+  overflow: hidden;
+}
+.newsList .module-list-01 h2 {
+  margin: 0.2rem 0 0.2rem;
+  font-size: 0.24rem;
+  height: 0.7rem;
+  font-weight: normal;
+}
+.newsList .module-list-01 h2 a {
+  letter-spacing: 0.02rem;
+  color: #4a4a4a;
+  text-decoration: none;
+}
+.newsList .module-list-01 h2 a:hover {
+  color: #4a4a4a;
+  text-decoration: underline;
+}
+.newsList .module-list-01 h2 a:hover:hover {
+  text-decoration: none;
+}
+.newsList .module-list-01 p {
+  line-height: 0.2rem;
+}
+.newsList .module-list-01 .more:hover {
+  text-decoration: underline;
+}
+.newsLi {
+  border-bottom: 1px solid #cfcfcf;
+  font-size: 0;
+}
+.newsLi a {
+  font-size: 0.28rem;
+  width: 20%;
+  display: inline-block;
+  text-align: center;
+  margin: 0.24rem 0;
+  line-height: 0.3rem;
+}
+.main {
+  background: #fff;
+}
+/*行业新闻内容页*/
+.infoTime {
+  font-size: 0.22rem;
+  text-align: center;
+  line-height: 0.44rem;
+}
+.newsContent {
+  color: #333;
+}
+.contentTitle {
+  font-size: 0.3rem;
+  text-align: center;
+  margin-top: 0.37rem;
+  line-height: 0.5rem;
+  height: 0.5rem;
+}
+.listContent p {
+  margin-top: 0.2rem;
+}
+.newsLi a.on {
+  color: #19aa4b;
+}
+a:hover {
+  color: #333;
+}
+/*# sourceMappingURL=aboutus.css.map */

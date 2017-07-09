@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.ContentManagementDao">
+    <resultMap id="contentManagementRM" type="ContentManagement">
+        <id property="id" column="ID"/>
+        <result column="ID" property="id"/>
+        <result property="image" column="IMAGE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+
+        <!-- 关联数据字典 -->
+        <association property="dictionary" javaType="Dictionary" columnPrefix="D_">
+            <id property="id" column="ID"/>
+            <result property="dicName" column="DIC_NAME"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+    </resultMap>
+
+
+    
+
+    <insert id="save" parameterType="ContentManagement" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_CONTENT_MANAGEMENT (
+        	ID,
+        	IMAGE,
+            CONTENT,
+            DICTIONARY_ID,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            SORT_NUM,
+            DELETED
+        ) VALUES (
+        #{id},
+        #{image},
+        #{content},
+        #{dictionary.id},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy},
+        #{sortNum},
+        #{deleted}
+        )
+    </insert>
+
+    <sql id="baseQuery">
+      
+            ID,
+            DICTIONARY_ID,
+            CONTENT,
+            BANKID,
+            DELETED,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            SORT_NUM
+
+    </sql>
+    <sql id="baseFilter">
+        <if test="content != null">
+            AND CONTENT = #{content}
+        </if>
+        
+        <if test="dictionary != null and dictionary.id != null">
+            AND DICTIONARY_ID = #{dictionary.id}
+        </if>
+        <if test="bank != null and bank.id != null">
+            AND BANKID = #{bank.id}
+        </if>
+        <if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+	    </if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="sortNum != null">
+			AND SORT_NUM = #{sortNum}
+	    </if>
+        
+    
+    </sql>
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="contentManagementRM">
+    	SELECT 
+		C.*,
+		D.ID	    D_ID,
+		D.DIC_NAME  D_DIC_NAME
+		FROM T_CONTENT_MANAGEMENT C
+		JOIN T_DICTIONARY D ON D.ID=C.DICTIONARY_ID
+		AND C.DELETED=0  AND D.DELETED=0
+		WHERE C.ID=#{id}
+    </select>
+	
+	<select id="findOne" parameterType="map" resultMap="contentManagementRM">
+       SELECT 
+		C.*,
+		D.ID	    D_ID,
+		D.DIC_NAME  D_DIC_NAME
+		FROM T_CONTENT_MANAGEMENT C
+		JOIN T_DICTIONARY D ON D.ID=C.DICTIONARY_ID
+		AND C.DELETED=0  AND D.DELETED=0
+        <where>
+            <if test="null != id">
+                ID = #{id}
+            </if>
+            <if test="null != dictionaryId">
+                AND DICTIONARY_ID = #{dictionaryId}
+            </if>
+            
+            AND C.DELETED = 0
+        </where>
+    </select>
+	
+    <sql id="productDynamicFilters">
+        <if test="_product_filters != null">
+            <foreach item="filter" collection="_product_filters" separator=" AND ">
+                <include refid="support.foreachFilter"/>
+            </foreach>
+        </if>
+    </sql>
+
+	
+    <sql id="brandDynamicFilters">
+        <if test="_brand_filters != null">
+            <foreach item="filter" collection="_brand_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(B.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            B.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- 分类动态条件 -->
+    <sql id="categoryDynamicFilters">
+        <if test="_category_filters != null">
+            <foreach item="filter" collection="_category_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(C.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            C.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+
+    <!-- 供应商动态条件 -->
+    <sql id="supplierDynamicFilters">
+        <if test="_supplier_filters != null">
+            <foreach item="filter" collection="_supplier_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(S.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            S.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- 模型动态条件 -->
+    <sql id="modelDynamicFilters">
+        <if test="_model_filters != null">
+            <foreach item="filter" collection="_model_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(M.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            M.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+	<select id="findMany" parameterType="map" resultMap="contentManagementRM">
+		SELECT 
+		C.*,
+		D.ID	    D_ID,
+		D.DIC_NAME  D_DIC_NAME
+		FROM T_CONTENT_MANAGEMENT C
+		JOIN T_DICTIONARY D ON D.ID=C.DICTIONARY_ID AND D.DELETED=0
+	
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND C.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		 <!--CREATED_DATE-->
+	</select>
+	
+	<select id="findManyByBankId" parameterType="ContentManagement" resultMap="contentManagementRM">
+		SELECT 
+		C.*,
+		D.ID	    D_ID,
+		D.DIC_NAME  D_DIC_NAME,
+		D.REMARK	D_REMARK
+		FROM T_CONTENT_MANAGEMENT C
+		JOIN T_DICTIONARY D ON D.ID=C.DICTIONARY_ID
+		AND C.DELETED=0  AND D.DELETED=0
+		ORDER BY SORT_NUM
+	</select>
+	
+	
+
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_CONTENT_MANAGEMENT C
+		JOIN T_DICTIONARY D ON D.ID=C.DICTIONARY_ID
+		AND C.DELETED=0 AND D.DELETED=0
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+		</where>
+
+	</select>
+
+	<select id="countByDicIdAndBankId" parameterType="ContentManagement" resultType="int">
+		SELECT COUNT(1)
+		FROM T_CONTENT_MANAGEMENT
+		WHERE DICTIONARY_ID=#{dictionary.id}
+		AND DELETED=0
+		<if test="id != null">
+			AND ID !=#{id}
+		</if>
+	</select>
+   
+
+    <update id="update" parameterType="ContentManagement">
+        UPDATE T_CONTENT_MANAGEMENT
+        <set>
+       		<if test="image != null">
+           		 IMAGE = #{image},
+	        </if> 
+            <if test="content != null">
+           		 CONTENT = #{content},
+	        </if>      
+	        <if test="dictionary != null and dictionary.id != null">
+	            DICTIONARY_ID = #{dictionary.id},
+	        </if>
+	      
+	        <if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+		    </if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="sortNum != null">
+				SORT_NUM = #{sortNum}
+		    </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="ContentManagement">
+        UPDATE T_CONTENT_MANAGEMENT SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    
+
+    <update id="offLoding" >
+        UPDATE T_PRODUCT SET IS_PUTAWAY= 0, SALES_OFF_DATE=NOW() WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <update id="onSell" >
+        UPDATE T_PRODUCT SET IS_PUTAWAY= 1, REGISTER_DATE=NOW() WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="countWaitAudit" resultType="int">
+        SELECT COUNT(1) FROM T_PRODUCT WHERE DELETED=0 AND AUDIT=1
+    </select>
+
+
+
+</mapper>

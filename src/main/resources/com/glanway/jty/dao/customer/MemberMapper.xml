@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.customer.MemberDao">
+    <select id="find" parameterType="long" resultType="Member">
+        SELECT
+        M.*
+        FROM
+          T_MEMBER M
+        WHERE M.DELETED = 0
+        AND M.ID = #{id}
+    </select>
+
+    <select id="findOne" parameterType="map" resultType="Member">
+        SELECT
+        M.*
+        FROM
+        T_MEMBER M
+        <where>
+            <if test="null != memberName">
+                MEMBER_NAME = #{memberName}
+            </if>
+            <if test="null != password">
+                AND PASSWORD = #{password}
+            </if>
+            <if test="phone != null">
+                AND PHONE = #{phone}
+            </if>
+            <if test="email != null">
+                AND EMAIL = #{email}
+            </if>
+            <if test="id != null">
+                AND ID = #{id}
+            </if>
+
+            <if test="null != activated">
+                AND ACTIVATED = #{activated}
+            </if>
+
+            <if test="null != status">
+                AND STATUS = #{status}
+            </if>
+            AND M.DELETED = 0
+        </where>
+    </select>
+
+    <select id="isExist" parameterType="map" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        T_MEMBER M WHERE M.DELETED = 0
+        <if test="memberName != null">
+            AND M.MEMBER_NAME = #{memberName}
+        </if>
+        <if test="phone != null">
+            AND M.PHONE = #{phone}
+        </if>
+        <if test="email != null">
+            AND M.EMAIL = #{email}
+        </if>
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="Member">
+        <include refid="support.ph"/>
+        SELECT * FROM
+        T_MEMBER M
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND M.DELETED = 0
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM
+        T_MEMBER M
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND M.DELETED = 0
+        </where>
+
+    </select>
+
+    <insert id="save" parameterType="Member" useGeneratedKeys="true" keyProperty="id">
+		insert into T_MEMBER(ID,MEMBER_NAME,PASSWORD,PHONE,EMAIL,ID_NO,REAL_NAME,SEX,HEAD_IMAGE,REGISTER_FROM,STATUS,LAST_LOGIN_TIME,LAST_LOGIN_IP,REGISTER_DATE,LAST_MODIFIED_DATE,LAST_MODIFIED_BY,MEMBER_CODE,ISP,DELETED,LOGIN_COUNT,CARD_IMG,CARD_IMG_TWO,BIRTHDATE,REG_TYPE,ACTIVATED,RECOMMENDED_ID,BALANCE,GRADE_NAME,ADDRESS)
+ values(#{id},#{memberName},#{password},#{phone},#{email},#{idNo},#{realName},#{sex},#{headImage},#{registerFrom},#{status},#{lastLoginTime},#{lastLoginIp},#{registerDate},NOW(),#{lastModifiedBy},#{memberCode},#{isp},0,0,#{cardImg},#{cardImgTwo},#{birthdate},#{regType},#{activated},#{recommendedId},#{balance},'普通会员',#{address})
+	</insert>
+
+    <update id="update" parameterType="Member">
+        update T_MEMBER
+        <set>
+            <if test="memberName != null">
+                MEMBER_NAME=#{memberName},
+            </if>
+            <if test="password != null">
+                PASSWORD=#{password},
+            </if>
+            <if test="phone != null">
+                PHONE=#{phone},
+            </if>
+            <if test="email != null">
+                EMAIL=#{email},
+            </if>
+            <if test="idNo != null">
+                ID_NO=#{idNo},
+            </if>
+            <if test="realName != null">
+                REAL_NAME=#{realName},
+            </if>
+            <if test="sex != null">
+                SEX=#{sex},
+            </if>
+            <if test="headImage != null">
+                HEAD_IMAGE=#{headImage},
+            </if>
+            <if test="registerFrom != null">
+                REGISTER_FROM=#{registerFrom},
+            </if>
+            <if test="status != null">
+                STATUS=#{status},
+            </if>
+            <if test="lastLoginTime != null">
+                LAST_LOGIN_TIME=#{lastLoginTime},
+            </if>
+            <if test="lastLoginIp != null">
+                LAST_LOGIN_IP=#{lastLoginIp},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE=#{lastModifiedDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY=#{lastModifiedBy},
+            </if>
+
+            <if test="memberCode != null">
+                MEMBER_CODE=#{memberCode},
+            </if>
+            <if test="isp != null">
+                ISP=#{isp},
+            </if>
+            <if test="loginCount != null">
+                LOGIN_COUNT = #{loginCount},
+            </if>
+            <if test="cardImg != null">
+                CARD_IMG = #{cardImg},
+            </if>
+            <if test="cardImgTwo != null">
+                CARD_IMG_TWO = #{cardImgTwo},
+            </if>
+            <if test="birthdate != null">
+                BIRTHDATE = #{birthdate},
+            </if>
+
+            <if test="provinceId != null">
+                PROVINCE_ID = #{provinceId},
+            </if>
+            <if test="recommendedId != null">
+                RECOMMENDED_ID = #{recommendedId},
+            </if>
+            <if test="balance != null">
+                BALANCE = #{balance},
+            </if>
+            <if test="gradeId != null">
+                GRADE_ID = #{gradeId},
+            </if>
+            <if test="gradeName != null">
+                GRADE_NAME = #{gradeName},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address}
+            </if>
+        </set>
+        where ID=#{id} AND DELETED = 0
+    </update>
+
+    <update id="delete" parameterType="long">
+		UPDATE T_MEMBER SET DELETED = 1 WHERE ID = #{id}
+	</update>
+    <update id="active" parameterType="map">
+        UPDATE T_MEMBER SET ACTIVATED = 1   WHERE EMAIL = #{email}
+    </update>
+    <update id="setPassword" parameterType="map">
+        <if test="phone != null or email != null or id != null">
+            UPDATE T_MEMBER SET PASSWORD = #{password}, LAST_LOGIN_TIME = #{lastLoginTime}, LAST_lOGIN_IP = #{loginIp}
+            <where>
+                <if test="phone != null">
+                    PHONE = #{phone}
+                </if>
+                <if test="email != null">
+                    AND EMAIL = #{email}
+                </if>
+                <if test="id != null">
+                    AND ID = #{id}
+                </if>
+                AND DELETED = 0
+            </where>
+        </if>
+    </update>
+
+
+    <select id="memberNameRepeat" parameterType="map" resultType="int">
+        SELECT
+          COUNT(*)
+        FROM
+        (
+        SELECT M.* FROM T_MEMBER M
+        WHERE M.DELETED =0
+          AND (M.ID != #{0})
+        AND (M.MEMBER_NAME = #{1})
+        ) A
+    </select>
+
+    <select id="maxMemberCode" resultType="int">
+        SELECT COUNT(ID) FROM T_MEMBER M;
+    </select>
+</mapper>

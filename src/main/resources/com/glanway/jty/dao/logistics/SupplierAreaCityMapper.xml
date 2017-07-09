@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.logistics.SupplierAreaCityDao">
+    <resultMap id="supplierAreaCityRM" type="SupplierAreaCity">
+        <id column="ID" property="id"/>
+        <result column="SUPPLIER_AREA_ID" property="supplierAreaId"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="deleted" column="DELETED"/>
+		<association column="CITY_ID"  property="hatCity" javaType="HatCity" columnPrefix="HC_">
+            	<id column="ID" property="id"/>
+		        <result property="CITY_CODE" column="cityCode"/>
+		        <result property="CITY_NAME" column="cityName"/>
+		        <result property="SUPER_CODE" column="superCode"/>
+ 		</association>
+    </resultMap>
+
+
+<!-- - - - - - - - - - - Create - - - - - - - - - -->
+	<insert id="batchSave" parameterType="List">
+		INSERT INTO T_SUPPLIER_AREA_CITY (
+	        SUPPLIER_AREA_ID,
+		    CITY_ID,
+		    CREATED_DATE,
+		    CREATED_BY,
+		    DELETED
+		) VALUES 
+		 <foreach collection="list" item="sac" index="index" separator="," >  
+         (
+	         #{sac.supplierAreaId},
+	         #{sac.hatCity.id},
+	         #{sac.createdDate}, 
+	         #{sac.createdBy}, 
+	         #{sac.deleted}
+          )  
+    	</foreach>  
+	</insert>
+	
+	<!-- 获取一条物流信息包含的所有城市的id -->
+	<select id="findBySupplierAreaId" parameterType="long" resultType="long">
+		SELECT
+		    CITY_ID HC_ID
+		FROM
+		    T_SUPPLIER_AREA_CITY
+		WHERE SUPPLIER_AREA_ID = #{id}
+		AND DELETED = 0
+	</select>
+
+	<!-- 删除一条物流信息下所有城市信息 -->
+	<delete id="deleteBySupplierAreaId" parameterType="long">
+		DELETE FROM T_SUPPLIER_AREA_CITY 
+		WHERE SUPPLIER_AREA_ID = #{supplierAreaId}
+	</delete>
+	
+	<!-- 删除多条物流信息下所有城市信息 -->
+	<delete id="deleteBySupplierAreaIdList" parameterType="List">
+		DELETE FROM T_SUPPLIER_AREA_CITY 
+		WHERE SUPPLIER_AREA_ID IN 
+		<foreach item="supplierAreaId" index="index" collection="list" open="(" separator="," close=")">
+			#{supplierAreaId}
+		</foreach>
+	</delete>
+	
+</mapper>

@@ -1,0 +1,96 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--
+<script type="x-tmpl-mustache" id="tpl-attr">
+<tr>
+    <td>
+        <input type="text" name="attributes[{{index}}].name" class="required">
+    </td>
+    <td>
+        <input type="text" name="attributes[{{index}}].alias" >
+    </td>
+    <td>
+        <select name="attributes[{{index}}].displayType" style="width: 100%;">
+            <option value="0">Select</option>
+            <option value="1" selected>Text</option>
+            <option value="2">Range</option>
+        </select>
+    </td>
+    <td>
+        <input type="text" name="attributes[{{index}}].attributeValues[0].firstValue">
+    </td>
+    <td>
+        <input type="text" name="attributes[{{index}}].sort" class="required digits" max="999">
+    </td>
+    <td>
+        <select name="attributes[{{index}}].isShow" style="width: 100%;">
+            <option value="1">Visible</option>
+            <option value="0">Hidden</option>
+        </select>
+    </td>
+    <td>
+        <div class="operateBox">
+            <img src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </td>
+</tr>
+</script>
+--%>
+<script type="x-tmpl-mustache" id="tpl-spec">
+<tr data-id="">
+    <td valign="top">
+        {{name}}
+        <input type="hidden" class='specIdZ' name="modelSpecs[{{index}}].spec.id" value="{{id}}">
+    </td>
+    <td valign="top">{{alias}}</td>
+    <td valign="top" style="text-align:center;">
+        <span class="spinner">
+            <input type="text" name="modelSpecs[{{index}}].sort" class="required digits" max="999">
+            <span class="spin-buttons">
+                <span class="btn-up"></span>
+                <span class="btn-down"></span>
+            </span>
+        </span>
+
+    </td>
+    <td valign="top">
+        <div class="operateBox" >
+        <%--
+            <img onclick="$(this).closest('tr').remove();" src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+            --%>
+        <img src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </td>
+</tr>
+</script>
+<script type="x-tmpl-mustache" id="tpl-param-group"><div style="margin-bottom:10px;">
+	<table class="table-module01">
+	    <colgroup>
+            <col style="width:20%"></col>
+            <col style="width:50%"></col>
+            <col style="width:30%"></col>
+        </colgroup>
+		<thead style="border-bottom:1px solid #ddd;background:#f7f7f7;">
+			<tr>
+				<td colspan="2" width="70%">
+					参数组名称:
+					<input type="text" name="parameters[{{index}}].name" class="required groupPara repeatParamValidate" parent="true" minlength="2" maxlength="12">
+				</td>
+				<td width="30%">
+					<button class="btn-sure" type="button">添加参数</button>
+    				<button class="btn-cancel" type="button" >移除</button>
+				</td>
+			</tr>
+		</thead>
+        <tbody>
+        </tbody>
+    </table>
+</div></script>
+<script type="x-tmpl-mustache" id="tpl-param">
+<tr style="border-bottom:1px dotted #ddd;">
+    <th valign="top" width="20%">参数名称</th>
+    <td valign="top" width="50%"><input type="text" name="parameters[{{groupIndex}}].children[{{index}}].name" children="true" class="required childPara repeatParamChildValidate" minlength="2" maxlength="12"></td>
+    <td valign="top" width="30%">
+        <button class="btn-cancel" type="button" >移除</button>
+    </td>
+</tr>
+</script>

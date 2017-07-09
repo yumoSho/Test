@@ -1,0 +1,109 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.wrap {
+  background: #f9f9f9;
+}
+.wrap .head .menuBtn img {
+  width: 0.49rem;
+}
+/*特价专区-正在进行*/
+.tabBtn {
+  height: .68rem;
+  font-size: .24rem;
+  background: #EEEEEE;
+  border-bottom: 1px solid #cacaca;
+  border-top: 1px solid #cacaca;
+}
+.tabBtn a {
+  float: left;
+  width: 49%;
+  line-height: .68rem;
+  text-align: center;
+}
+.tabBtn a.on {
+  color: #19aa4b;
+  width: 49%;
+}
+.tabBtn i {
+  float: left;
+  width: .01rem;
+  height: .29rem;
+  border-left: 1px solid #d8d8d8;
+  margin: .2rem 0;
+}
+.information {
+  overflow: hidden;
+  padding-bottom: .9rem;
+}
+.information .informationDiv {
+  border: 1px solid #ededed;
+  margin-top: .22rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 3px 3px 0 #e1e1e1;
+  position: relative;
+  overflow: hidden;
+}
+.information .informationDiv .informationImg {
+  display: inline-block;
+}
+.information .informationDiv .informationImg img {
+  width: 3.45rem;
+  height: 3.79rem;
+}
+.information .informationDiv .informationRight {
+  margin-right: .25rem;
+    width:3.1rem;
+  font-size: .24rem;
+  color: #666;
+  padding-top: .35rem;
+}
+.information .informationDiv .informationRight a {
+  width: 3rem;
+  margin: .08rem 0 .2rem;
+}
+.information .informationDiv .informationRight .colorP {
+  color: #e60019;
+}
+.information .informationDiv .informationRight .colorP .justify {
+  letter-spacing: .38rem;
+  margin-right: -0.38rem;
+}
+.information .informationDiv .informationRight .weight {
+  font-weight: 600;
+}
+.information .informationDiv .informationRight .sizeP {
+  font-size: .36rem;
+}
+.information .informationDiv .informationRight .countDown {
+  height: .47rem;
+  text-align: center;
+  line-height: .47rem;
+  background: #ccc;
+    margin-top: .1rem;
+}
+.information .informationDiv .informationRight .marginP {
+  margin: .14rem 0;
+}
+.information .informationDiv .informationRight .marginP .fright {
+  line-height: .56rem;
+}
+/*即将开始*/
+.mask {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: url(../../images/mobile/mask.png) 0 0 repeat;
+  top: 0;
+  left: 0;
+}
+.mask img {
+  position: absolute;
+  width: 2.8rem;
+  height: 2.8rem;
+  top: 50%;
+  left: 50%;
+  margin-top: -1.4rem;
+  margin-left: -1.4rem;
+}
+/*# sourceMappingURL=saleProduct.css.map */

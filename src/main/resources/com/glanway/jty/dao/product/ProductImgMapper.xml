@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-25 09:11:01
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.ProductImageDao">
+    <!-- if need
+    <resultMap id="productImageRM" type="ProductImage">
+        <id property="id" column="ID"/>
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="deleted" column="DELETED" />
+        <result property="isMain" column="IS_MAIN" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <result property="path" column="PATH" />
+        <result property="sort" column="SORT" />
+        <association property="" resultType="" />
+        <collection property="">
+        </collection>
+    </resultMap>
+    -->
+    
+    <resultMap type="ProductImg" id="productImageRM">
+    	<id property="id" column="ID"/>
+        <result property="deleted" column="DELETED" />
+        <result property="path" column="PATH" />
+        <result property="sort" column="SORT" />
+    </resultMap>
+
+    <!-- -->
+    <sql id="baseCols">
+            ID, 
+            PATH, 
+            SORT, 
+            PRODUCT_ID,
+            GOODS_ID, 
+            DELETED, 
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            CREATED_BY, 
+            CREATED_DATE
+    </sql>
+
+    <sql id="baseQuery">
+        SELECT
+            ID,
+            PATH,
+            SORT,
+            PRODUCT_ID,
+            GOODS_ID,
+            DELETED,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            CREATED_BY,
+            CREATED_DATE
+        FROM
+            T_PRODUCT_IMG
+    </sql>
+
+    <sql id="baseFilter">
+		<if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="path != null">
+            AND PATH = #{path}
+        </if>
+        <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+		<if test="product != null">
+			AND PRODUCT_ID = #{product.id}
+		</if>
+		<if test="goods != null">
+			AND GOODS_ID = #{goods.id}
+		</if>
+		<if test="deleted != null">
+			AND DELETED = #{deleted}
+		</if>
+        <!-- more -->
+    </sql>
+
+    <!-- - - - - - - - - - Retrieve  - - - - - - - - - -->
+    <!-- 根据指定商品ID获取图片 -->
+    <select id="listByProduct"  resultType="ProductImg">
+    	SELECT
+    		PI.PATH,
+    		PI.SORT
+    	FROM
+    		T_PRODUCT_IMG PI
+    	WHERE 
+    		PI.PRODUCT_ID = #{productID}
+    	AND
+    		PI.DELETED = 0
+        AND
+            PI.GOODS_ID IS NULL
+    	ORDER BY
+    		PI.SORT
+    </select>
+    
+    <!-- 根据指定单品ID获取图片 -->
+    <select id="listByGoods"  resultType="ProductImg">
+    	SELECT
+    		PI.PATH,
+    		PI.SORT
+    	FROM
+    		T_PRODUCT_IMG PI
+    	WHERE
+    		PI.GOODS_ID = #{goodsID}
+    	AND 
+    		PI.DELETED = 0
+    	ORDER BY
+    		PI.SORT
+    </select>
+
+    <!-- retrieve by id -->
+    <select id="find"  resultType="ProductImg">
+        <include refid="baseQuery"/>
+        WHERE ID = #{id}
+    </select>
+
+    <!-- retrieve a unique entity -->
+    <select id="findOne" parameterType="map" resultType="ProductImg">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- retrieve many entities -->
+    <select id="findMany" parameterType="map" resultType="ProductImg">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+        ORDER BY SORT
+    </select>
+
+    <!-- count -->
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_PRODUCT_IMAGE
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+    <insert id="save" parameterType="ProductImg" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_PRODUCT_IMG (
+            ID,
+            PATH,
+            SORT,
+            PRODUCT_ID,
+            GOODS_ID,
+            DELETED,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            CREATED_BY,
+            CREATED_DATE
+        ) VALUES (
+            #{id},
+            #{path},
+            #{sort},
+            #{product.id},
+            #{goods.id},
+            #{deleted},
+            #{lastModifiedBy},
+            #{lastModifiedDate},
+            #{createdBy},
+            #{createdDate}
+        )
+    </insert>
+
+    <!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+    <update id="update" parameterType="ProductImg">
+        UPDATE T_PRODUCT_IMG
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="path != null">
+                PATH = #{path},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+
+    <update id="delete" parameterType="ParameterValue">
+        UPDATE T_PRODUCT_IMG SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <update id="deleteProductImage" >
+        UPDATE T_PRODUCT_IMG SET DELETED = 1 WHERE PRODUCT_ID = #{id} AND GOODS_ID IS NULL
+    </update>
+
+    <update id="deleteGoodsImage" >
+        UPDATE T_PRODUCT_IMG SET DELETED = 1 WHERE GOODS_ID = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-17 16:54:02
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.ModelSpecDao">
+	<resultMap id="modelSpecRM" type="ModelSpec">
+		<id property="id" column="ID"/>
+		<result property="sort" column="SORT" />
+		<association property="model" javaType="Model">
+			<id property="id" column="M_ID" />
+			<result property="name" column="M_NAME" />
+			<result property="alias" column="M_ALIAS" />
+			<result property="useAttribute" column="M_USE_ATTRIBUTE" />
+			<result property="useParameter" column="M_USE_PARAMETER" />
+			<result property="useSpec" column="M_USE_SPEC" />
+			<result property="deleted" column="M_DELETED" />
+			<result property="createdBy" column="M_CREATED_BY" />
+			<result property="createdDate" column="M_CREATED_DATE" />
+			<result property="lastModifiedBy" column="M_LAST_MODIFIED_BY" />
+			<result property="lastModifiedDate" column="M_LAST_MODIFIED_DATE" />
+		</association>
+		<association property="spec" javaType="Spec">
+			<id property="id" column="S_ID" />
+			<result property="name" column="S_NAME" />
+			<result property="alias" column="S_ALIAS" />
+			<result property="sort" column="S_SORT" />
+			<result property="deleted" column="S_DELETED" />
+			<result property="createdBy" column="S_CREATED_BY" />
+			<result property="createdDate" column="S_CREATED_DATE" />
+			<result property="lastModifiedBy" column="S_LAST_MODIFIED_BY" />
+			<result property="lastModifiedDate" column="S_LAST_MODIFIED_DATE" />
+			<collection property="specValues" ofType="SpecValue">
+				<result property="id" column="SV_ID" />
+				<result property="name" column="SV_NAME" />
+				<result property="alias" column="SV_ALIAS" />
+				<result property="code" column="SV_CODE" />
+				<result property="sort" column="SV_SORT" />
+				<result property="deleted" column="SV_DELETED" />
+				<result property="createdBy" column="SV_CREATED_BY" />
+				<result property="createdDate" column="SV_CREATED_DATE" />
+				<result property="lastModifiedBy" column="SV_LAST_MODIFIED_BY" />
+				<result property="lastModifiedDate" column="SV_LAST_MODIFIED_DATE" />
+			</collection>
+		</association>
+	</resultMap>
+
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="modelSpec" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO T_MODEL_SPEC(
+			ID,
+			MODEL_ID,
+			SPEC_ID,
+			SORT,
+			DELETED,
+			CREATED_BY,
+			CREATED_DATE,
+			LAST_MODIFIED_BY,
+			LAST_MODIFIED_DATE
+		) VALUES (
+			#{id},
+			#{model.id},
+			#{spec.id},
+			#{sort},
+			#{deleted},
+			#{createdBy},
+			#{createdDate},
+			#{lastModifiedBy},
+			#{lastModifiedDate}
+		)
+	</insert>
+
+	<update id="update" parameterType="modelSpec">
+		UPDATE T_MODEL_SPEC
+		<set>
+			<if test="model != null">
+				MODEL_ID = #{model.id},
+			</if>
+			<if test="spec != null">
+				SPEC_ID = #{spec.id},
+			</if>
+			<if test="sort != null">
+				SORT = #{sort},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+	<update id="delete" parameterType="ModelSpec">
+        UPDATE T_MODEL_SPEC SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+	<select id="findModelSpecs"  resultMap="modelSpecRM">
+		SELECT
+			MS.ID,
+			MS.SORT,
+			M.ID                    M_ID,
+			M.NAME                  M_NAME,
+			M.ALIAS                 M_ALIAS,
+			M.USE_ATTRIBUTE         M_USE_ATTRIBUTE,
+			M.USE_SPEC              M_USE_SPEC,
+			M.USE_PARAMETER         M_USE_PARAMETER,
+			M.DELETED               M_DELETED,
+			M.CREATED_BY            M_CREATED_BY,
+			M.CREATED_DATE 		  	M_CREATED_DATE,
+			M.LAST_MODIFIED_BY 	  	M_LAST_MODIFIED_BY,
+			M.LAST_MODIFIED_DATE    M_LAST_MODIFIED_DATE,
+			S.ID                    S_ID,
+			S.NAME 				  	S_NAME,
+			S.ALIAS                 S_ALIAS,
+			S.SORT                  S_SORT,
+			S.DELETED               S_DELETED,
+			S.CREATED_BY            S_CREATED_BY,
+			S.CREATED_DATE          S_CREATED_DATE,
+			S.LAST_MODIFIED_BY      S_LAST_MODIFIED_BY,
+			S.LAST_MODIFIED_DATE    S_LAST_MODIFIED_DATE,
+			SV.ID                    SV_ID,
+			SV.NAME                  SV_NAME,
+			SV.ALIAS                 SV_ALIAS,
+			SV.CODE                  SV_CODE,
+			SV.SORT                  SV_SORT,
+			SV.DELETED               SV_DELETED,
+			SV.CREATED_BY            SV_CREATED_BY,
+			SV.CREATED_DATE          SV_CREATED_DATE,
+			SV.LAST_MODIFIED_BY      SV_LAST_MODIFIED_BY,
+			SV.LAST_MODIFIED_DATE    SV_LAST_MODIFIED_DATE
+		FROM T_MODEL_SPEC MS
+		INNER JOIN T_MODEL M ON MS.MODEL_ID = M.ID AND M.DELETED=0
+		LEFT JOIN  T_SPEC S ON MS.SPEC_ID = S.ID AND S.DELETED=0
+		LEFT JOIN T_SPEC_VALUE SV ON SV.SPEC_ID = S.ID AND SV.DELETED=0
+		WHERE
+		MS.DELETED = 0
+		AND
+		MS.MODEL_ID = #{mid}
+		ORDER BY MS.SORT
+	</select>
+
+	<update id="deleteModelSpecs" >
+		UPDATE T_MODEL_SPEC SET DELETED = 1 WHERE MODEL_ID = #{mid}
+	</update>
+
+	<select id="isReferenced" resultType="java.lang.Boolean">
+		SELECT
+			1
+		FROM
+			T_MODEL_SPEC MS
+		WHERE
+			MS.DELETED = 0 AND MS.ID = #{msId}
+		AND
+		EXISTS (
+			SELECT
+				1
+			FROM
+				T_GOODS_SPEC_VALUE GSV,
+				T_SPEC_VALUE SV,
+				T_GOODS P,
+				T_CATEGORY C
+			WHERE
+				GSV.DELETED = 0 AND SV.DELETED = 0 AND GSV.SPEC_VALUE_ID = SV.ID AND SV.SPEC_ID = MS.SPEC_ID AND GSV.GOODS_ID = P.ID
+				AND P.DELETED = 0 AND P.CATEGORY_ID = C.ID AND C.DELETED = 0 AND C.MODEL_ID = MS.MODEL_ID
+		)
+		LIMIT 0,2
+	</select>
+</mapper>

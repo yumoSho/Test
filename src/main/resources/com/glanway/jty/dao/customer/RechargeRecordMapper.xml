@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.customer.RechargeRecordDao">
+
+    <select id="find" parameterType="long" resultType="RechargeRecord">
+        SELECT
+        M.*
+        FROM
+          T_RECHARGE_RECORD M
+        WHERE M.DELETED = 0
+        AND M.ID = #{id}
+    </select>
+
+
+
+    <select id="findMany" parameterType="map" resultType="RechargeRecord">
+        <include refid="support.ph"/>
+        SELECT * FROM (
+        SELECT RE.*,
+          M.EMAIL "member.email",
+          M.EMAIL MEMBER_MAIL,
+          M.PHONE "member.phone",
+          M.PHONE MEMBER_PHONE,
+          M.MEMBER_CODE "member.memberCode",
+          M.EMAIL MEMBER_CODE,
+          M.MEMBER_NAME "member.memberName",
+          M.MEMBER_NAME MEMBER_NAME
+        FROM
+        T_RECHARGE_RECORD RE,T_MEMBER M
+        WHERE  RE.MEMBER_ID = M.ID  AND RE.DELETED = 0
+        ) A
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND DELETED = 0
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+      SELECT count(*) FROM (
+        SELECT RE.*,
+        M.EMAIL "member.email",
+        M.EMAIL MEMBER_MAIL,
+        M.PHONE "member.phone",
+        M.PHONE MEMBER_PHONE,
+        M.MEMBER_CODE "member.memberCode",
+        M.EMAIL MEMBER_CODE,
+        M.MEMBER_NAME "member.memberName",
+        M.MEMBER_NAME MEMBER_NAME
+        FROM
+        T_RECHARGE_RECORD RE,T_MEMBER M
+        WHERE  RE.MEMBER_ID = M.ID  AND RE.DELETED = 0
+        ) A
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND DELETED = 0
+        </where>
+
+    </select>
+
+
+    <update id="delete" parameterType="long">
+		UPDATE T_RECHARGE_RECORD SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+</mapper>

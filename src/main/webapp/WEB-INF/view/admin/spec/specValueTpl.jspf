@@ -1,0 +1,22 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<script id="tpl-spec-value" type="x-tmpl-mustache">
+    <tr>
+        <td valign="top"><input type="text" name="specValues[{{index}}].name" class="required repeatSpecValValidate specVal" maxlength="50"></td>
+        <td valign="top"><input type="text" name="specValues[{{index}}].alias" ></td>
+        <td valign="top"><input type="text" name="specValues[{{index}}].code" class="required repeatSpecCodeValidate specCode" minlength="1" maxlength="5"></td>
+        <td valign="top">
+                <span class="spinner">
+                    <input type="text" name="specValues[{{index}}].sort" class="required digits" max="999">
+                    <span class="spin-buttons">
+                        <span class="btn-up"></span>
+                        <span class="btn-down"></span>
+                    </span>
+                </span>
+            </td>
+        <td valign="top">
+            <div class="operateBox" style="padding-top:4px;">
+                <img src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+            </div>
+        </td>
+    </tr>
+</script>

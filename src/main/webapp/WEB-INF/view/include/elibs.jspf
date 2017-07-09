@@ -1,0 +1,81 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<%--
+<script type="text/javascript" src="${ctx}/js/admin/gridproxy.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/resource/js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${ctx}/resource/js/easyui/themes/icon.css">
+<script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/ueditor/lang/en/en.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/easyui/ux/jquery.kindeditor.js"></script>
+--%>
+<link rel="stylesheet" href="${ctx}/css/admin/admin.css">
+<%--<link rel="stylesheet" type="text/css" href="${ctx}/css/admin/uploader.css">--%>
+<link href="http://cdn.bootcss.com/chosen/1.4.2/chosen.css" rel="stylesheet">
+<link rel="stylesheet" href="${ctx}/js/lib/jqgrid/css/jquery-ui.theme.css">
+<link rel="stylesheet" href="${ctx}/js/lib/jqgrid/css/ui.jqgrid.css">
+<link rel="stylesheet" href="${ctx}/css/admin/jqgrid.sm.css">
+<link rel="stylesheet" href="${ctx}/js/lib/uploader2/uploader2.css">
+
+<script type="text/javascript" src="${ctx}/js/lib/layer-admin/skin/layer.css"></script>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/easyui/datagrid-detailview.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/easyui/ux/jquery.headerfilter.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/easyui/ux/jquery.clearbutton.js"></script>
+<script type="text/javascript">window.jQuery && jQuery.ajaxSettings && (jQuery.ajaxSettings.traditional = true);</script>
+<script type="text/javascript" src="${ctx}/js/lib/jquery-validation-1.13.0/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/jquery-validation-1.13.0/localization/messages_zh.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/admin/customValidation.js" defer></script>
+<script type="text/javascript" src="${ctx}/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/js/lazyload.js"></script>
+<script type="text/javascript" src="${ctx}/js/jq.Slide.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/cp-0.9/colorPicker_src.js"></script>
+<script type="text/javascript" src="${ctx}/js/admin/common.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/jqgrid/js/i18n/grid.locale-cn.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/jqgrid/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/jqgrid/js/jqgrid.custom.js"></script>
+<%--<script type="text/javascript" src="${ctx}/js/admin/common.js"></script>--%>
+<script type="text/javascript" src="${ctx}/js/lib/mustache.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/plupload-2.1.2/plupload.full.min.js" ></script>
+<script type="text/javascript" src="${ctx}/js/admin/util.js" defer></script>
+<script type="text/javascript">window.layerSkin = 'layer-ext-moon';window.contextPath = "${ctx}";window.Besture.contextPath = "${ctx}";</script>
+<script type="text/javascript" src="${ctx}/js/lib/ueditor/third-party/zeroclipboard/ZeroClipboard.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/chosen/1.4.2/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/glanway.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/spinner/spinner.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/layer-admin/layer.js"></script>
+<script type="text/javascript" src="${ctx}/js/admin/gridproxy.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/jqgrid/src/grid.inlinedit.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="${ctx}/js/lib/uploader2/uploader2.js"></script>
+
+<script>
+    $(function(){
+        layer.config({
+            extend: ['skin/message/style.css','skin/alertpop/style.css'], //加载您的扩展样式
+            skin: 'layer-ext-message',
+        });
+        //初始化富文本js
+        $("textarea[id ^= 'editor_']").each(function(){
+            var editor = $(this).attr("id");
+            UE.getEditor(editor,{
+                initialFrameWidth:820,
+//                initialFrameHeight:200,
+                toolbars: [[
+                    'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                    'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                    'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                    'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                    'directionalityltr', 'directionalityrtl', 'indent', '|',
+                    'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                    'preview','|','snapscreen' ,'|' ,'simpleupload', '|' , 'insertimage','|','insertvideo'
+                ]]
+            });
+        });
+    })
+</script>

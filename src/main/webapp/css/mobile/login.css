@@ -1,0 +1,313 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+i {
+  font-style: normal;
+}
+iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.wrap {
+  background: #fff;
+  height: 100%;
+}
+.regwrap {
+  background: #fff;
+  height: 100%;
+}
+.redStar {
+  margin-right: .08rem;
+}
+.head a img {
+  width: .49rem;
+}
+.main {
+  padding-bottom: 0;
+}
+#samePadding .registTitle {
+  font-size: .24rem;
+  width: 100%;
+  height: 1rem;
+  line-height: 1rem;
+  text-align: center;
+  border-bottom: solid 1px #e3e3e3;
+}
+#samePadding .registTitle a {
+  width: 50%;
+  font-size: .28rem;
+}
+#samePadding .registTitle .on {
+  color: #19aa4b;
+}
+/*登录*/
+.displayFrame li {
+  padding: .38rem 0;
+  border-bottom: 1px solid #e3e3e3;
+  font-size: .26rem;
+  overflow: hidden;
+}
+.displayFrame li .spanWidthsperd {
+  width: 1.06rem;
+  display: inline-block;
+  color: #333;
+}
+.displayFrame li input {
+  border: none;
+  outline: none;
+  font-size: .26rem;
+  width: 4.5rem;
+}
+.displayFrame li input.codeInput {
+  width: 2.5rem;
+}
+.displayFrame .heightBtn {
+  padding: .26rem 0;
+  line-height: .6rem;
+}
+.displayFrame .iframeThreebtn {
+  display: none;
+}
+.loginLink {
+  font-size: .24rem;
+  margin-bottom: .54rem;
+}
+.loginLink a {
+  color: #006fd7;
+}
+.loginBy {
+  position: absolute;
+  top: 8.5rem;
+  left: 50%;
+  width: 2.8rem;
+  height: 2rem;
+  margin-left: -1.4rem;
+}
+.loginBy p {
+  font-size: .24rem;
+  text-align: center;
+}
+.loginBy a {
+  float: left;
+  padding-top: 0;
+  width: .8rem;
+  height: 1.2rem;
+}
+.loginBy a img {
+  width: .8rem;
+  height: .84rem;
+}
+.loginBy .sina {
+  margin: 0 .2rem;
+}
+/*注册*/
+.iframeDiv {
+  display: none;
+  min-height: 8rem;
+}
+.notes {
+  margin-top: .09rem;
+  padding: .17rem .15rem .19rem;
+  background: #fffbee;
+  border: 1px solid #e6001a;
+  border-left: none;
+  border-right: none;
+}
+.notes p {
+  color: #e6001a;
+  font-size: .24rem;
+  margin-bottom: .17rem;
+}
+.spanWidth {
+  width: 2rem;
+  display: inline-block;
+  margin-right: .1rem;
+  text-align: right;
+}
+.iframebtn {
+  background: url(../images/rightImg.png) 98% center no-repeat;
+  background-size: .17rem;
+}
+.backGrun {
+  width: 5.2rem;
+  display: inline-block;
+  height: .35rem;
+}
+#verificationCode {
+  width: 2.32rem;
+}
+.codeImg {
+  width: 1.14rem;
+  height: .57rem;
+}
+#noteBtn {
+  text-align: center;
+  font-size: .26rem;
+  color: #fff;
+  height: .6rem;
+  width: 2.24rem;
+  border-radius: 4px;
+  float: right;
+  background: #19aa4b;
+}
+#noteBtn.on {
+  background: #f3f3f3;
+  color: #999;
+}
+.certificateImg {
+  border-bottom: 1px solid #e3e3e3;
+  padding: .2rem 0 .44rem;
+}
+.certificateImg .certificateImgtop {
+  font-size: .26rem;
+  line-height: .48rem;
+}
+.certificateImg .certificateImgtop i {
+  margin-right: .01rem;
+  display: inline-block;
+  width: .2rem;
+  text-align: right;
+}
+.certificateImg .certificateImgtop span {
+  margin-right: .1rem;
+}
+.certificateImg .certificateImgtop a {
+  width: 1.39rem;
+  height: .48rem;
+  text-align: center;
+  line-height: .487rem;
+  color: #fff;
+  background: #e6001a;
+  border: none;
+  outline: none;
+  display: inline-block;
+  border-radius: 4px;
+  position: relative;
+}
+.certificateImg .certificateImgtop a input {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.certificateImg .certificateImgDiv {
+  padding: .38rem 0 0 1.72rem;
+}
+.certificateImg .certificateImgDiv img {
+  width: 1.78rem;
+  height: 1.26rem;
+  float: left;
+}
+.certificateImg .certificateImgDiv ul {
+  float: left;
+  font-size: .22rem;
+  color: #999;
+  margin: .23rem .08rem;
+  line-height: .4rem;
+}
+.agreement {
+  padding-top: .5rem;
+}
+.agreement .fleft {
+  font-size: .24rem;
+}
+.agreement input {
+  width: .23rem;
+  height: .23rem;
+  float: left;
+  margin: .07rem .12rem 0 1.7rem;
+}
+.agreement .agreementP {
+  font-size: .24rem;
+  display: inline-block;
+  float: left;
+}
+.agreement .agreementP a {
+  color: #006fd7;
+}
+/*店铺标签*/
+.storeUl {
+  text-indent: .15rem;
+}
+.storeUl li {
+  border-bottom: 1px solid #dcdcdc;
+  line-height: 1.09rem;
+}
+.storeUl a {
+  display: block;
+  height: 1.09rem;
+  font-size: .3rem;
+  color: #5a5a5a;
+}
+/*注册协议*/
+.registDeal {
+  line-height: .4rem;
+  letter-spacing: 1px;
+  margin-bottom: .5rem;
+  margin-top: .2rem;
+}
+/*找回密码2*/
+.promptMobile {
+  padding-top: .57rem;
+  text-align: center;
+  font-size: .26rem;
+}
+/*找回密码4*/
+.retrievePassword4 {
+  text-align: center;
+  font-size: .26rem;
+  padding: 1.2rem 0 .44rem;
+}
+/*找回密码首页*/
+.findPwdIndex {
+  padding: .8rem .1rem 0;
+  font-size: .24rem;
+}
+.findPwdIndex li {
+  width: 3.1rem;
+  height: .94rem;
+  border: solid 1px #19aa4b;
+  border-radius: 5px;
+  background: #19aa4b;
+}
+.findPwdIndex li a {
+  display: block;
+  width: 3.2rem;
+  height: .94rem;
+  color: #fff;
+  line-height: .94rem;
+  font-size: .36rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.findPwdIndex li a:active {
+  background: #19aa4b;
+  color: #fff;
+}
+/*邮箱找回密码成功页面*/
+.findPwdEmail {
+  font-size: .24rem;
+  padding: 3rem .12rem;
+  text-align: center;
+}
+.findPwdEmail img {
+  width: 1.33rem;
+  height: 1.39rem;
+  margin: 0 auto;
+}
+.findPwdEmail p {
+  text-align: left;
+  line-height: .46rem;
+  padding-top: .2rem;
+  font-size: .28rem;
+}
+.findPwdEmail p a {
+  color: #0033ff;
+}
+/*# sourceMappingURL=login.css.map */

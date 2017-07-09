@@ -1,0 +1,73 @@
+# app config file
+jdbc.driver = ${jdbc.driver}
+jdbc.url = ${jdbc.url}
+#jdbc.url = jdbc:mysql://localhost:3306/hgbf?characterEncoding=UTF-8
+jdbc.user = ${jdbc.username}
+#jdbc.user = root
+jdbc.password = ${jdbc.password}
+#jdbc.password = root
+
+# email config
+mail.isDebug = true
+mail.charset = UTF-8
+mail.host = smtp.exmail.qq.com
+mail.port = 25
+mail.username = glanwaytest@glanway.com
+mail.password = glanway1234
+mail.sendFrom = glanwaytest@glanway.com
+mail.sendName = admin
+mail.smtp.auth = true
+mail.smtp.timeout = 25000
+mail.smtp.starttls.enable = false
+
+# \u7b2c\u4e00\u4fe1\u606f  sms
+# sms.1xinxi.smsUrl = http://web.1xinxi.cn/asmx/smsservice.aspx
+# sms.1xinxi.signature = \u3010\u9f0e\u575a\u5546\u57ce\u3011
+
+# \u7b2c\u4e00\u4fe1\u606f  userId is optional
+# sms.1xinxi.name = \u9f0e\u575a\u5546\u57ce
+# sms.1xinxi.pwd = 51689BA21549C4109E9343B71BE3
+
+# \u521b\u4e16\u534e\u4fe1  sms
+sms.ipyy.mmsUrl = http://sh2.ipyy.com/mms.aspx
+sms.ipyy.statusUrl = http://sh2.ipyy.com/statusApi.aspx
+sms.ipyy.passwordUrl = http://sh2.ipyy.com/pwd.aspx
+
+# \u521b\u4e16\u534e\u4fe1  userId is optional
+sms.ipyy.userId =
+
+#emay SDK
+#\u8f6f\u4ef6\u5e8f\u5217\u53f7
+sms.softwareSerialNo=3SDK-BSO-0130-JHURN
+
+#\u81ea\u5b9a\u4e49\u5173\u952e\u5b57(key\u503c)
+#sms.key = 338175
+sms.key=918550
+
+
+data.file.home = ${data.file.home}
+data.file.home.relative = ${data.file.home.relative}
+data.image.home = ${data.image.home}
+data.image.home.relative = ${data.image.home.relative}
+
+solr.server.url = ${solr.server.url}
+#获取Token异步回调地址
+ WeiXin.OAuth.Callback = http://www.djmall.cn/mobile/wexinOAuthCallback
+# WeiXin.UnifiedOrder.Callback = http://www.djmall.cn/mobile/unifiedOrderCallback
+
+#获取Token异步回调地址
+# WeiXin.OAuth.Callback = http://gitool.glanway.com/ds/mobile/wexinOAuthCallback
+#回调地址 手机，
+WeiXin.UnifiedOrder.Callback = http://www.djmall.cn/mobile/unifiedOrderCallback
+#回调地址 PC，
+WeiXin.UnifiedOrder.CallbackPc=http://www.djmall.cn/payment/unifiedOrderCallback
+
+WeiXin.AppId = wx2d1f6ee115ba1b85
+WeiXin.AppSecret = d0d72d9047d986c86222dd60af25cfed
+
+WeiXin.MerchantId = 1276984801
+
+WeiXin.MerchantPayKey = b4bacc7fb83b3f4b08ef5910b7b7feec
+
+# 用户同意授权，获取code 回调地址
+WeiXin.Login.Callback=http://www.djmall.cn/mobile/login/loginCallback

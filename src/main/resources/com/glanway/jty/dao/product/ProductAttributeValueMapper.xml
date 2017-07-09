@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.product.ProductAttributeValueDao">
+    <resultMap id="pavRM" type="ProductAttributeValue">
+        <id column="ID" property="id"/>
+        <association property="product" javaType="Product">
+            <id column="PRODUCT_ID" property="id"></id>
+        </association>
+        <association property="attribute" javaType="Attribute" >
+            <id column="ATTRIBUTE_ID" property="id"></id>
+        </association>
+        <collection property="attributeValueList" ofType="AttributeValue" columnPrefix="AV_">
+            <id column="ID" property="id"/>
+            <result column="VALUE" property="value"/>
+            <result column="CODE" property="code"/>
+            <result column="SORT" property="sort"/>
+        </collection>
+
+    </resultMap>
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+    <insert id="insert" parameterType="ProductAttributeValue" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_PRODUCT_ATTRIBUTE_VALUE (
+            ID,
+            PRODUCT_ID,
+            ATTRIBUTE_ID,
+            ATTRIBUTE_VALUE_ID,
+            DELETED
+        ) VALUES (
+            #{id},
+            #{product.id},
+            #{attribute.id},
+            #{attributeValue.id},
+            #{deleted}
+        )
+    </insert>
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+    <update id="delete" parameterType="ProductAttributeValue">
+        UPDATE T_PRODUCT_ATTRIBUTE_VALUE SET DELETED = 1 WHERE PRODUCT_ID = #{product.id} AND  ATTRIBUTE_ID = #{attribute.id} AND ATTRIBUTE_VALUE_ID = #{attributeValue.id}
+    </update>
+
+    <select id="getAttributeValueByProductIdAndAttributeId" parameterType="ProductAttributeValue" resultMap="pavRM">
+        SELECT
+            TPAV.ID,
+	        TPAV.PRODUCT_ID,
+	        TPAV.ATTRIBUTE_ID,
+	        TAV.ID AV_ID,
+	        TAV.VALUE AV_VALUE,
+	        TAV.SORT AV_SORT,
+	        TAV.CODE AV_CODE
+        FROM
+            T_PRODUCT_ATTRIBUTE_VALUE TPAV
+        INNER JOIN T_ATTRIBUTE_VALUE TAV ON TPAV.ATTRIBUTE_VALUE_ID = TAV. ID
+        AND TAV.DELETED = 0
+        AND TPAV.DELETED = 0
+        WHERE TPAV.PRODUCT_ID=#{product.id} AND TPAV.ATTRIBUTE_ID=#{attribute.id}
+    </select>
+
+    <select id="selectExist" parameterType="ProductAttributeValue" resultType="ProductAttributeValue">
+        SELECT
+            *
+        FROM
+          T_PRODUCT_ATTRIBUTE_VALUE
+        WHERE PRODUCT_ID=#{product.id} AND ATTRIBUTE_ID=#{attribute.id} AND ATTRIBUTE_VALUE_ID=#{attributeValue.id}
+    </select>
+</mapper>

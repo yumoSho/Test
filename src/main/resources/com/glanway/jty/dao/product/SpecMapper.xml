@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.product.SpecDao">
+
+    <!-- =========================== RETRIEVE ========================== -->
+    <select id="find" resultMap="baseRM">
+        <bind name="_parameter" value="#{'id':_parameter}"/>
+        <include refid="queryBase2"/>
+    </select>
+
+    <select id="findOne" parameterType="map" resultMap="baseRM">
+        <include refid="queryBase2"/>
+    </select>
+
+
+    <!-- -->
+    <select id="findMany" parameterType="map" resultMap="baseRM">
+        <include refid="support.ph"/>
+        <include refid="queryBase"/>
+        <include refid="support.pf"/>
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM (
+        <include refid="queryBase"/>
+        ) C
+    </select>
+
+    <select id="findSpecAndValuesByProductId" resultMap="baseRM">
+        SELECT
+        S.ID AS ID
+        ,S.CREATED_BY AS CREATED_BY
+        ,S.CREATED_DATE AS CREATED_DATE
+        ,S.LAST_MODIFIED_BY AS LAST_MODIFIED_BY
+        ,S.LAST_MODIFIED_DATE AS LAST_MODIFIED_DATE
+        ,S.NAME AS NAME
+        ,S.ALIAS AS ALIAS
+        ,S.SORT AS SORT
+        ,S.DELETED AS DELETED
+        ,SV.ID AS specValues_ID
+        ,SV.CREATED_BY AS specValues_CREATED_BY
+        ,SV.CREATED_DATE AS specValues_CREATED_DATE
+        ,SV.LAST_MODIFIED_BY AS specValues_LAST_MODIFIED_BY
+        ,SV.LAST_MODIFIED_DATE AS specValues_LAST_MODIFIED_DATE
+        ,SV.NAME AS specValues_NAME
+        ,SV.ALIAS AS specValues_ALIAS
+        ,SV.CODE AS specValues_CODE
+        ,SV.SORT AS specValues_SORT
+        ,SV.DELETED AS specValues_DELETED
+        FROM
+        T_SPEC S, T_SPEC_VALUE SV
+        WHERE
+        S.DELETED = 0
+        AND
+        SV.DELETED = 0
+        AND
+        S.ID = SV.SPEC_ID
+        AND
+        EXISTS (
+        SELECT 1
+        FROM T_PRODUCT P, T_GOODS G, T_GOODS_SPEC_VALUE GSV
+        WHERE P.ID = G.PRODUCT_ID AND P.DELETED = 0 AND G.DELETED = 0
+        AND GSV.GOODS_ID = G.ID AND GSV.DELETED = 0
+        AND GSV.SPEC_VALUE_ID = SV.ID
+        AND P.ID = #{pid}
+        )
+    </select>
+
+    <!-- =========================== CREATE ========================== -->
+
+    <insert id="save" parameterType="Spec" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_SPEC (
+        <!-- self columns -->
+        ID
+        ,CREATED_BY
+        ,CREATED_DATE
+        ,LAST_MODIFIED_BY
+        ,LAST_MODIFIED_DATE
+        ,NAME
+        ,SPEC_CODE
+        ,ALIAS
+        ,SORT
+        ,DELETED
+        <!-- one to one fk -->
+        <!-- many to one fk -->
+        )
+        VALUES (
+        <!-- self columns -->
+        #{id},
+        #{createdBy},
+        #{createdDate},
+        #{lastModifiedBy},
+        #{lastModifiedDate},
+        #{name},
+        #{specCode},
+        #{alias},
+        #{sort},
+        #{deleted}
+        <!-- one to one fk -->
+        <!-- may to one fk -->
+
+        )
+    </insert>
+
+    <!-- =========================== UPDATE ========================== -->
+
+    <update id="update" parameterType="Spec">
+        UPDATE T_SPEC
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="alias != null">
+                ALIAS = #{alias},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete">
+      UPDATE T_SPEC SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <!-- =========================== SQL FRAGMENT ========================== -->
+
+    <sql id="queryBase">
+        <bind name="_oldFilters" value="_parameter._filters"/>
+        <bind name="_oldSort" value="_parameter._sort"/>
+        <!-- 因为 mybatis 在当前上下文找不到变量时候会到 _parameter 中是否存在, 因此这里需要清空(name不会作为ognl解析) -->
+        <bind name="" value="_parameter._filters = null"/>
+        <bind name="" value="_parameter._sort = null"/>
+        SELECT
+        ROOT.ID AS ID
+        ,ROOT.CREATED_BY AS CREATED_BY
+        ,ROOT.CREATED_DATE AS CREATED_DATE
+        ,ROOT.LAST_MODIFIED_BY AS LAST_MODIFIED_BY
+        ,ROOT.LAST_MODIFIED_DATE AS LAST_MODIFIED_DATE
+        ,ROOT.NAME AS NAME
+        ,ROOT.SPEC_CODE AS SPEC_CODE
+        ,ROOT.ALIAS AS ALIAS
+        ,ROOT.SORT AS SORT
+        ,ROOT.DELETED AS DELETED
+        FROM T_SPEC ROOT
+        WHERE 1 = 1
+        <!-- self filter -->
+        <include refid="rootFilter"/>
+        <!-- self dynamic filter -->
+        <bind name="_filters" value="_oldFilters"/>
+        <bind name="_filterPrefix" value="'ROOT.'"/>
+        <trim suffixOverrides="AND">AND
+            <include refid="support.dynamicFilters"/>
+        </trim>
+
+        <if test="_parameter.specValues != null">
+            AND EXISTS (
+            SELECT 1
+            FROM T_SPEC_VALUE specValues
+            WHERE specValues.SPEC_ID = ROOT.ID
+            <!-- specValues filter -->
+            <include refid="specValuesFilter"/>
+            <!-- specValues dynamic filter -->
+            <bind name="_filters" value="_parameter.specValues != null ? specValues._filters : null "/>
+            <bind name="_filterPrefix" value="'specValues.'"/>
+            <trim suffixOverrides="AND">AND
+                <include refid="support.dynamicFilters"/>
+            </trim>
+            )
+        </if>
+        ORDER BY
+        <!-- TODO 这里有bug, 只能先按照ROOT排序,然后是 one to one 然后 many to one ... 求助... -->
+        <bind name="_sort" value="_oldSort"/>
+        <bind name="_sortPrefix" value="'ROOT.'"/>
+        <trim prefixOverrides=","><include refid="support.dynamicSort"/>,
+        </trim>
+        <!-- to one -->
+        ROOT.CREATED_DATE
+    </sql>
+
+    <sql id="queryBase2">
+        <include refid="queryBase"/>
+    </sql>
+
+    <sql id="rootFilter">
+        <if test="_parameter.id != null">
+            AND ROOT.ID = #{_parameter.id}
+        </if>
+        <if test="_parameter.createdBy != null">
+            AND ROOT.CREATED_BY = #{_parameter.createdBy}
+        </if>
+        <if test="_parameter.createdDate != null">
+            AND ROOT.CREATED_DATE = #{_parameter.createdDate}
+        </if>
+        <if test="_parameter.lastModifiedBy != null">
+            AND ROOT.LAST_MODIFIED_BY = #{_parameter.lastModifiedBy}
+        </if>
+        <if test="_parameter.lastModifiedDate != null">
+            AND ROOT.LAST_MODIFIED_DATE = #{_parameter.lastModifiedDate}
+        </if>
+        <if test="_parameter.name != null">
+            AND ROOT.NAME = #{_parameter.name}
+        </if>
+        <if test="_parameter.alias != null">
+            AND ROOT.ALIAS = #{_parameter.alias}
+        </if>
+        <if test="_parameter.sort != null">
+            AND ROOT.SORT = #{_parameter.sort}
+        </if>
+        <if test="_parameter.deleted != null">
+            AND ROOT.DELETED = #{_parameter.deleted}
+        </if>
+        AND ROOT.DELETED = 0
+    </sql>
+
+    <!-- specValues base filter -->
+    <sql id="specValuesFilter">
+        <if test="_parameter.specValues != null">
+            <if test="specValues.id != null">
+                AND specValues.ID = #{specValues.id}
+            </if>
+            <if test="specValues.createdBy != null">
+                AND specValues.CREATED_BY = #{specValues.createdBy}
+            </if>
+            <if test="specValues.createdDate != null">
+                AND specValues.CREATED_DATE = #{specValues.createdDate}
+            </if>
+            <if test="specValues.lastModifiedBy != null">
+                AND specValues.LAST_MODIFIED_BY = #{specValues.lastModifiedBy}
+            </if>
+            <if test="specValues.lastModifiedDate != null">
+                AND specValues.LAST_MODIFIED_DATE = #{specValues.lastModifiedDate}
+            </if>
+            <if test="specValues.name != null">
+                AND specValues.NAME = #{specValues.name}
+            </if>
+            <if test="specValues.alias != null">
+                AND specValues.ALIAS = #{specValues.alias}
+            </if>
+            <if test="specValues.code != null">
+                AND specValues.CODE = #{specValues.code}
+            </if>
+            <if test="specValues.sort != null">
+                AND specValues.SORT = #{specValues.sort}
+            </if>
+            <if test="specValues.deleted != null">
+                AND specValues.DELETED = #{specValues.deleted}
+            </if>
+        </if>
+        AND specValues.DELETED = 0
+    </sql>
+
+    <select id="specHaveBeenUsedForGoods" parameterType="long" resultType="boolean">
+        SELECT 1 FROM  DUAL	WHERE EXISTS (
+         SELECT * FROM T_SPEC TS
+            INNER JOIN T_MODEL_SPEC TMS ON TS.ID=TMS.SPEC_ID AND TS.DELETED=0 AND TMS.DELETED=0
+            INNER JOIN T_MODEL TM ON TM.ID=TMS.MODEL_ID AND TM.DELETED=0 AND TMS.DELETED=0
+            INNER JOIN T_PRODUCT TP  ON TP.MODEL_ID= TM.ID AND TP.DELETED=0 AND TM.DELETED=0
+            WHERE TS.DELETED=0 AND TS.ID=#{0}
+        )
+    </select>
+
+    <select id="specNextId" resultType="long">
+        SELECT MAX(ID) FROM T_SPEC
+    </select>
+
+    <!-- ======================== RESULT MAP ========================= -->
+    <resultMap id="baseRM" type="Spec">
+        <id property="id" column="ID"/>
+        <result property="id" column="ID"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="name" column="NAME"/>
+        <result property="specCode" column="SPEC_CODE"/>
+        <result property="alias" column="ALIAS"/>
+        <result property="sort" column="SORT"/>
+        <result property="deleted" column="DELETED"/>
+        <!-- to one -->
+        <!-- to many -->
+        <collection property="specValues" ofType="SpecValue">
+            <id property="id" column="specValues_ID"/>
+            <result property="createdBy" column="specValues_CREATED_BY"/>
+            <result property="createdDate" column="specValues_CREATED_DATE"/>
+            <result property="lastModifiedBy" column="specValues_LAST_MODIFIED_BY"/>
+            <result property="lastModifiedDate" column="specValues_LAST_MODIFIED_DATE"/>
+            <result property="name" column="specValues_NAME"/>
+            <result property="alias" column="specValues_ALIAS"/>
+            <result property="code" column="specValues_CODE"/>
+            <result property="sort" column="specValues_SORT"/>
+            <result property="deleted" column="specValues_DELETED"/>
+        </collection>
+    </resultMap>
+</mapper>

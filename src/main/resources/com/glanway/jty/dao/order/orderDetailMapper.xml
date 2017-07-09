@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.order.OrderDetailDao">
+	<resultMap id="ordersDetailRM" type="orderDetail">
+		<id property="id" column="ID" />
+		<result property="seqno" column="SEQNO" />
+		<result property="orderId" column="ORDERID" />
+		<result property="orderCode" column="ORDERCODE" />
+		<result property="goodsId" column="GOODSID" />
+		<result property="goodsCode" column="GOODSCODE" />
+		<result property="goodsName" column="GOODSNAME" />
+		<result property="goodsSpec" column="GOODSSPEC" />
+		<result property="goodsNum" column="GOODSNUM" />
+		<result property="goodsPrice" column="GOODSPRICE" />
+		<result property="goodsImage" column="GOODSIMAGE" />
+		<result property="safePrice" column="SAFEPRICE" />
+		<result property="addPrice" column="ADDPRICE" />
+		<result property="sellPrice" column="SELLPRICE" />
+		<result property="costPrice" column="COSTPRICE" />
+		<result property="discount" column="DISCOUNT" />
+		<result property="deleted" column="DELETED" />
+		<result property="goodsFrom" column="GOODS_FROM" />
+		<result property="returnedNum" column="RETURNEDNUM"/>
+	</resultMap>
+	<!-- 根据订单ID查询订单详情信息 -->
+	<select id="getOrderDetailByOrderId" parameterType="long"
+		resultMap="ordersDetailRM">
+		SELECT O.ID,
+		O.SEQNO,
+		O.ORDERID,
+		O.ORDERCODE,
+		O.GOODSID,
+		O.GOODSCODE,
+		O.GOODSSPEC,
+		O.GOODSNUM,
+		O.GOODSNAME,
+		O.GOODSPRICE,
+		O.SAFEPRICE,
+		O.ADDPRICE,
+		O.SELLPRICE,
+		0.GOODS_FROM,
+		FROM T_ORDER_DETAIL O
+		<where>
+			AND ORDERID=#{id}
+			AND DELETED = 0
+		</where>
+	</select>
+	<!--根据订单ID，商品ID更新订单详情中商品已申请退换货数量-->
+    <update id="updateReturnedNum" parameterType="map">
+		UPDATE T_ORDER_DETAIL
+		<set>
+			RETURNEDNUM =(IFNULL(RETURNEDNUM,0) + #{returnedNum})
+		</set>
+		WHERE ORDERID = #{orderId}
+		AND   GOODSID = #{goodsId}
+	</update>
+	<!--新增订单详情信息-->
+	<insert id="save" parameterType="OrderDetail" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO  T_ORDER_DETAIL  (
+	 					ID ,
+	 					SEQNO ,
+	 					ORDERID,
+	 					ORDERCODE,
+	 					GOODSID,
+	 					GOODSCODE,
+	 					GOODSNAME,
+	 					GOODSSPEC,
+	 					GOODSNUM,
+	 					GOODSPRICE,
+	 					GOODSIMAGE,
+	 					SAFEPRICE,
+	 					ADDPRICE,
+	 					SELLPRICE,
+	 					COSTPRICE,
+	 					DISCOUNT,
+	 					DELETED,
+	 					GOODS_FROM)
+			VALUES
+					(   #{id},
+						null,
+						#{orderId},
+						#{orderCode},
+						#{goodsId},
+						#{goodsCode},
+						#{goodsName},
+						#{goodsSpec},
+						#{goodsNum},
+						#{goodsPrice},
+						#{goodsImage},
+						#{safePrice},
+						#{addPrice},
+						#{sellPrice},
+						#{costPrice},
+						#{discount},
+						0,
+						#{goodsFrom})
+	</insert>
+
+	<update id="updateCommented" parameterType="long">
+		UPDATE T_ORDER_DETAIL SET COMMENTED=1 WHERE ID=#{id}
+	</update>
+</mapper>

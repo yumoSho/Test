@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入最新 uploader2 样式(version 0.3) -->
+    <link rel="stylesheet" href="uploader2.css">
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/plupload/2.1.8/plupload.full.min.js"></script>
+    <!-- 引入最新版本的 uploader2.js (version: 0.3) -->
+    <script type="text/javascript" src="uploader2.js"></script>
+</head>
+<body>
+<div class="uploader-1" id="single-drop-zone">
+    <div class="upload-desc">请上传<b>50x30</b>图片</div>
+    <div class="upload-single">
+        <div class="uploader-msg" id="u1-msg"></div>
+        <div class="actions">
+            <a href="javascript:;" id="image-upload-btn" name="path"
+               data-drop-target="single-drop-zone">选择文件</a>
+        </div>
+        <div class="upload-input">请选择...</div>
+        <ul class="upload-queue" id="image-upload-queue">
+            <li><input type="hidden" name="path" value="已经上传文件路径" /></li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var uploader = Uploader2({
+            name: 'path',
+            list: 'image-upload-queue',
+            mode: 't',
+            max_file_count: 1,
+            max_file_size: '20m',
+            extensions: 'jpg,png',
+            /*-
+             * url: 要上传的位置
+             *      该值为 web.xml 中指定的 mapping url + /preupload
+             *      eg: /images/* --> /images/preupload
+             * policy: 指定 url 是否为策略url (获取oss参数等信息)
+             */
+            url: '${ctx}/images/preupload',
+            policy: true,
+            message_target: 'u1-msg',
+            browse_button: 'image-upload-btn'
+        }).bind('FileFiltered', function (up, file) {
+            var el = file.el,
+                    name = el ? el.getAttribute('data-name') || el.value : file.name;
+            $('#image-upload-btn .upload-input').text(name).attr('title', name);
+        }).bind('FilesRemoved', function (up, file) {
+            $('#image-upload-btn .upload-input').text('请选择..').attr('title', '');
+        });
+    });
+</script>
+</body>
+</html>

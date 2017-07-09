@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.product.BrandCategoryDao">
+
+    <sql id="baseCols">
+        ID,
+        BRAND_ID,
+        CATEGORY_ID,
+        DELETED,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE
+    </sql>
+
+    <sql id="baseQuery">
+        SELECT
+            ID,
+            BRAND_ID,
+            CATEGORY_ID,
+            DELETED,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE
+        FROM
+          T_BRAND
+    </sql>
+
+    <sql id="baseFilter">
+        <if test="brand.id != null">
+            AND BRAND_ID = #{brand.id}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="category.id != null">
+            AND CATEGORY_ID = #{category.id}
+        </if>
+        AND DELETED = 0
+        <!-- more -->
+    </sql>
+
+    <select id="find" parameterType="long" resultMap="brandCategoryRM">
+        SELECT
+            ID,
+            BRAND_ID,
+            CATEGORY_ID,
+            DELETED,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE
+        FROM
+            T_BRAND_CATEGORY
+    </select>
+
+    <select id="findOne" parameterType="map" resultMap="brandCategoryRM">
+        <include refid="baseQuery" />
+        <where>
+            <include refid="baseFilter" />
+        </where>
+    </select>
+
+    <select id="findMany" parameterType="map" resultMap="brandCategoryRM">
+        SELECT
+          R.*
+        FROM (
+        <include refid="support.ph" />
+        <include refid="baseQuery" />
+        <where>
+            <include refid="support.dynamicFilters" />
+            <include refid="baseFilter" />
+
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort" />
+            , CREATED_DATE DESC
+        </trim>
+        <include refid="support.pf" />
+        ) R
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_BRAND_CATEGORY
+        <where>
+            <include refid="support.dynamicFilters" />
+            <include refid="baseFilter" />
+        </where>
+    </select>
+
+    <insert id="save" parameterType="BrandCategory"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_BRAND_CATEGORY (
+            ID,
+            BRAND_ID,
+            CATEGORY_ID,
+            DELETED,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE
+        ) VALUES (
+            #{id},
+            #{brand.id},
+            #{category.id},
+            #{deleted},
+            #{createdBy},
+            #{createdDate},
+            #{lastModifiedBy},
+            #{lastModifiedDate}
+        )
+    </insert>
+
+    <update id="update" parameterType="BrandCategory">
+        UPDATE T_BRAND_CATEGORY
+        <set>
+            <if test="brand.id != null">
+                BRAND_ID = #{brand.id},
+            </if>
+            <if test="category.id != null">
+                CATEGORY_ID = #{category.id},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="BrandCategory">
+        UPDATE T_BRAND_CATEGORY SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <update id="deleteBrandCateByid" >
+        UPDATE T_BRAND_CATEGORY SET DELETED = 1 WHERE CATEGORY_ID = #{0}
+    </update>
+
+    <resultMap id="brandCategoryRM" type="com.glanway.jty.entity.product.BrandCategory">
+        <id column="ID" property="id"/>
+        <result column="DELETED" property="deleted"/>
+        <association property="brand" javaType="com.glanway.jty.entity.product.Brand">
+            <id column="BRAND_ID" property="id"/>
+        </association>
+        <association property="category" javaType="com.glanway.jty.entity.product.Category">
+            <id column="CATEGORY_ID" property="id"/>
+        </association>
+    </resultMap>
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.personalcenter.CollectDao">
+
+    <resultMap id="collectRM" type="Collect">
+        <id column="ID" property="id"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="goodsFrom" column="GOODS_FROM"/>
+        <result property="otherId" column="OTHER_ID"/>
+        <association property="goods" javaType="Goods" >
+            <id property="id" column="TG_ID"/>
+            <result property="title" column="TITLE" />
+            <result column="IMAGE" property="image"/>
+            <result column="PRICE" property="price"/>
+            <association property="product" javaType="Product" columnPrefix="P_" >
+                <id property="id" column="ID" />
+                <result property="title" column="TITLE" />
+                <result column="PRICE" property="price"/>
+                <result column="WEIGHT" property="weight"/>
+                <result column="IMAGE" property="image"/>
+                <result column="ENABLE_SPECS" property="enableSpecs"/>
+                <result column="REAL_SALES" property="realSales"/>
+                <result column="IS_PUTAWAY" property="isPutaway"/>
+                <association property="category" javaType="Category" columnPrefix="C_">
+                    <id property="id" column="ID"/>
+                    <result property="name" column="NAME"/>
+                </association>
+            </association>
+            <association property="activityGoods" javaType="ActivityGoods" columnPrefix="AG_">
+                <id property="id" column="ID"/>
+                <result property="discount"  column="DISCOUNT"/>
+                <result property="startDate" column="START_DATE"/>
+                <result property="endDate" column="END_DATE"/>
+            </association>
+        </association>
+        <association property="member" javaType="Member" columnPrefix="TM">
+            <id column="ID" property="id"/>
+            <result column="EMAIL" property="email"/>
+            <result column="PHONE" property="phone"/>
+            <result column="MEMBER_NAME" property="memberName"/>
+        </association>
+    </resultMap>
+
+    <sql id="baseCols">
+            ID,
+            MEMBER_ID,
+            GOODS_ID,
+            GOODS_FROM,
+            OTHER_ID,
+            DELETED,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY
+    </sql>
+
+    <sql id="baseFilter">
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="member != null and member.id != null">
+            AND MEMBER_ID = #{member.id}
+        </if>
+        <if test="goods != null and goods.id">
+            AND GOODS_ID = #{goods.id}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="goodsFrom != null">
+            AND GOODS_FROM = #{goodsFrom}
+        </if>
+        <if test="otherId != null">
+            AND OTHER_ID = #{otherId}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        AND DELETED = 0
+    </sql>
+
+    <insert id="save" parameterType="Collect" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_COLLECT(
+          <include refid="baseCols"/>
+        )VALUES(
+            #{id},
+            #{member.id},
+            #{goods.id},
+            #{goodsFrom},
+            #{otherId},
+            #{deleted},
+            #{createdDate},
+            #{createdBy},
+            #{lastModifiedDate},
+            #{lastModifiedBy}
+        )
+    </insert>
+
+    <update id="update" parameterType="Collect">
+        UPDATE T_COLLECT
+        <set>
+            <if test="member != null and member.id != null">
+                MEMBER_ID = #{member.id},
+            </if>
+             <if test="goods != null and goods.id != null">
+                GOODS_ID = #{goods.id},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="goodsFrom != null">
+                GOODS_FROM = #{goodsFrom},
+            </if>
+            <if test="otherId != null">
+                OTHER_ID = #{otherId},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="Collect">
+        UPDATE T_COLLECT SET DELETED = 1 WHERE ID = #{id}
+    </update>
+    <update id="deleteByProduct" parameterType="Collect">
+        UPDATE T_COLLECT SET DELETED = 1 WHERE GOODS_ID = #{goodsId}
+    </update>
+
+    <select id="findMany" parameterType="map" resultMap="collectRM">
+        SELECT
+            R.*
+        FROM (
+    	<include refid="support.ph"/>
+        SELECT * FROM (
+            SELECT
+            TC.*,
+            TG.ID 	TG_ID,
+            TG.SN	SN,
+            TG.TITLE TITLE,
+            TG.INTRO INTRO,
+            TG.PRICE PRICE,
+            TG.IMAGE IMAGE,
+            TP.REAL_SALES,
+            TP.ID P_ID,
+            TP.INTRO P_INTRO,
+            TP.PRICE P_PRICE,
+            TP.WEIGHT P_WEIGHT,
+            TM.ID TM_ID,
+            TM.MEMBER_CODE TM_MEMBER_CODE,
+            TM.EMAIL TM_EMAIL,
+            TM.PHONE TM_PHONE,
+            TCC.ID     P_C_ID,
+            TCC.NAME     P_C_NAME
+            FROM T_COLLECT TC
+            INNER JOIN T_MEMBER TM ON TC.MEMBER_ID = TM.ID AND TM.DELETED = 0 AND TC.DELETED=0
+            INNER JOIN T_GOODS TG ON TC.GOODS_ID = TG.ID AND TG.DELETED=0
+            INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0 AND TP.IS_PUTAWAY=1
+            LEFT JOIN T_CATEGORY TCC ON TP.CATEGORY_ID = TCC.ID AND TCC.DELETED = 0
+        ) A
+        <where>
+           <trim prefixOverrides="AND">
+           		<include refid="support.dynamicFilters"/>
+           		<include refid="baseFilter"/>
+           </trim>
+        </where>
+        ORDER BY
+	       <trim prefixOverrides=",">
+	           <include refid="support.dynamicSort"/>, A.LAST_MODIFIED_DATE DESC
+	       </trim>
+        <include refid="support.pf"/>
+        ) R
+    </select>
+
+    <select id="find" parameterType="long" resultMap="collectRM">
+          SELECT
+            TC.*,
+            TM.ID TM_ID,
+            TM.MEMBER_CODE TM_MEMBER_CODE,
+            TM.EMAIL TM_EMAIL,
+            TM.PHONE TM_PHONE,
+            TG.ID 	TG_ID,
+            TG.SN	TG_SN,
+            TCC.ID     P_C_ID,
+            TCC.NAME     P_C_NAME,
+            TG.TITLE TG_TITLE,
+            TG.INTRO TG_INTRO,
+            TG.PRICE TG_PRICE,
+            TG.IMAGE TG_IMAGE,
+            TP.REAL_SALES,
+            TP.ID P_ID,
+            TP.INTRO P_INTRO,
+            TP.WEIGHT P_WEIGHT
+          FROM T_COLLECT TC
+          INNER JOIN T_MEMBER TM ON TC.MEMBER_ID = TM.ID AND TM.DELETED = 0 AND TC.DELETED=0
+          INNER JOIN T_GOODS TG ON TC.GOODS_ID = TG.ID AND TG.DELETED=0
+        INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0 AND TP.IS_PUTAWAY=1
+        LEFT JOIN T_CATEGORY TCC ON TP.CATEGORY_ID = TCC.ID AND TCC.DELETED = 0
+        WHERE TC.ID=#{id}
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+
+        SELECT
+          COUNT(1)
+        FROM (
+        SELECT * FROM (
+        SELECT
+        TC.*,
+        TG.ID 	TG_ID,
+        TG.SN	SN,
+        TG.TITLE TITLE,
+        TG.INTRO INTRO,
+        TG.PRICE PRICE,
+        TG.IMAGE IMAGE,
+        TP.REAL_SALES,
+        TP.ID P_ID,
+        TCC.ID     P_C_ID,
+        TCC.NAME     P_C_NAME,
+        TP.INTRO P_INTRO,
+        TP.WEIGHT P_WEIGHT,
+        TM.ID TM_ID,
+        TM.MEMBER_CODE TM_MEMBER_CODE,
+        TM.EMAIL TM_EMAIL,
+        TM.PHONE TM_PHONE
+        FROM T_COLLECT TC
+        INNER JOIN T_MEMBER TM ON TC.MEMBER_ID = TM.ID AND TM.DELETED = 0 AND TC.DELETED=0
+        INNER JOIN T_GOODS TG ON TC.GOODS_ID = TG.ID AND TG.DELETED=0
+        INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0 AND TP.IS_PUTAWAY=1
+        LEFT JOIN T_CATEGORY TCC ON TP.CATEGORY_ID = TCC.ID AND TCC.DELETED = 0
+        ) A
+        <where>
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+                <include refid="baseFilter"/>
+            </trim>
+        </where>
+        ) R
+
+    </select>
+
+    <select id="findOne" parameterType="map" resultMap="collectRM">
+        SELECT
+        R.*
+        FROM (
+        SELECT * FROM (
+        SELECT
+        TC.*,
+        TG.ID 	TG_ID,
+        TG.SN	TG_SN,
+        TG.TITLE TG_TITLE,
+        TG.INTRO TG_INTRO,
+        TCC.ID     P_C_ID,
+        TCC.NAME     P_C_NAME,
+        TG.PRICE TG_PRICE,
+        TG.IMAGE TG_IMAGE,
+        TP.REAL_SALES,
+        TP.ID P_ID,
+        TP.INTRO P_INTRO,
+        TP.WEIGHT P_WEIGHT
+        FROM T_COLLECT TC
+        INNER JOIN T_MEMBER TM ON TC.MEMBER_ID = TM.ID AND TM.DELETED = 0 AND TC.DELETED=0
+        INNER JOIN T_GOODS TG ON TC.GOODS_ID = TG.ID AND TG.DELETED=0
+        INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0 AND TP.IS_PUTAWAY=1
+        LEFT JOIN T_CATEGORY TCC ON TP.CATEGORY_ID = TCC.ID AND TCC.DELETED = 0
+        ) A
+        <where>
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+                <include refid="baseFilter"/>
+            </trim>
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>, A.LAST_MODIFIED_DATE DESC
+        </trim>
+        ) R
+    </select>
+</mapper>

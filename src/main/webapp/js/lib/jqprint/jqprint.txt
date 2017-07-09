@@ -1,0 +1,27 @@
+功能：jQuery打印插件jqprint 参考网址：http://www.jq22.com/jquery-info347
+实现方法
+引用jquery和，jqprint到您的页面
+
+<script language="javascript" src="jquery-1.4.4.min.js"></script>
+<script language="javascript" src="jquery.jqprint-0.3.js"></script>
+js
+
+<script language="javascript">
+function  a(){
+        $("#ddd").jqprint();
+    }
+</script>
+html
+
+<div id="ddd">
+    <table>
+        <tr>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+    </table>
+</div>
+<input type="button" onclick=" a()" value="打印"/>

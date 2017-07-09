@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Created on 2014-07-23 11:26:57 @author crud generated -->
+<mapper namespace="com.glanway.jty.dao.product.AttributeValueDao">
+	<resultMap id="attributeValueRM" type="AttributeValue">
+		<id property="id" column="ID" />
+		<result property="value" column="VALUE" />
+		<result property="sort" column="SORT" />
+		<result property="deleted" column="DELETED" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="createdDate" column="CREATED_DATE" />
+		<result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+		<result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+		<association property="attribute" javaType="Attribute"
+			columnPrefix="A_">
+			<id property="id" column="ATTRIBUTE_ID" />
+			<result property="name" column="NAME" />
+		</association>
+	</resultMap>
+
+	<resultMap id="attributeValueDetail" type="AttributeValue">
+		<id property="id" column="ID" />
+		<result property="value" column="VALUE" />
+		<result property="code" column="CODE" />
+		<association property="attribute" javaType="Attribute"
+			columnPrefix="a_">
+			<id property="id" column="ATTRIBUTE_ID" />
+		</association>
+		<!--<collection property="attributeValueResources" ofType="AttributeValueResource"
+			columnPrefix="r_">
+			<id property="id" column="ID" />
+			<result property="name" column="NAME" />
+			<result property="path" column="PATH" />
+			<result property="resourceType" column="RESOURCE_TYPE" />
+		</collection>-->
+	</resultMap>
+
+	<!-- -->
+	<sql id="baseCols">
+		ID,
+		VALUE,
+		CODE,
+		SORT,
+		ATTRIBUTE_ID,
+		DELETED,
+		CREATED_BY,
+		CREATED_DATE,
+		LAST_MODIFIED_BY,
+		LAST_MODIFIED_DATE
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+			ID,
+			VALUE,
+			CODE,
+			SORT,
+			ATTRIBUTE_ID,
+			DELETED,
+			CREATED_BY,
+			CREATED_DATE,
+			LAST_MODIFIED_BY,
+			LAST_MODIFIED_DATE
+		FROM
+			T_ATTRIBUTE_VALUE
+	</sql>
+
+	<sql id="baseFilter">
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="fristValue != null">
+			AND VALUE = #{value}
+		</if>
+
+		<if test="code != null">
+			AND CODE = #{code}
+		</if>
+		<if test="sort != null">
+			AND SORT = #{sort}
+		</if>
+		<!-- more -->
+	</sql>
+
+	<!-- - - - - - - - - - Retrieve - - - - - - - - - -->
+
+
+	<!-- retrieve by id -->
+	<select id="find"  resultType="AttributeValue">
+		<include refid="baseQuery" />
+		WHERE ID = #{id}
+	</select>
+
+	<!-- retrieve a unique entity -->
+	<select id="findOne" parameterType="map" resultType="AttributeValue">
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultType="AttributeValue">
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+		<!-- TODO default sort -->
+		ORDER BY CREATED_DATE
+		<!-- ORDER BY ROWID -->
+	</select>
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM T_ATTRIBUTE_VALUE
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="AttributeValue" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO T_ATTRIBUTE_VALUE (
+		<include refid="baseCols" />
+		) VALUES (
+		#{id},
+		#{value},
+		#{code},
+		#{sort},
+		#{attribute.id},
+		#{deleted},
+		#{createdBy},
+		#{createdDate},
+		#{lastModifiedBy},
+		#{lastModifiedDate}
+		)
+	</insert>
+
+
+	<insert id="saveProductAttributeValue" parameterType="map" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO T_PRODUCT_ATTRIBUTE_VALUE
+		(ID,PRODUCT_ID, ATTRIBUTE_VALUE_ID,ATTRIBUTE_ID, DELETED)
+		VALUES
+		(#{id},#{productId}, #{attributeValueId}, #{ATTRIBUTE_ID}, 0)
+
+	</insert>
+
+	<!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+	<update id="update" parameterType="AttributeValue">
+		UPDATE T_ATTRIBUTE_VALUE
+		<set>
+			<if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="deleted != null">
+				DELETED = #{deleted},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="value != null">
+				VALUE = #{value},
+			</if>
+			<if test="code != null">
+				CODE = #{code},
+			</if>
+			<if test="sort != null">
+				SORT = #{sort},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+	<!-- - - - - - - - - - - Delete - - - - - - - - - -->
+
+	<update id="delete" parameterType="AttributeValue">
+		<!-- DELETE FROM T_ATTRIBUTE_VALUE WHERE ID = #{id} -->
+		UPDATE T_ATTRIBUTE_VALUE SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+	<delete id="deleteByAttributeId">
+		UPDATE T_ATTRIBUTE_VALUE SET DELETED = 1 WHERE ATTRIBUTE_ID = #{aid}
+	</delete>
+
+	<update id="deleteProductCustomAttributeValueByProductId">
+		UPDATE T_ATTRIBUTE_VALUE AV
+		SET DELETED = 1
+		WHERE
+			ATTRIBUTE_ID IS NOT NULL
+		AND
+			EXISTS (
+				SELECT
+					1
+				FROM T_PRODUCT_ATTRIBUTE_VALUE PAV
+				WHERE ATTRIBUTE_ID IS NOT NULL
+				AND PAV.PRODUCT_ID = #{pid}
+				AND AV.ID = PAV.ATTRIBUTE_VALUE_ID
+			)
+	</update>
+
+	<update id="deleteProductAttributeValue">
+		UPDATE T_PRODUCT_ATTRIBUTE_VALUE AV
+		SET DELETED = 1
+		WHERE PRODUCT_ID = #{pid} AND DELETED = 0
+	</update>
+
+
+</mapper>

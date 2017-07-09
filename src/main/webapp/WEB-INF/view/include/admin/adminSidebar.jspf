@@ -1,0 +1,96 @@
+<%-- 权限管理顶部菜单 --%>
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@include file="../../include/taglibs.jspf" %>
+	<!-- Begin 左侧导航 -->
+	<div class="leftBar">
+		<%@include file="../../include/admin/logo.jspf"%>
+        <div class="subMenu">
+			<div class="subMenu-t">
+<c:forEach items="${modules}" var="module">
+    <c:if test="${module.id==mid}">
+				<h2>${module.name}</h2>
+    </c:if>
+</c:forEach>
+			</div>
+			<div class="sunMenu-list">
+                <ul>
+                    <c:forEach items="${modules}" var="module">
+                        <c:if test="${module.id == mid}">
+	                        <c:forEach items="${module.pages}" var="pageZ">
+				                    <li <c:if test="${fn:contains(pageZ.url,moduleUrl)}">class="on"</c:if>>
+				                        <a href="${ctx}/${fn:startsWith(pageZ.url, '/') ? fn:substring(pageZ.url, 1, fn:length(pageZ.url)) : pageZ.url}" title="${pageZ.name}">
+				                            <s></s>
+				                            <img src="${ctx}/images/admin/icon-menubar-01.png" width="20" height="20" />
+				                            <span>${pageZ.name}</span>
+				                        </a>
+				                    </li>
+	                        </c:forEach>
+                        </c:if>
+                    </c:forEach>
+                </ul>
+			</div>
+		</div>
+	</div>
+	<!-- //End 左侧导航 -->
+<script type="text/javascript">
+
+    <%--$(function(){--%>
+        <%--var ctx = (window.Besture || window)['contextPath'] || '';--%>
+        <%--$.ajax({--%>
+            <%--type: "get",--%>
+            <%--url: "${ctx}/admin/permission/getUserPermission",--%>
+            <%--data: {--%>
+                <%--currentPath: window.location.pathname.substring(ctx.length)--%>
+            <%--},--%>
+            <%--success: function(data){--%>
+                <%--<!-- 左侧菜单 -->--%>
+                <%--var $menuDiv = $('.sunMenu-list');--%>
+                <%--var $ul = $('<ul/>');--%>
+                <%--var currentModule = data.currentModule;--%>
+                <%--var currentPage = data.currentPage;--%>
+                <%--var pages = currentModule.pages;--%>
+                <%--for(var i=0; i<pages.length; i++){--%>
+                    <%--var page = pages[i];--%>
+                    <%--if(page.isShow == true){--%>
+
+                        <%--var $li = $('<li/>');--%>
+
+                        <%--if(currentPage.id === page.id){--%>
+                            <%--$li.addClass("on");--%>
+                        <%--}--%>
+                        <%--var $a = $('<a/>').attr({"href": "${ctx}" + page.pageUrl, "title" : page.name});--%>
+                        <%--$('<s/>').appendTo($a);--%>
+                        <%--$img = $('<img/>').attr({"src":"${ctx}/images/admin/icon-menubar-01.png", "width":"20", "height":"20"});--%>
+                        <%--$img.appendTo($a);--%>
+                        <%--$('<span/>').text(page.name).appendTo($a);--%>
+                        <%--$a.appendTo($li);--%>
+                        <%--$li.appendTo($ul);--%>
+                    <%--}--%>
+                <%--}--%>
+                <%--$ul.appendTo($menuDiv);--%>
+
+                <%--<!-- 头部菜单 -->--%>
+                <%--var $hUl = $('.JQ-slide-content');--%>
+                <%--var modules = data.modules;--%>
+                <%--for(var i=0; i<modules.length; i++){--%>
+                    <%--var module = modules[i];--%>
+                    <%--var defaultPage;--%>
+                    <%--for(var j=0; j<module.pages.length; j++){--%>
+                        <%--if(module.pages[j].isShow){--%>
+                            <%--defaultPage = module.pages[j];--%>
+                            <%--break;--%>
+                        <%--}--%>
+                    <%--}--%>
+                    <%--var $li = $('<li/>');--%>
+                    <%--$('<a/>').attr({"href": "${ctx}" + defaultPage.pageUrl, "title": module.name}).text(module.name).appendTo($li);--%>
+                    <%--$li.appendTo($hUl);--%>
+                    <%--if(module.id === currentModule.id){--%>
+                        <%--$li.addClass("on");--%>
+                    <%--}--%>
+                <%--}--%>
+
+            <%--}--%>
+        <%--})--%>
+    <%--})--%>
+
+</script>

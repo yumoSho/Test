@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.customer.OauthBindDao">
+    <select id="find" parameterType="long" resultType="OauthBind">
+        SELECT
+        M.*
+        FROM
+          T_OAUTH_BIND M
+        WHERE
+         M.ID = #{id}
+    </select>
+
+    <select id="findOne" parameterType="map" resultType="OauthBind">
+        SELECT
+        M.*
+        FROM
+        T_OAUTH_BIND M
+        <where>
+            <if test="null != memberId">
+                MEMBER_ID = #{memberId}
+            </if>
+            <if test="null != channel">
+                AND CHANNEL = #{channel}
+            </if>
+            <if test="openid != null">
+                AND OPEN_ID = #{openid}
+            </if>
+            <if test="id != null">
+                AND ID = #{id}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--<select id="findMany" parameterType="map" resultType="Member">
+        <include refid="support.ph"/>
+        SELECT * FROM
+        T_OAUTH_BIND M
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND M.DELETED = 0
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM
+        T_MEMBER M
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND M.DELETED = 0
+        </where>
+
+    </select>-->
+
+    <insert id="save" parameterType="OauthBind" useGeneratedKeys="true" keyProperty="id">
+		insert into T_OAUTH_BIND(
+		ID,
+		MEMBER_ID,
+		CHANNEL,
+		OPEN_ID,
+		CREATED_DATE
+		)
+        values(
+        #{id},
+        #{memberId},
+        #{channel},
+        #{openId},
+        #{createdDate}
+        )
+	</insert>
+
+    <update id="update" parameterType="OauthBind">
+        update T_OAUTH_BIND
+        <set>
+            <if test="memberId != null">
+                MEMBER_ID=#{memberId},
+            </if>
+            <if test="channel != null">
+                CHANNEL=#{channel},
+            </if>
+            <if test="openId != null">
+                OPEN_ID=#{openId},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE=#{createdDate},
+            </if>
+        </set>
+        where ID=#{id}
+    </update>
+</mapper>

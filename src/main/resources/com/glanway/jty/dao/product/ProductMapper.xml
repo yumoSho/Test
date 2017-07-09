@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-29 07:53:06
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.ProductDao">
+    <resultMap id="productRM" type="Product">
+        <id property="id" column="ID"/>
+        <result column="TITLE" property="title"/>
+        <result column="INTRO" property="intro"/>
+        <result column="SN" property="sn"/>
+        <result column="PRICE" property="price"/>
+        <result column="WEIGHT" property="weight"/>
+        <result column="REAL_SALES" property="realSales"/>
+        <result column="SALES" property="sales"/>
+        <result column="PROMOTIONAL_INFO" property="promotionalInfo"/>
+        <result column="SERVICE" property="service"/>
+        <result column="TIP" property="tip"/>
+        <result column="IMAGE" property="image"/>
+        <result column="IS_PUTAWAY" property="isPutaway"/>
+        <result column="REGISTER_DATE" property="registerDate"/>
+        <result column="SALES_OFF_DATE" property="salesOffDate"/>
+        <result column="DELETED" property="deleted"/>
+        <result column="ENABLE_SPECS" property="enableSpecs"/>
+        <result column="STOCK" property="stock"/>
+        <result column="ALERT_STOCK" property="alertStock"/>
+        <result column="DETAIL" property="detail"/>
+        <result column="MOBILE_DETAIL" property="mobileDetail"/>
+        <result column="SEO_TITLE" property="seoTitle"/>
+        <result column="SEO_KEYWORD" property="seoKeyword"/>
+        <result column="SEO_DESCRIPTION" property="seoDescription"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <!-- 关联品类 -->
+        <association property="category" javaType="Category" columnPrefix="C_">
+            <id property="id" column="ID"/>
+            <result property="name" column="NAME"/>
+            <!-- 关联模型 -->
+            <association property="model" javaType="Model">
+                <id property="id" column="M_ID"/>
+                <result property="name" column="M_NAME"/>
+                <result property="userSpec" column="M_USE_SPEC"/>
+            </association>
+        </association>
+        <!-- 关联品牌 -->
+        <association property="brand" javaType="Brand" columnPrefix="B_">
+            <id property="id" column="ID"/>
+            <result property="name" column="NAME"/>
+        </association>
+
+        <association property="label" javaType="Label">
+            <id column="LID" property="id"/>
+            <result column="LABEL_NAME" property="labelName"/>
+            <result column="LABEL_PATH" property="labelPath"/>
+        </association>
+        <collection property="areas" javaType="HatProvince">
+            <id property="id" column="HPID"/>
+        </collection>
+        <!-- 关联图片 -->
+        <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+            <id property="id" column="ID"/>
+            <result property="path" column="PATH"/>
+        </collection>
+    </resultMap>
+
+
+    <resultMap id="productDetailRM" type="Product" autoMapping="true">
+        <id property="id" column="ID"/>
+        <result property="enableSpecs" column="ENABLE_SPECS"/>
+        <association property="category" javaType="Category">
+            <id property="id" column="C_ID"/>
+            <result property="name" column="C_NAME"/>
+            <association property="model" javaType="Model">
+                <id property="id" column="M_ID"/>
+                <id property="name" column="M_NAME"/>
+            </association>
+            <collection property="brands" ofType="Brand">
+                <id property="id" column="AB_ID"/>
+                <result property="name" column="AB_NAME"/>
+            </collection>
+        </association>
+        <association property="label" javaType="Label">
+            <id column="LID" property="id"/>
+            <result column="LABEL_NAME" property="labelName"/>
+            <result column="LABEL_PATH" property="labelPath"/>
+        </association>
+        <association property="brand" javaType="Brand">
+            <id property="id" column="B_ID"/>
+            <result property="name" column="B_NAME"/>
+        </association>
+        <collection property="areas" ofType="HatProvince">
+            <id property="id" column="HPID"/>
+        </collection>
+        <collection property="attributeValues" ofType="AttributeValue">
+            <id property="id" column="AV_ID"/>
+            <result property="value" column="AV_VALUE"/>
+            <association property="attribute" javaType="Attribute">
+                <id property="id" column="A_ID"/>
+                <result property="name" column="A_NAME"/>
+            </association>
+        </collection>
+        <collection property="parameterValues" ofType="ParameterValue">
+            <id property="id" column="PV_ID"/>
+            <result property="value" column="PV_VALUE"/>
+            <association property="parameter" javaType="Parameter">
+                <id property="id" column="PP_ID"/>
+                <result property="name" column="PP_NAME"/>
+                <result property="sort" column="PP_SORT"/>
+            </association>
+        </collection>
+        <collection property="productImgs" ofType="ProductImg">
+            <id property="id" column="PI_ID"/>
+            <id property="sort" column="PI_SORT"/>
+            <result property="path" column="PI_PATH"/>
+        </collection>
+    </resultMap>
+
+
+    <!-- -->
+    <sql id="baseCols">
+        ID,
+        TITLE,
+        INTRO,
+        SN,
+        CATEGORY_ID,
+        MODEL_ID,
+        BRAND_ID,
+        PRICE,
+        SALES,
+        PROMOTIONAL_INFO,
+        SERVICE,
+        TIP,
+        LABLE_ID,
+        WEIGHT,
+        REAL_SALES,
+        IMAGE,
+        IS_PUTAWAY,
+        REGISTER_DATE,
+        SALES_OFF_DATE,
+        DELETED,
+        ENABLE_SPECS,
+        STOCK,
+        ALERT_STOCK,
+        DETAIL,
+        MOBILE_DETAIL,
+        SEO_TITLE,
+        SEO_KEYWORD,
+        SEO_DESCRIPTION,
+        CREATED_DATE,
+        CREATED_BY,
+        LAST_MODIFIED_DATE,
+        LAST_MODIFIED_BY
+    </sql>
+
+    <select id="find"  resultMap="productDetailRM">
+        SELECT
+        P.*,
+        C.ID C_ID,
+        C.NAME C_NAME,
+        M.ID M_ID,
+        M.NAME M_NAME,
+        M.USE_SPEC M_USE_SPEC,
+        B.ID B_ID,
+        B.NAME B_NAME,
+        AV.ID AV_ID,
+        AV.VALUE AV_VALUE,
+        A.ID A_ID,
+        A.NAME A_NAME,
+        PV.ID PV_ID,
+        PV.VALUE PV_VALUE,
+        PP.ID PP_ID,
+        PP.NAME PP_NAME,
+        PP.SORT PP_SORT,
+        PI.ID PI_ID,
+        PI.SORT PI_SORT,
+        PI.PATH PI_PATH,
+        AB.ID AB_ID,
+        AB.NAME AB_NAME,
+        LL.ID LID,
+        LL.LABEL_PATH,
+        LL.LABEL_NAME,
+        POC.ID  HPID
+        FROM (
+        SELECT
+        *
+        FROM
+        T_PRODUCT P
+        WHERE
+        ID = #{id}
+        AND DELETED = 0
+        ) P
+
+        LEFT JOIN T_CATEGORY C ON C.ID = P.CATEGORY_ID AND C.DELETED = 0
+        LEFT JOIN T_MODEL M ON C.MODEL_ID = M.ID AND M.DELETED = 0
+        LEFT JOIN T_BRAND B ON P.BRAND_ID = B.ID AND B.DELETED = 0
+        LEFT JOIN T_PRODUCT_ATTRIBUTE_VALUE PAV ON PAV.PRODUCT_ID = P.ID AND PAV.DELETED = 0
+        LEFT JOIN T_ATTRIBUTE_VALUE AV ON PAV.ATTRIBUTE_VALUE_ID = AV.ID AND AV.DELETED = 0
+        LEFT JOIN T_ATTRIBUTE A ON AV.ATTRIBUTE_ID = A.ID AND A.DELETED = 0
+        LEFT JOIN T_PARAMETER_VALUE PV ON PV.PRODUCT_ID = P.ID AND PV.DELETED = 0
+        LEFT JOIN T_PRODUCT_IMG PI ON PI.PRODUCT_ID = P.ID AND PI.DELETED = 0 AND PI.GOODS_ID IS NULL
+        LEFT JOIN T_BRAND_CATEGORY BC ON BC.CATEGORY_ID = C.ID AND BC.DELETED = 0
+        LEFT JOIN T_BRAND AB ON BC.BRAND_ID = AB.ID AND AB.DELETED = 0
+        LEFT JOIN T_PARAMETER PP ON PP.ID = PV.PARAMETER_ID AND PP.DELETED = 0
+        LEFT JOIN T_LABEL LL ON P.LABEL_ID= LL.ID AND LL.DELETED=0
+        LEFT JOIN T_PROVINCE_PRODUCT POP ON P.ID=POP.PRODUCT_ID
+        LEFT JOIN HAT_PROVINCE POC ON POP.PROVINCE_ID=POC.ID
+        ORDER BY PI_SORT ASC
+    </select>
+
+
+    <insert id="save" parameterType="Product" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_PRODUCT (
+            ID,
+            TITLE,
+            INTRO,
+            SN,
+            CATEGORY_ID,
+            MODEL_ID,
+            BRAND_ID,
+            PRICE,
+            SALES,
+            PROMOTIONAL_INFO,
+            SERVICE,
+            TIP,
+            LABEL_ID,
+            WEIGHT,
+            REAL_SALES,
+            IMAGE,
+            IS_PUTAWAY,
+            REGISTER_DATE,
+            SALES_OFF_DATE,
+            DELETED,
+            ENABLE_SPECS,
+            STOCK,
+            ALERT_STOCK,
+            DETAIL,
+            MOBILE_DETAIL,
+            SEO_TITLE,
+            SEO_KEYWORD,
+            SEO_DESCRIPTION,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY
+        ) VALUES (
+        #{id},
+        #{title},
+        #{intro},
+        #{sn},
+        #{category.id},
+        #{model.id},
+        #{brand.id},
+        #{price},
+        #{sales},
+        #{promotionalInfo},
+        #{service},
+        #{tip},
+        #{label.id},
+        #{weight},
+        #{realSales},
+        #{image},
+        #{isPutaway},
+        #{registerDate},
+        #{salesOffDate},
+        #{deleted},
+        #{enableSpecs},
+        #{stock},
+        #{alertStock},
+        #{detail},
+        #{mobileDetail},
+        #{seoTitle},
+        #{seoKeyword},
+        #{seoDescription},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy}
+        )
+    </insert>
+
+    <sql id="baseQuery">
+        SELECT
+            ID,
+            TITLE,
+            INTRO,
+            SN,
+            CATEGORY_ID,
+            MODEL_ID,
+            BRAND_ID,
+            PRICE,
+            SALES,
+            PROMOTIONAL_INFO,
+            SERVICE,
+            TIP,
+            LABLE_ID,
+            WEIGHT,
+            REAL_SALES,
+            IMAGE,
+            IS_PUTAWAY,
+            REGISTER_DATE,
+            SALES_OFF_DATE,
+            DELETED,
+            ENABLE_SPECS,
+            STOCK,
+            ALERT_STOCK,
+            DETAIL,
+            MOBILE_DETAIL,
+            SEO_TITLE,
+            SEO_KEYWORD,
+            SEO_DESCRIPTION,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY
+        FROM
+          T_PRODUCT
+    </sql>
+    <sql id="baseFilter">
+        <if test="title != null">
+            AND TITLE = #{title}
+        </if>
+        <if test="intro != null">
+            AND INTRO = #{intro}
+        </if>
+        <if test="sn != null">
+            AND SN = #{sn}
+        </if>
+        <if test="category != null and category.id != null">
+            AND CATEGORY_ID = #{category.id}
+        </if>
+        <if test="model != null and model.id != null">
+            AND MODEL_ID = #{model.id}
+        </if>
+        <if test="label != null and label.id != null">
+            AND LABEL_ID = #{label.id}
+        </if>
+        <if test="brand != null and brand.id != null">
+            AND BRAND_ID = #{brand.id}
+        </if>
+        <if test="price != null">
+            AND PRICE = #{price}
+        </if>
+        <if test="sales != null">
+            AND SALES = #{sales}
+        </if>
+        <if test="promotionalInfo != null">
+            AND PROMOTIONAL_INFO = #{promotionalInfo}
+        </if>
+        <if test="service != null">
+            AND SERVICE = #{service}
+        </if>
+        <if test="tip != null">
+            AND tip = #{tip}
+        </if>
+        <if test="weight != null">
+            AND WEIGHT = #{weight}
+        </if>
+        <if test="realSales != null">
+            AND REAL_SALES = #{realSales}
+        </if>
+        <if test="image != null">
+            AND IMAGE = #{image}
+        </if>
+        <if test="isPutaway != null">
+            AND IS_PUTAWAY = #{isPutaway}
+        </if>
+        <if test="registerDate != null">
+            AND REGISTER_DATE = #{registerDate}
+        </if>
+        <if test="enableSpecs != null">
+            AND ENABLE_SPECS = #{enableSpecs}
+        </if>
+        <if test="salesOffDate != null">
+            AND SALES_OFF_DATE = #{salesOffDate}
+        </if>
+        <if test="stock != null">
+            AND STOCK = #{stock}
+        </if>
+        <if test="alertStock != null">
+            AND ALERT_STOCK = #{alertStock}
+        </if>
+        <if test="detail != null">
+            AND DETAIL = #{detail}
+        </if>
+        <if test="mobileDetail != null">
+            AND MOBILE_DETAIL = #{mobileDetail}
+        </if>
+        <if test="seoTitle != null">
+            AND SEO_TITLE = #{seoTitle}
+        </if>
+        <if test="seoKeyword != null">
+            AND SEO_KEYWORD = #{seoKeyword}
+        </if>
+        <if test="seoDescription != null">
+            AND SEO_DESCRIPTION = #{seoDescription}
+        </if>
+        AND DELETED = 0
+        <!-- more -->
+    </sql>
+
+    <sql id="productDynamicFilters">
+        <if test="_product_filters != null">
+            <foreach item="filter" collection="_product_filters" separator=" AND ">
+                <include refid="support.foreachFilter"/>
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="brandDynamicFilters">
+        <if test="_brand_filters != null">
+            <foreach item="filter" collection="_brand_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(B.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            B.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- 分类动态条件 -->
+    <sql id="categoryDynamicFilters">
+        <if test="_category_filters != null">
+            <foreach item="filter" collection="_category_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(C.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            C.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- 供应商动态条件 -->
+    <sql id="labelDynamicFilters">
+        <if test="_label_filters != null">
+            <foreach item="filter" collection="_label_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(LL.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            LL.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- 模型动态条件 -->
+    <sql id="modelDynamicFilters">
+        <if test="_model_filters != null">
+            <foreach item="filter" collection="_model_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(M.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            M.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="findMany" parameterType="map" resultMap="productRM">
+        SELECT
+        R.*,
+        M.ID      C_M_ID,
+        M.NAME    C_M_NAME,
+        PI.ID     P_ID,
+        PI.PATH   P_PATH
+        FROM (
+        <include refid="support.ph"/>
+        SELECT
+        R.*,
+        B.ID      B_ID,
+        B.NAME    B_NAME,
+        C.ID      C_ID,
+        C.NAME    C_NAME,
+        C.MODEL_ID C_MODEL_ID,
+        LL.ID     LID,
+        LL.LABEL_PATH,
+        LL.LABEL_NAME
+        FROM (
+        SELECT
+            P.ID,
+            P.TITLE,
+            P.INTRO,
+            P.SN,
+            P.BRAND_ID,
+            P.CATEGORY_ID,
+            P.MODEL_ID,
+            P.PRICE,
+            P.SALES,
+            P.PROMOTIONAL_INFO,
+            P.SERVICE,
+            P.TIP,
+            P.WEIGHT,
+            P.REAL_SALES,
+            P.LABEL_ID,
+            P.IMAGE,
+            P.IS_PUTAWAY,
+            P.REGISTER_DATE,
+            P.SALES_OFF_DATE,
+            P.DELETED,
+            P.ENABLE_SPECS,
+            P.STOCK,
+            P.ALERT_STOCK,
+            P.DETAIL,
+            P.MOBILE_DETAIL,
+            P.SEO_TITLE,
+            P.SEO_KEYWORD,
+            P.SEO_DESCRIPTION,
+            P. CREATED_DATE,
+            P.CREATED_BY,
+            P.LAST_MODIFIED_DATE,
+            P.LAST_MODIFIED_BY
+        FROM
+          T_PRODUCT P
+        <where>
+            <!-- 兼容通用动态过滤 -->
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+                <include refid="productDynamicFilters" />
+                <include refid="baseFilter"/>
+            </trim>
+        </where>
+        ORDER BY 
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>, CREATED_DATE DESC
+        </trim>
+        ) R
+        LEFT JOIN T_BRAND B ON R.BRAND_ID = B.ID
+        JOIN T_CATEGORY C ON R.CATEGORY_ID = C.ID
+        <if test="_model_filters != null">
+            LEFT JOIN T_MODEL M ON C.MODEL_ID = M.ID AND M.DELETED = 0
+        </if>
+        LEFT JOIN T_LABEL LL ON R.LABEL_ID = LL.ID AND LL.DELETED=0
+        <where>
+            <trim suffixOverrides="AND"> AND <include refid="brandDynamicFilters" /></trim>
+            <if test="_model_filters != null">
+                <trim suffixOverrides="AND">AND <include refid="modelDynamicFilters" /></trim>
+            </if>
+            <trim suffixOverrides="AND"> AND <include refid="categoryDynamicFilters" /></trim>
+            <trim suffixOverrides="AND"> AND <include refid="labelDynamicFilters" /></trim>
+        </where>
+        <include refid="support.pf"/>
+        ) R
+        LEFT JOIN T_MODEL M ON R.C_MODEL_ID = M.ID AND M.DELETED = 0 <trim suffixOverrides="AND">AND <include refid="modelDynamicFilters" /></trim>
+        LEFT JOIN T_PRODUCT_IMG PI ON PI.PRODUCT_ID = R.ID AND PI.GOODS_ID IS NULL AND PI.DELETED = 0
+        ORDER BY R.LAST_MODIFIED_DATE DESC
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT
+        count(1)
+        FROM (
+        SELECT
+            P.ID,
+            P.TITLE,
+            P.INTRO,
+            P.SN,
+            P.BRAND_ID,
+            P.CATEGORY_ID,
+            P.MODEL_ID,
+            P.PRICE,
+            P.WEIGHT,
+            P.REAL_SALES,
+            P.IMAGE,
+            P.LABEL_ID,
+            P.IS_PUTAWAY,
+            P.REGISTER_DATE,
+            P.SALES_OFF_DATE,
+            P.DELETED,
+            P.ENABLE_SPECS,
+            P.STOCK,
+            P.ALERT_STOCK,
+            P.DETAIL,
+            P.MOBILE_DETAIL,
+            P.SEO_TITLE,
+            P.SEO_KEYWORD,
+            P.SEO_DESCRIPTION,
+            P. CREATED_DATE,
+            P.CREATED_BY,
+            P.LAST_MODIFIED_DATE,
+            P.LAST_MODIFIED_BY
+        FROM
+          T_PRODUCT P
+        <where>
+            <trim prefixOverrides="AND">
+                <!-- 兼容通用动态过滤 -->
+                <include refid="support.dynamicFilters"/>
+                <include refid="productDynamicFilters"/>
+                <include refid="baseFilter"/>
+            </trim>
+        </where>
+        ) R
+        LEFT JOIN T_BRAND B ON R.BRAND_ID = B.ID
+        <trim suffixOverrides="AND">AND
+            <include refid="brandDynamicFilters"/>
+        </trim>
+        LEFT JOIN T_CATEGORY C ON R.CATEGORY_ID = C.ID
+        <trim suffixOverrides="AND">AND
+            <include refid="categoryDynamicFilters"/>
+        </trim>
+        <if test="_model_filters != null">
+            INNER JOIN T_MODEL M ON C.MODEL_ID = M.ID AND M.DELETED = 0
+            <trim suffixOverrides="AND">AND
+                <include refid="modelDynamicFilters"/>
+            </trim>
+        </if>
+        LEFT JOIN T_LABEL LL ON LL.ID=R.LABEL_ID  AND LL.DELETED=0
+        <where>
+            <trim suffixOverrides="AND"> AND <include refid="brandDynamicFilters" /></trim>
+            <if test="_model_filters != null">
+                <trim suffixOverrides="AND">AND <include refid="modelDynamicFilters" /></trim>
+            </if>
+            <trim suffixOverrides="AND"> AND <include refid="categoryDynamicFilters" /></trim>
+            <trim suffixOverrides="AND"> AND <include refid="labelDynamicFilters" /></trim>
+        </where>
+    </select>
+
+
+    <update id="update" parameterType="Product">
+        UPDATE T_PRODUCT
+        <set>
+            <if test="title != null">
+                 TITLE = #{title},
+            </if>
+            <if test="intro != null">
+                 INTRO = #{intro},
+            </if>
+            <if test="sn != null">
+                 SN = #{sn},
+            </if>
+            <if test="category != null and category.id != null">
+                 CATEGORY_ID = #{category.id},
+            </if>
+            <if test="model != null and model.id != null">
+                 MODEL_ID = #{model.id},
+            </if>
+            <if test="brand != null and brand.id != null">
+                 BRAND_ID = #{brand.id},
+            </if>
+            <if test="label != null and label.id != null">
+                LABEL_ID = #{label.id},
+            </if>
+            <if test="price != null">
+                 PRICE = #{price},
+            </if>
+           <if test="weight != null">
+                 WEIGHT = #{weight},
+            </if>
+            <if test="promotionalInfo != null">
+                PROMOTIONAL_INFO = #{promotionalInfo},
+            </if>
+            <if test="service != null">
+                SERVICE = #{service},
+            </if>
+            <if test="tip != null">
+                TIP = #{tip},
+            </if>
+            <if test="sales != null">
+                 SALES = #{sales},
+            </if>
+            <if test="image != null">
+                 IMAGE = #{image},
+            </if>
+            <if test="isPutaway != null">
+                 IS_PUTAWAY = #{isPutaway},
+            </if>
+            <if test="registerDate != null">
+                 REGISTER_DATE = #{registerDate},
+            </if>
+            <if test="enableSpecs != null">
+                 ENABLE_SPECS = #{enableSpecs},
+            </if>
+            <if test="salesOffDate != null">
+                 SALES_OFF_DATE = #{salesOffDate},
+            </if>
+            <if test="stock != null">
+                 STOCK = #{stock},
+            </if>
+            <if test="alertStock != null">
+                 ALERT_STOCK = #{alertStock},
+            </if>
+            <if test="detail != null">
+                 DETAIL = #{detail},
+            </if>
+            <if test="mobileDetail != null">
+                 MOBILE_DETAIL = #{mobileDetail},
+            </if>
+            <if test="seoTitle != null">
+                 SEO_TITLE = #{seoTitle},
+            </if>
+            <if test="seoKeyword != null">
+                 SEO_KEYWORD = #{seoKeyword},
+            </if>
+            <if test="seoDescription != null">
+                 SEO_DESCRIPTION = #{seoDescription},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="Product">
+        UPDATE T_PRODUCT SET DELETED = 1, IS_PUTAWAY = 0 WHERE ID = #{id}
+    </update>
+
+    <select id="isSingleProduct" parameterType="long" resultType="int">
+      SELECT COUNT(1) FROM T_PRODUCT P
+      LEFT JOIN T_GOODS G ON P.ID=G.PRODUCT_ID AND G.DELETED=0
+      WHERE P.DELETED =0 AND P.ENABLE_SPECS=0 AND P.ID=#{0}
+    </select>
+
+    <update id="offLoding" >
+        UPDATE T_PRODUCT SET IS_PUTAWAY= 0, SALES_OFF_DATE=NOW() WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <update id="onSell" >
+        UPDATE T_PRODUCT SET IS_PUTAWAY= 1, REGISTER_DATE=NOW() WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deletedAreasByProductId" parameterType="long">
+        DELETE  FROM  T_PROVINCE_PRODUCT WHERE PRODUCT_ID=#{id}
+    </delete>
+
+    <insert id="addProductAreas" parameterType="map" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_PROVINCE_PRODUCT (
+          ID,
+          PROVINCE_ID,
+          PRODUCT_ID
+        )VALUES(
+          #{id},
+          #{hatProvince.id},
+          #{product.id}
+        )
+    </insert>
+</mapper>

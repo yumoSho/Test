@@ -1,0 +1,31 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<%--<script type="x-tmpl-mustache" id="tpl-packageDetail">
+            <div class="em_list">
+                <div class="suits suits_2">
+                    <ul id="recoul">
+                        {{#accessories}}
+                            <li>
+                                <s></s>
+                                  <div class="p-img">
+                                      <input type="hidden" name="composes[].accessories[{{index}}].productId" value="{{product.id}}" >
+                                      <input type="hidden" name="composes[].accessories[{{index}}].goodsId" value="{{id}}" >
+                                      <a href="#">
+                                          <img src="${ctx}/{{detailImages}}" width="99" height="99" />
+                                      </a>
+                                  </div>
+                                  <div class="p-name">
+                                      <a href="#">
+                                          {{product.title}}
+                                          {{#specValues.length}}
+                                                ({{#specValues}}
+                                                    {{name}}
+                                                 {{/specValues}})
+                                           {{/specValues.length}}
+                                      </a>
+                                  </div>
+                            </li>
+                        {{/accessories}}
+                    </ul>
+                </div>
+             </div>
+</script>--%>

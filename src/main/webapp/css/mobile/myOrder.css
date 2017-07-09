@@ -1,0 +1,270 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+/*商品下架*/
+.goodsRemove {
+  max-width: 100%;
+  text-align: center;
+  padding: 3.3rem 0 0 0;
+}
+.goodsRemove p {
+  font-size: 0.3rem;
+  margin-top: 0.2rem;
+}
+.goodsRemove img {
+  width: 1.87rem;
+  height: 1.39rem;
+}
+.bgblack {
+  background: #fff;
+}
+/*订单详情*/
+.orderDetail {
+  font-size: 0.24rem;
+  color: #191919;
+}
+.orderDetail .pOrder {
+  text-align: center;
+  color: #19aa4b;
+  line-height: 0.9rem;
+}
+.orderAdd {
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  line-height: 0.45rem;
+  padding: 0.09rem 0.15rem;
+}
+.orderAdd span {
+  display: inline-block;
+}
+.orderText,
+.remarks .orderRe {
+  color: #959595;
+}
+.orderStore {
+  border-top: 1px solid #dcdcdc;
+  line-height: 0.4rem;
+  padding: 0.11rem 0.15rem;
+  overflow: hidden;
+}
+.orderStore span {
+  color: #19aa4b;
+}
+dl.store {
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  padding: 0.18rem 0.15rem;
+  margin-bottom: 0.08rem;
+}
+dl.store dt {
+  float: left;
+  border: 1px solid #dcdcdc;
+  margin-right: 0.15rem;
+  width: 1.8rem;
+  height: 6.5em;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+dl.store dt a {
+  display: inline-block;
+}
+dl.store dt a img {
+  vertical-align: middle;
+  width: 1.67rem;
+  height: 1.39rem;
+}
+dl.store dd {
+  color: #666;
+  padding: 0.1rem 0;
+  overflow: hidden;
+  line-height: 0.45rem;
+}
+dl.store dd p {
+  font-size: 0.24rem;
+  line-height: 0.45rem;
+}
+dl.store dd a {
+  color: #666;
+}
+dl.store .storeRed {
+  color: #19aa4b;
+  font-size: 0.24rem;
+  text-decoration: none;
+}
+.orderPrice {
+  margin-top: -0.08rem;
+  font-size: 0.22rem;
+  color: #191919;
+  height: 0.94rem;
+  line-height: 0.94rem;
+  border-bottom: 1px solid #dcdcdc;
+}
+.orderPrice .storeRed {
+  color: #19aa4b;
+  font-size: 0.24rem;
+  font-weight: bold;
+}
+.orderStore p {
+  width: 100%;
+  overflow: hidden;
+  height: 0.4rem;
+  white-space: nowrap;
+  word-break: break-all;
+}
+.orderStore p .storeOrderState {
+  color: #19aa4b;
+}
+.orderStore p a {
+  color: #191919;
+}
+.orderAdd span {
+  height: 0.45rem;
+}
+.orderAdd span.receipL {
+  width: 50%;
+  overflow: hidden;
+}
+.remarks {
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  margin-top: 0.1rem;
+  padding: 0.2rem 0.15rem;
+}
+.remarks p {
+  line-height: 0.5rem;
+}
+.remarks p:first-child{
+    overflow: hidden;
+}
+.remarks p:first-child .fleft{
+    white-space: nowrap;
+}
+.remarks p:first-child .fright{
+    width: 6rem;
+    display: block;
+    padding: .065rem 0;
+    line-height: .36rem;
+}
+.remarks p.orderRe {
+  line-height: 0.35rem;
+}
+/*物流详情*/
+.logStore {
+  line-height: 0.4rem;
+  padding: 0.11rem 0.15rem;
+}
+.logNum {
+  width: 100%;
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  height: 0.5rem;
+  background: #ffb273;
+  text-align: center;
+  line-height: 0.5rem;
+  opacity: 0.6;
+  color: #fff;
+}
+.logisticD p {
+  line-height: 0.42rem;
+  font-size: 0.22rem;
+  color: #999999;
+}
+.logisticD p.logP {
+  color: #191919;
+  font-size: 0.24rem;
+}
+dl.logistic {
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  padding: 0.18rem 0.15rem;
+  margin-top: .17rem;
+}
+dl.logistic dt {
+  position: relative;
+  float: left;
+  border: 1px solid #dcdcdc;
+  margin-right: 0.15rem;
+  width: 1.8rem;
+  height: 2rem;
+  box-sizing: border-box;
+}
+dl.logistic dd {
+  padding: 0.155rem 0;
+  overflow: hidden;
+}
+dl.logistic .storeRed {
+  color: #19aa4b;
+  font-size: 0.24rem;
+  text-decoration: none;
+}
+.track {
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  line-height: 0.62rem;
+  font-size: 0.22rem;
+}
+.sign {
+  padding: 0.3rem 0.55rem 0 0.55rem;
+  border-bottom: 1px solid #dcdcdc;
+}
+.sign .signTop {
+  position: relative;
+  padding-bottom: 0.45rem;
+  border-left: 3px solid #dcdcdc;
+}
+.sign .signTop p {
+  line-height: 0.35rem;
+  padding: 0 0.38rem;
+}
+.sign .signTop p.signBrown {
+  color: #959595;
+  font-size: 0.18rem;
+}
+.sign .signTop p.signRed {
+  color: #19aa4b;
+  font-size: 0.24rem;
+}
+.sign .noSign {
+  position: relative;
+  padding-bottom: 0.48rem;
+  border-left: 3px solid #dcdcdc;
+}
+.sign .noSign p {
+  line-height: 0.35rem;
+  padding: 0 0.38rem;
+}
+.sign .noSign p.noSignBrown {
+  color: #666;
+}
+.sign .noSign p.signbrown {
+  color: #959595;
+  font-size: 0.18rem;
+}
+.signTop img {
+  width: 0.35rem;
+  position: absolute;
+  left: -3%;
+}
+.noSign img {
+  width: 0.25rem;
+  position: absolute;
+  left: -2.2%;
+  top: 0.05rem;
+}
+/*我的订单*/
+.myOrd {
+  font-size: 0;
+}
+.myOrd a {
+  font-size: 0.26rem;
+  color: #191919;
+  width: 20%;
+  text-align: center;
+  display: inline-block;
+  padding: .15rem 0;
+}
+.myOrd a.on {
+  border-bottom: solid 2px #19aa4b;
+}
+/*# sourceMappingURL=myOrder.css.map */

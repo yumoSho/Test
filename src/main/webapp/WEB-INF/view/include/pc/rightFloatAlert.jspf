@@ -1,0 +1,448 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<div class="rightFloat clearfix">
+    <div class="leftBar fl">
+        <ul class="handelList">
+            <li class="goRightCart">
+                <a href="javascript:void(0);" title="购物车" style="background-image:url(${ctx}/images/pc/rightIcon1.png);" class="rightCartShow"><i class="cartNum cartNumSmall">0</i></a>
+                <span>我的购物车</span>
+            </li>
+            <li class="rightCollected">
+                <a href="javascript:void(0);" title="收藏" style="background-image:url(${ctx}/images/pc/rightIcon2.png);"></a>
+                <span>我的收藏</span>
+            </li>
+            <li class="rightCoupon">
+                <a href="javascript:void(0);" title="优惠券" style="background-image:url(${ctx}/images/pc/rightIcon3.png);"></a>
+                <span>我的优惠券</span>
+            </li>
+            <li class="rightRecharge">
+                <a href="javascript:void(0);" title="充值" style="background-image:url(${ctx}/images/pc/rightIcon4.png);"></a>
+                <span>充值</span>
+            </li>
+            <li>
+                <a href="http://wpa.qq.com/msgrd?v=3&uin=${simpleWebsite.qq}&site=qq&menu=yes" title="在线咨询" style="background-image:url(${ctx}/images/pc/rightIcon5.png);" target="_blank"></a>
+                <span onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=${simpleWebsite.qq}&site=qq&menu=yes')" >在线咨询</span>
+            </li>
+            <li class="rightShare">
+                <a href="javascript:void(0);" title="分享有礼" style="background-image:url(${ctx}/images/pc/rightIcon6.png);"></a>
+                <span>分享有礼</span>
+            </li>
+            <li class="userBack">
+                <a href="javascript:void(0);" title="用户反馈" style="background-image:url(${ctx}/images/pc/rightIcon7.png);"></a>
+                <span>用户反馈</span>
+            </li>
+        </ul>
+        <a href="javascript:void(0);" class="goTop"><img src="${ctx}/images/pc/goTop.jpg" /></a>
+    </div>
+    <div class="rightCart fl ">
+        <div class="rightCartTitle clearfix">
+            <a href="javascript:void(0);" class="fl"><img src="${ctx}/images/pc/icon20.png" width="14" height="9" /></a>
+            <span><img src="${ctx}/images/pc/rightIconCart.png" width="18" height="14" />我的购物车</span>
+        </div>
+        <div class="cartProList">
+            <!--头部操作-->
+            <div class="rightCartHandel clearfix">
+                <label class="fl">
+                    <input type="checkbox" class="checkAll" name="checkAll">全选
+                </label>
+                <a href="javascript:void(0);" class="fr rDelAll">删除</a>
+            </div>
+            <div class="rightCartList">
+            </div>
+            <div class="rightCartBtnWrap">
+                <div class="rightCartMoney clearfix">
+                    <span class="leftMoney fl">已选择<span id="totalCartNum" style="color:red;font-weight: 700">0</span>件</span>
+                    <span class="rightMoney fr">￥<span id="totalCartMoney">0.00</span></span>
+                </div>
+                <c:choose>
+                    <c:when test="${not empty member};">
+                        <a href="${ctx}/cart" class="goToPay">结算</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="javascript:void(0)" class="goToPay">去 结 算</a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+        <!--购物车为空提示-->
+        <div class="cartNull color666" id="cartNull" style="display: none">
+            您的购物车还是空的！
+        </div>
+    </div>
+</div><!-- //rightFloat -->
+<!--用户咨询弹窗-->
+<div class="userBackPop" style=" z-index: 999;">
+    <div class="backInner">
+        <img src="${ctx}/images/pc/closeAskPop.png" width="16" height="17" class="closeAdkPop fr" />
+		 <c:choose>
+		<c:when test="${sessionScope.member.id !=null }">
+        <div class="askInner">
+            <p class="askTitle color666">用户反馈</p>
+            <p class="askNotice color666">
+                尊敬的用户：<br />
+                您好！为了给您提供更好的服务， 请留下您对网站的意见和建议！
+            </p>
+            <form id="askForm">
+            	<input name="memberId" type="hidden" value="${sessionScope.member.id}">
+                <div class="askText clearfix">
+                    <div class="askLeft fl">发表内容：</div>
+                    <textarea name="content"></textarea>
+                </div>
+                <div class="subMitBtn">
+                    <input id="feedbackSubmit" type="button" value="提交"/>
+                    <input type="reset" value="取消" />
+                </div>
+            </form>
+        </div>
+        </c:when>
+        <c:otherwise>
+			 <div class="askInner">
+            <p class="askTitle color666">用户反馈</p>
+            <p class="askNotice color666">
+                您尚未登录：<br />
+                请<a href="${ctx }/login"> 登录 </a>后再填写反馈！
+            </p>
+
+        </div>
+		</c:otherwise>
+        </c:choose>
+    </div>
+</div>
+<!--分享弹窗-->
+<div class="sharePop">
+    <div class="sharePopInner">
+        <div class="shareTitle clearfix">
+            <span class="fl">分享链接</span>
+            <a href="javascript:void(0);" class="fr"><img src="${ctx}/images/pc/closeWrite.png" width="20" height="20" /></a>
+        </div>
+        <div class="linkInner">
+            <c:if test="${not empty sessionScope.member}">
+            <a id="rightFloat_a" href="https://home.jd.com/">https://home.jd.com/YJBB008f46sadasdasdasdsa</a>
+            </c:if>
+                <c:if test="${not empty sessionScope.member}">
+                    <p id="d_clip_p_content">在分享网站链接后，通过此链接注册的好友，购买指定类型的商品后，您将会获得一定比例的余额返现。</p>
+                    <input id="d_clip_button" type="button" value="复制" data-clipboard-target="rightFloat_a"/>
+                </c:if>
+                <c:if test="${empty sessionScope.member}">
+                    <span id="d_clip_p_content" style="display: block;font-size: 20px;color: #19aa4b;margin-top: 50px">登录后才能拥有专属分享链接，请先登录</span>
+                    <input type="button" value="登录" onclick="javascript:window.location.href='${ctx}/login'"/>
+                </c:if>
+        </div>
+    </div>
+</div>
+
+<div id="subCartForm" style="display: none">
+
+</div>
+<input type="hidden" id="isLogin" value="<c:choose><c:when test="${member == null}">false</c:when><c:otherwise>true</c:otherwise></c:choose>"/>
+<script src="${ctx}/js/BaiduTemplate.js"></script>
+<script type="text/html" id="goodsTmpl">
+    <div class="rightCartItem clearfix">
+        <div class="handel fl"><input type="checkbox" name="checkOne" class="checkOne" value="<!=cart.id!>" <! if(cart.selected) {!>checked<!}!>  /></div>
+        <div class="rightProDes fl clearfix">
+            <a href="<!=ctx!>/detail/<!=cart.goodsId!>?goodsFrom=<!=cart.goodsFrom!>&oid=<!=cart.otherId!>" class="fl"><img src="<!=ctx!>/<!=cart.goodsImg!>_55x60" width="55" height="60" /></a>
+            <div class="cartProName fl">
+                <a href="<!=ctx!>/detail/<!=cart.goodsId!>?goodsFrom=<!=cart.goodsFrom!>&oid=<!=cart.otherId!>" class="proName "><!=cart.goodsName!></a>
+                <div class="rightCartNum clearfix">
+                    <input type="hidden" name="id" value="<!=cart.id!>">
+                        <! if(cart.isLive) {!>
+                    <div class="rightCartPrice fl clearfix">
+                        <input type="hidden" name="oldCount">
+                        <a href="javascript:void(0);" class="fl sCartDes numDecrice">-</a>
+                        <input type="text" class="sCartInput  rightCartInput fl" value="<!=cart.buyCount!>" />
+                        <a href="javascript:void(0);" class="fl sCartAdd numAdd">+</a>
+                    </div>
+                        <!} else{!>
+                            <div class="rightCartPrice fl"> <span style="color:red">已下架</span></div>
+                        <!}!>
+                    <input  type="hidden" name="canBuy" value="<!= (cart.buyCount <= cart.inventory && cart.isLive)!>">
+                </div>
+            </div>
+        </div>
+        <div class="sCartProNum fl">
+            <div class="priceNumber" style="color: red;font-weight: 400"> <! if(cart.isLive) {!>￥<span>
+                 <!=cart.price!> </span><!}!></div>
+            <a href="javascript:void(0);" class="fr deleteOne" onclick="cartDel(<!=cart.id!>)">删除</a>
+        </div>
+    </div>
+</script>
+<script>
+	$(function(){
+        cartAsyn();
+        //计算右侧页面迷你购物车高度
+        var windowHeight = $(window).height();
+        $(".rightCartList").css("height",windowHeight-165+"px");
+        //计算购物车总数量
+        searchGoodSCart();
+    });
+
+    function cartAsyn() {
+        var flag = ${not empty member};
+        var url = contextPath + "/cart/cartAsyn";
+        if(!flag){
+            url = contextPath + "/cookieCart/cartAsyn";
+        }
+        var bt;
+        if(!bt){
+            bt = baidu.template;
+            bt.LEFT_DELIMITER='<!';
+            bt.RIGHT_DELIMITER='!>'
+        }
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(data){
+                var $container = $("div.rightCartList").empty();
+                if(data.cartList.length > 0){
+                    var totalPrice = 0.00;
+                    var totalNum = 0;
+                    $.each(data.cartList,function(i,row){
+                        if(row.selected){
+                            totalPrice += row.totalPrice;
+                            totalNum += row.buyCount;
+                        }
+                        var tmplData = {ctx:contextPath,cart:row};
+                        var html = bt('goodsTmpl',tmplData);
+                        $container.append(html);
+                    });
+                    $(".cartProList").show();
+                    $("#cartNull").hide();
+                    $("#totalCartNum").text(totalNum);
+                    $("#totalCartMoney").text(HgUtil.numberFormat(totalPrice,2));
+
+                    //迷你购物车删除显示(zy)
+                    $(".rightCartItem").hover(function () {
+                        $me = $(this);
+                        $me.find(".deleteOne").addClass("show");
+                    }, function () {
+                        $(this).find(".deleteOne").removeClass("show");
+                    });
+
+                    //绑定勾选事件
+                    bindSelectEvent();
+                    //绑定数量操作事件
+                    bindGoodsNumEvent();
+                    //更新购物车总数量
+                    searchGoodSCart();
+                }else {
+                    $(".cartProList").hide();
+                    $("#cartNull").show();
+                }
+            },
+            error:function(){
+
+            }
+        });
+    }
+
+
+    //批量删除弹窗
+    $(".rDelAll").click(function () {
+            var checkedList = $("input[name='checkOne']:checked");
+            var ids = "";
+            checkedList.each(function (i) {
+                ids += "id=" + $(this).val() + "&";
+            });
+        cartDel(0,ids);
+        cartAsyn();//跟新侧边栏购物车
+    });
+    /*删除商品*/
+    function cartDel(id,ids) {
+        if(!ids) {
+             ids="id="+id;
+        }
+
+
+        var loginFlag = $("#isLogin").val();
+        var URI = '/cart/delete';
+        if (loginFlag == 'false') {
+            URI = '/cookieCart/delete';
+        }
+        $.ajax({
+            url: contextPath + URI,
+            type: 'post',
+            async: false,
+            data: ids,
+            dataType: 'json',
+            success: function (message) {
+                if (message.success) {
+                    cartAsyn();//跟新侧边栏购物车
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    /*绑定全选事件*/
+    function bindSelectEvent() {
+        $(".checkAll").off('click').on('click', function () {
+            var checked = $(this).attr("checked");
+            if (checked == "checked") {
+                $(".rightCartList input[type='checkbox']").attr("checked", "checked");
+            } else {
+                $(".rightCartList input[type='checkbox']").removeAttr("checked");
+            }
+            selected(this);//选中商品后花心页面
+        });
+        $(".rightCartList input[name='checkOne']").on('click', function () {
+            selected(this);//选中商品后花心页面
+        });
+    }
+
+    /*解除选择商品事件*/
+    function unBindSelectEvent() {
+        $(".checkAll").off('click');
+        $(".rightCartList input[name='checkOne']").off("click");
+    }
+    /*选中商品后请求后台的方法*/
+    function selected(obj) {
+        unBindSelectEvent;
+        var checkedList = $(".rightCartList input[name='checkOne']:checked");
+        var ids = "";
+        checkedList.each(function (i) {
+            ids += "id=" + $(this).val() + "&";
+        });
+        var loginFlag = $("#isLogin").val();
+        var URI = '/cart/selectGoods';
+        if (loginFlag == 'false') {
+            URI = '/cookieCart/selectGoods';
+        }
+        $.ajax({
+            url: contextPath + URI,
+            type: 'post',
+            async: false,
+            data: ids,
+            dataType: 'json',
+            success: function (message) {
+                if (message.success) {
+                    cartAsyn();//跟新侧边栏购物车
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    //商品数量操作
+
+    /*绑定商品数量操作js*/
+    function bindGoodsNumEvent() {
+        //保留修改前的值
+        $("input.sCartInput").focus(function () {
+            $(this).siblings("input:hidden[name=oldCount]").val(this.value);
+        });
+        //修改购买数量事件绑定
+        $("input.sCartInput").change(function () {
+            changeBuyCount(3, this);
+        });
+        //增加购买数量事件
+        $(".numAdd").off('click').on('click', function () {
+            changeBuyCount(1, this);
+        });
+        //减少购买数量事件
+        $(".numDecrice").off('click').on('click', function () {
+            changeBuyCount(2, this);
+        });
+    }
+
+    /*解除商品数量操作时间绑定*/
+    function unBindEvent() {
+        $(".numDecrice,.numAdd").off('click');
+    }
+
+    //商品数量 +1 、-1操作
+    //op: 1->加 2->减 3->直接修改数值
+    function changeBuyCount(op, obj) {
+        unBindEvent();//解除事件
+        var id = $(obj).closest(".rightCartNum").find("input[name=id]").val();
+        var buyCount = 0;
+        if (op == 3) {
+            buyCount = $(obj).val();
+            if (!buyCount || isNaN(buyCount) || buyCount < 1) {
+                $(obj).val($(obj).siblings("input:hidden[name=oldCount]").val());
+                bindGoodsNumEvent();
+                return false;
+            }
+        } else {
+            buyCount = $(obj).siblings("input.sCartInput").val();
+        }
+        var loginFlag = $("#isLogin").val();
+        var URI = '/cart/changeBuyCount';
+        if (loginFlag == 'false') {
+            URI = '/cookieCart/changeBuyCount';
+        }
+        $.ajax({
+            url: contextPath + URI,
+            type: 'post',
+            async: false,
+            data: {id: id, type: op, buyCount: buyCount},
+            dataType: 'json',
+            success: function (message) {
+                if (message.success) {
+                    cartAsyn();
+                } else {
+                    if (op == 3) {
+                        var oldVal = $(obj).siblings("input:hidden").val();
+                        $(obj).siblings("input:hidden").siblings("input.sCartInput").val(oldVal)
+                    }
+                    bindGoodsNumEvent();
+                }
+            },
+            error: function () {
+                bindGoodsNumEvent();
+            }
+        });
+    }
+
+    //结算
+    $(".goToPay ").click(function () {
+        var loginFlag = $("#isLogin").val();
+        if (loginFlag == 'true') {
+            var dataLen = $(" input[name=checkOne]:checked").length;
+            if (dataLen < 1) {
+                return;
+            }
+            var canBuy = true;
+            $("input[name=canBuy]").each(function (i, obj) {
+                if ($(obj).val() == 'false' && $(obj).closest("tr").find("input:checkbox[name=proListCheckbox]:checked").length > 0) {
+                    canBuy = false;
+                    $(this).siblings("input.sCartInput").focus();//数量超限的获取焦点
+                    return false;
+                }
+            });
+            if (!canBuy) {
+                return;
+            }
+            var checkedList = $("input[name='checkOne']:checked");
+            var form = $('<form action="' + contextPath + '/order/addByCart" method="post"></form>');
+            checkedList.each(function (i) {
+                form.append('<input type="text" name="cartId" value="' + $(this).val() + '">');
+            });
+            form.append('<input id="subCartFormBtn" type="submit">');
+            $("#subCartForm").append(form);
+            $("#subCartFormBtn").click();
+        } else {
+            location.href =contextPath + '/login?redirectURL=' + contextPath + "/cart";
+        }
+    });
+
+    /*计算购物车数量*/
+    function searchGoodSCart(){
+        var loginFlag = "${member != null}";
+        var URI = '/cart/findCount';
+        if(loginFlag == 'false'){
+            URI = '/cookieCart/findCount';
+        }
+        $.ajax({
+            url: contextPath + URI,
+            type: 'post',
+            async: false,
+            dataType: 'json',
+            success: function (message) {
+                var totalCount = message.data;
+                $(".cartNumSmall").text(HgUtil.numberFormat(totalCount,0));
+            }
+        });
+    }
+</script>

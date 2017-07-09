@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-25 09:11:01
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.ParameterValueDao">
+    <!-- if need
+    <resultMap id="parameterValueRM" type="ParameterValue">
+        <id property="id" column="ID"/>
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="deleted" column="DELETED" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <result property="value" column="VALUE" />
+        <result property="sort" column="SORT" />
+        <association property="" resultType="" />
+        <collection property="">
+        </collection>
+    </resultMap>
+    -->
+    <resultMap id="productByParameter" type="com.glanway.jty.entity.product.ParameterValue" >
+        <id property="id" column="ID"/>
+        <result property="value" column="VALUE" />
+        <association property="parameter" column="PARAMETER_ID" javaType="com.glanway.jty.entity.product.Parameter">
+            <id property="id" column="PAID"/>
+            <result property="name" column="PANAME" />
+            <association property="parent" column="PARENT_ID" javaType="com.glanway.jty.entity.product.Parameter" >
+            <id property="id" column="PARENTSID"/>
+            <result property="name" column="PARENTSNAME" />
+            </association>
+        </association>
+    </resultMap>
+    <!--<select id="productByParameter" resultMap="productByParameter" >
+        SELECT
+        PAVALUE. ID,
+        PAVALUE.VALUE,
+        PA. ID  PAID,
+        PA. NAME  PANAME,
+        PARENTS. ID  PARENTSID,
+        PARENTS. NAME  PARENTSNAME
+    FROM
+        T_PARAMETER_VALUE PAVALUE
+    INNER JOIN T_PARAMETER PA ON PAVALUE.PARAMETER_ID = PA. ID
+    INNER JOIN T_PARAMETER PARENTS ON PA.PARENT_ID=PARENTS.ID
+    WHERE
+        PAVALUE.DELETED = 0
+    AND PA.DELETED = 0
+    AND PARENTS.DELETED=0
+    AND PAVALUE.PRODUCT_ID =#{id}
+    </select>-->
+
+
+
+
+
+
+    <!-- -->
+    <sql id="baseCols">
+            CREATED_BY, 
+            CREATED_DATE, 
+            DELETED, 
+            ID, 
+            LAST_MODIFIED_BY, 
+            LAST_MODIFIED_DATE, 
+            VALUE,
+            SORT,
+            PARAMETER_ID,
+            PRODUCT_ID
+    </sql>
+
+    <sql id="baseQuery">
+        SELECT
+            CREATED_BY,
+            CREATED_DATE,
+            DELETED,
+            ID,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            VALUE,
+            SORT,
+            PARAMETER_ID,
+            PRODUCT_ID
+        FROM
+            T_PARAMETER_VALUE
+    </sql>
+
+    <sql id="baseFilter">
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="deleted != null">
+            AND DELETED = #{deleted}
+        </if>
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="value != null">
+            AND VALUE = #{value}
+        </if>
+        <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+        <!-- more -->
+    </sql>
+
+    <!-- - - - - - - - - - Retrieve  - - - - - - - - - -->
+
+    <!-- retrieve by id -->
+    <select id="find"  resultType="ParameterValue">
+        <include refid="baseQuery"/>
+        WHERE ID = #{id}
+    </select>
+
+    <!-- retrieve a unique entity -->
+    <select id="findOne" parameterType="map" resultType="ParameterValue">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- retrieve many entities -->
+    <select id="findMany" parameterType="map" resultType="ParameterValue">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+        <!-- TODO default sort -->
+        ORDER BY ID
+        <!-- ORDER BY ROWID -->
+    </select>
+
+    <!-- count -->
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_PARAMETER_VALUE
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+    <insert id="save" parameterType="ParameterValue" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_PARAMETER_VALUE (
+            <include refid="baseCols"/>
+        ) VALUES (
+            #{createdBy},
+            #{createdDate},
+            #{deleted},
+            #{id},
+            #{lastModifiedBy},
+            #{lastModifiedDate},
+            #{value},
+            #{sort},
+            #{parameter.id},
+            #{product.id}
+        )
+    </insert>
+
+    <!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+    <update id="update" parameterType="ParameterValue">
+        UPDATE T_PARAMETER_VALUE
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="value != null">
+                VALUE = #{value},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+
+    <update id="delete" parameterType="ParameterValue">
+        UPDATE T_PARAMETER_VALUE SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <update id="deleteParameterValueByProductId">
+         UPDATE T_PARAMETER_VALUE SET DELETED = 1 WHERE PRODUCT_ID = #{pid}
+    </update>
+
+</mapper>

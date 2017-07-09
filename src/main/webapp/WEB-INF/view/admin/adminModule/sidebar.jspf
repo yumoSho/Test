@@ -1,0 +1,44 @@
+<%-- 权限管理顶部菜单 --%>
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+	<!-- Begin 左侧导航 -->
+	<div class="leftBar">
+		<%@include file="${ctx}/include/admin/logo.jspf"%>
+		<div class="subMenu">
+			<div class="subMenu-t">
+				<h2>权限管理</h2>
+			</div>
+			<div class="sunMenu-list">
+                <ul>
+                    <li class="on">
+                        <a href="${ctx}/admin/adminUser/index" title="后台用户管理">
+                            <s></s>
+                            <img src="${ctx}/images/admin/icon-menubar-01.png" width="20" height="20" />
+                            <span>后台用户管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/admin/role/index" title="角色管理">
+                            <s></s>
+                            <img src="${ctx}/images/admin/icon-menubar-01.png" width="20" height="20" />
+                            <span>角色管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/admin/module/index" title="模块管理">
+                            <s></s>
+                            <img src="${ctx}/images/admin/icon-menubar-01.png" width="20" height="20" />
+                            <span>模块管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/admin/adminPage/index" title="页面管理">
+                            <s></s>
+                            <img src="${ctx}/images/admin/icon-menubar-01.png" width="20" height="20" />
+                            <span>页面管理</span>
+                        </a>
+                    </li>
+                </ul>
+			</div>
+		</div>
+	</div>
+	<!-- //End 左侧导航 -->

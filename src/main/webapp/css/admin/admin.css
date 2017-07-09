@@ -1,0 +1,255 @@
+@charset "utf-8";
+/*非完整版*/
+/* S spinner */
+.spinner {
+    position: relative;
+    /*width: 88px;*/
+    height: 22px;
+    line-height: 22px;
+    text-align: left;
+    display: inline-block;
+}
+input[type=text]:disabled{
+    background-color: #E6E6E6;
+}
+.spinner input {
+    margin-top: -3px;
+    margin-right: 3px;
+    padding: 0 23px 0 3px;
+    border: 1px solid #bfbfbf;
+    /*width: 60px;*/
+    width: 175px;
+    height: 22px;
+}
+
+.spinner input:focus {
+    border-color: #e1a531;
+    -moz-box-shadow: 0 0 3px #e1a531;
+    -webkit-box-shadow: 0 0 3px #e1a531;
+    box-shadow: 0 0 3px #e1a531;
+    outline: none;
+}
+
+.spinner .spin-buttons {
+    position: absolute;
+    top: -1px;
+    right: 3px;
+}
+
+.spinner .btn-up,
+.spinner .btn-down {
+    width: 22px;
+    height: 12px;
+    line-height: 12px;
+    font-size: 1%;
+    cursor: pointer;
+    display: block;
+    border-left: 1px solid #d3d3d3;
+    -webkit-user-select: none;
+}
+
+.spinner .btn-up:hover,
+.spinner .btn-down:hover {
+    background-color: #dadada;
+}
+
+.spinner .btn-up i,
+.spinner .btn-up:before,
+.spinner .btn-down i,
+.spinner .btn-down:before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    right: 7px;
+    border: 4px solid #bbb;
+}
+
+.spinner .btn-up i,
+.spinner .btn-up:before {
+    top: 1px;
+    right: 7px;
+    border-color: transparent transparent #bbb;
+}
+
+.spinner .btn-down i,
+.spinner .btn-down:before {
+    bottom: 2px;
+    right: 7px;
+    border-color: #bbb transparent transparent;
+}
+
+.spinner .btn-up:hover i,
+.spinner .btn-up:hover:before {
+    border-bottom-color: #000;
+}
+
+.spinner .btn-down:hover i,
+.spinner .btn-down:hover:before {
+    border-top-color: #000;
+}
+
+/* E spinner */
+
+/** S chosen, treepicker, linked reset **/
+.chosen-container {
+    /*font-size: 12px;*/
+    font-size: inherit;
+    width: 200px !important;
+}
+
+.chosen-container-single .chosen-single,
+.chosen-container-single .chosen-drop,
+.chosen-container-multi .chosen-choices {
+    border-radius: 0;
+    border-color: #ccc;
+}
+
+.chosen-container-active .chosen-single {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.chosen-container-active .chosen-choices {
+    border-color: #e1a531;
+}
+
+.chosen-container-multi .chosen-choices {
+    margin: 0;
+    padding: 0;
+    background-image: none;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close{
+    top:11px!important;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    height: 22px;
+    /*padding: 0 8px;*/
+    padding: 0;
+}
+
+.chosen-container-multi .chosen-choices {
+    margin: 0;
+    padding: 0;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice {
+    margin: 2px 0 2px 3px;
+    padding: 2px 20px 2px 5px;
+    line-height: 14px;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 3px;
+    margin-top: -7px;
+    width: 12px;
+    height: 12px;
+    font-size: 1px;
+    color: #999;
+    cursor: pointer;
+    background: transparent;
+    text-decoration: none;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi), only screen and (min-resolution: 1.5dppx) {
+    .chosen-container-multi .chosen-choices .search-choice .search-choice-close {
+        background-image: none !important;
+        background-size: auto !important;
+    }
+}
+
+.chosen-container-single .chosen-single {border-radius: 0px!important;height: 26px!important;}
+
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover:before {
+    color: #000;
+}
+
+.chosen-container-single .chosen-single div b,
+.tree-picker-container-single .tree-picker-single .linked-icon {
+    position: absolute;
+    top: 0;
+    right: 9px;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    background: url(/images/bar_arrow.png) no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi), only screen and (min-resolution: 1.5dppx) {
+    .chosen-container-single .chosen-single div b {
+        background-image: url(/images/bar_arrow.png) !important;
+        background-size: auto !important;
+    }
+}
+
+.tree-picker-with-drop .tree-picker-single .linked-icon,
+.chosen-container-active.chosen-with-drop .chosen-single div b {
+    background: url(/images/bar_arrow.png) no-repeat 0 -23px;
+}
+
+.chosen-container-single .chosen-single span,
+.tree-picker-container .tree-picker-single span {
+    display: block;
+    margin-right: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.linked-container,
+.chosen-container-single .chosen-single,
+.tree-picker-container-single .tree-picker-single {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr=#fffcfcfc, endColorStr=#fff2f2f2);
+    background: #fcfcfc;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#f2f2f2));
+    background: -webkit-linear-gradient(top, #fcfcfc, #f2f2f2);
+    background: -moz-linear-gradient(top, #fcfcfc, #f2f2f2);
+    background: -o-linear-gradient(top, #fcfcfc, #f2f2f2);
+    background: linear-gradient(to bottom, #fcfcfc, #f2f2f2);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    white-space: nowrap;
+    text-align: left;
+}
+/** E chosen, treepicker, linked reset **/
+
+/*选择条件样式 begin*/
+.select-container{
+    background-color: rgba(51, 153, 153, 1);
+    border-radius: 68px;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    /*margin-right: 15px;*/
+    padding: 4px 15px 4px;
+}
+.select-container span{
+    font-family:'应用字体 Regular', '应用字体';
+    color: white;
+}
+.select-container select{
+    margin-left: 10px;
+    padding: 0;
+    outline: none;
+    float:right;
+    height: 20px;
+    width: 120px;
+}
+/*选择条件样式 end*/
+.caption {
+    border:1px solid #ebebeb;height: 29px;border-bottom:0;line-height: 29px;color: #555555;font-size: 12px;font-weight: bold
+}
+
+
+input[type=text][disabled] {
+    background-color: #eeeeee;
+}

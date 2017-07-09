@@ -1,0 +1,8 @@
+<div class="head loginLogo">
+   <%@include file="/WEB-INF/view/include/topbar.jspf"%>
+    <div class="sameWidth clearfix">
+        <a href="${ctx}/" class="fleft logo">
+            <img src="${ctx}/images/logo.png" width="209" height="96" />
+        </a>
+    </div>
+</div>

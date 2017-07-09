@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--  -->
+
+<mapper namespace="com.glanway.jty.dao.perm.UserDao">
+
+
+    <!--保存 OK-->
+    <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_USER(ID,USER_NAME,PASSWORD,REAL_NAME,IS_FREEZE,
+		        REMARK,USER_TYPE,CUSTOMER_ID
+		        ,LAST_LOGIN_TIME,CREATED_DATE,CREATED_BY,
+		        LAST_MODIFIED_DATE,LAST_MODIFIED_BY,
+		        DELETED,LAST_LOGIN_IP,ISP,CUSTOMER_NAME)
+		    VALUES(
+			 #{id}
+			,#{userName}
+			,#{password}
+			,#{realName}
+			,#{isFreeze}
+			,#{remark}
+			,#{userType}
+			,#{customerId}
+			,#{lastLoginTime}
+			,#{createdDate}
+			,#{createdBy}
+			,#{lastModifiedDate}
+			,#{lastModifiedBy}
+			,0
+			,#{lastLoginIp}
+			,#{isp}
+			,#{customerName}
+		)
+	</insert>
+<!--更新  OK-->
+    <update id="update" parameterType="User">
+        UPDATE T_USER
+        <set>
+            <if test="userName != null">
+                USER_NAME = #{userName},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password},
+            </if>
+            <if test="realName != null">
+                REAL_NAME = #{realName},
+            </if>
+            <if test="isFreeze != null">
+                IS_FREEZE = #{isFreeze},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark},
+            </if>
+            <!--<if test="userType != null">
+                USER_TYPE = #{userType},
+            </if>-->
+            <if test="customerId != null">
+                CUSTOMER_ID = #{customerId},
+            </if>
+            LAST_MODIFIED_DATE = NOW(),
+
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastLoginIp != null">
+                LAST_LOGIN_IP = #{lastLoginIp},
+            </if>
+            <if test="isp != null">
+                ISP = #{isp},
+            </if>
+            <if test="customerName != null">
+                CUSTOMER_NAME = #{customerName}
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!--设置最后登录时间为当前时间-->
+    <update id="updateLoginTime">
+        UPDATE T_USER SET LAST_LOGIN_TIME = NOW(),LAST_LOGIN_IP = #{1} WHERE ID = #{0};
+    </update>
+    <!--删除  OK-->
+    <update id="delete" parameterType="User">
+    	UPDATE T_USER SET DELETED = 1 WHERE ID = #{id}
+    </update>
+    <!--批量删除-->
+    <update id="deleteBatchByCustomerId">
+        UPDATE T_USER SET DELETED = 1 WHERE CUSTOMER_ID IN
+        <foreach item="customerId" index="index" collection="array" separator="," open="(" close=")">
+            #{customerId}
+        </foreach>
+    </update>
+
+<!--查询  OK-->
+    <select id="find" parameterType="long" resultType="User">
+    	SELECT * FROM T_USER WHERE ID = #{id} AND DELETED = 0
+    </select>
+
+    <!--查询用户类型-->
+    <select id="finUserType" parameterType="long" resultType="Integer">
+        SELECT USER_TYPE FROM T_USER WHERE ID = #{id} AND DELETED = 0
+    </select>
+
+    <!--根据客户Id查询用户-->
+    <select id="findByCustomerId" parameterType="long" resultType="User">
+        SELECT * FROM T_USER WHERE CUSTOMER_ID = #{customerId} AND DELETED = 0
+    </select>
+
+
+<!--统计用户数量 OK-->
+    <select id="count" resultType="int" parameterType="map">
+        SELECT COUNT(1) FROM T_USER TU
+        <where>
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+                AND TU.DELETED = 0
+            </trim>
+        </where>
+    </select>
+<!--findmany OK-->
+    <select id="findMany" parameterType="map" resultType="User">
+        <include refid="support.ph"/>
+        SELECT * FROM T_USER TU
+        <where>
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+            </trim>
+            AND TU.DELETED = 0
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim>
+        <include refid="support.pf"/>
+    </select>
+<!--OK-->
+    <select id="findOne" resultType="User" parameterType="map">
+    	SELECT * FROM T_USER WHERE ID = #{id}
+    </select>
+
+    <!--根据条件查询用户   OK-->
+    <select id="getBaseUser" parameterType="map" resultType="User">
+        SELECT * FROM T_USER
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+<!-- OK-->
+    <sql id="baseFilter">
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="userName != null">
+            AND USER_NAME = #{userName}
+        </if>
+        <if test="password != null">
+            AND PASSWORD = #{password}
+        </if>
+        <if test="realName != null">
+            AND REAL_NAME = #{realName}
+        </if>
+        <if test="isFreeze != null">
+            AND IS_FREEZE = #{isFreeze}
+        </if>
+        <if test="remark != null">
+            AND  REMARK = #{remark}
+        </if>
+        <if test="userType != null">
+            AND USER_TYPE = #{userType}
+        </if>
+        <if test="customerId != null">
+            AND CUSTOMER_ID = #{customerId}
+        </if>
+        <if test="lastLoginTime != null">
+            AND LAST_LOGIN_TIME = #{lastLoginTime}
+        </if>
+        <if test="createdDate != null">
+            AND  CREATED_DATE = #{createdDate}
+        </if>
+        <if test="createdBy != null">
+            AND  CREATED_BY = #{createdBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND  LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="deleted != null">
+            AND  DELETED = #{deleted}
+        </if>
+    </sql>
+
+    <!--给用户添加权限   OK-->
+    <insert id="saveUserToRole" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_USER_ROLE(
+        <include refid="userToRoleCols"/>
+        )VALUES(
+        #{id},
+        #{userId},
+        #{roleId},
+        #{deleted},
+        NOW(),
+        #{createdBy},
+        NOW(),
+        #{lastModifiedBy}
+        )
+    </insert>
+    <!--用户-角色表的所有字段  OK-->
+    <sql id="userToRoleCols">
+        ID,
+        USER_ID,
+        ROLE_ID,
+        DELETED,
+        CREATED_DATE,
+        CREATED_BY,
+        LAST_MODIFIED_DATE,
+        LAST_MODIFIED_BY
+    </sql>
+
+    <!--查询用户的角色列表 OK-->
+    <select id="findRoleByUser" parameterType="long" resultType="Role">
+        SELECT TR.* FROM T_ROLE TR,T_USER_ROLE UR WHERE UR.DELETED = 0 AND TR.DELETED = 0 AND TR.ID = UR.ROLE_ID AND UR.USER_ID = #{userId}
+    </select>
+    <!--查询用户的所有角色ID集合 OK-->
+    <select id="getRoleIdsByUserId" parameterType="long" resultType="long">
+    	SELECT ROLE_ID FROM T_USER_ROLE WHERE USER_ID = #{userId} AND DELETED=0
+    </select>
+
+    <!--删除某用户 的所有角色   OK -->
+    <delete id="deleteUserToRoleByUserId" parameterType="long">
+        DELETE FROM T_USER_ROLE WHERE USER_ID = #{userId}
+    </delete>
+
+<!--用户列表需要的字段   ok-->
+    <resultMap id="UserRM" type="User">
+        <id property="id" column="ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="remark" column="REMARK"/>
+        <result property="isFreeze" column="IS_FREEZE"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="lastLoginTime" column="LAST_LOGIN_TIME"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <collection property="roles" ofType="Role">
+            <id property="id" column="R_ID"/>
+            <result property="name" column="R_NAME"/>
+        </collection>
+    </resultMap>
+
+<!--解析角色 查询参数的方法-->
+    <sql id="roleDynamicFilters">
+        <if test="_role_filters != null">
+            <foreach item="filter" collection="_role_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(TRC.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            TRC.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!--用户列表页查询方法  ok-->
+    <!--  @Deprecated-->
+    <select id="listFindMany" parameterType="map" resultMap="UserRM">
+        SELECT
+        UR.*,
+        TR.ID R_ID,
+        TR.NAME R_NAME
+        FROM (
+        <include refid="support.ph"/>
+        SELECT * FROM T_USER TU
+        <where>
+            <if test="_filters!= null">
+                <foreach item="filter" collection="_filters" separator=" AND ">
+                    <include refid="support.foreachFilter"/>
+                </foreach>
+            </if>
+            AND TU.DELETED=0
+            AND ID IN (
+            SELECT DISTINCT USER_ID FROM
+            T_USER_ROLE TURZ
+            INNER JOIN T_ROLE TRC ON TRC.ID= TURZ.ROLE_ID AND TURZ.DELETED=0 AND TRC.DELETED=0
+            <where>
+                <if test="_role_filters!= null">
+                    <trim suffixOverrides="AND">AND
+                        <include refid="roleDynamicFilters"/>
+                    </trim>
+                </if>
+            </where>
+            )
+        </where>
+        <include refid="support.pf"/>
+        )UR
+        INNER JOIN T_USER_ROLE TUR ON UR.ID=TUR.USER_ID AND TUR.DELETED=0
+        INNER JOIN T_ROLE TR ON TR.ID= TUR.ROLE_ID AND TUR.DELETED=0 AND TR.DELETED=0
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim>
+    </select>
+<!--   @Deprecated-->
+    <select id="listCount" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_USER TU
+        <where>
+            <if test="_filters!= null">
+                <foreach item="filter" collection="_filters" separator=" AND ">
+                    <include refid="support.foreachFilter"/>
+                </foreach>
+            </if>
+            AND TU.DELETED=0 AND ID IN (
+            SELECT DISTINCT USER_ID FROM
+            T_USER_ROLE TURZ
+            INNER JOIN T_ROLE TRC ON TRC.ID= TURZ.ROLE_ID AND TURZ.DELETED=0 AND TRC.DELETED=0
+            <where>
+                <if test="_role_filters!= null">
+                    <trim suffixOverrides="AND">AND
+                        <include refid="roleDynamicFilters"/>
+                    </trim>
+                </if>
+            </where>
+            )
+        </where>
+    </select>
+</mapper>

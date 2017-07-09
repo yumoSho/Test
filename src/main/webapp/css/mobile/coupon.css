@@ -1,0 +1,87 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.coupon {
+  margin-top: 0.16rem;
+  font-size: 0.24rem;
+}
+.couponTop .couponTLeft,
+.couponTop .couponTRight {
+  float: left;
+  width: 50%;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  background: #fff;
+  height: 2.09rem;
+}
+.couponTop .couponTLeft p,
+.couponTop .couponTRight p {
+  text-align: center;
+  font-size: 0.28rem;
+}
+.couponTop .couponTLeft p.hi5,
+.couponTop .couponTRight p.hi5 {
+  line-height: 0.5rem;
+}
+.couponTop .couponTLeft p.hi4,
+.couponTop .couponTRight p.hi4 {
+  margin-top: .0.02rem;
+}
+.couponTop .couponTLeft {
+  border-right: none;
+}
+.cTcontent dt,
+.cTcontent dd {
+  float: left;
+}
+.couponTop .couponTLeft.on p,
+.couponTop .couponTRight.on p {
+  color: #19aa4b;
+}
+.couponText {
+  margin-top: 0.2rem;
+}
+.expired1,
+.expired2 {
+  width: 0.92rem;
+  height: 0.68rem;
+  margin: auto;
+  background-size: 100% 100%;
+  margin-top: 0.34rem;
+  display: inherit;
+}
+.couponTLeft.on .expired1 {
+  background-image: url("../../images/mobile/expired.png");
+  background-repeat: no-repeat;
+}
+.couponTLeft .expired1 {
+  background-image: url("../../images/mobile/noexpired1.png");
+  background-repeat: no-repeat;
+}
+.couponTRight .expired2 {
+  background-image: url("../../images/mobile/noexpired2.png");
+  background-repeat: no-repeat;
+}
+.couponTRight.on .expired2 {
+  background-image: url("../../images/mobile/expired2.png");
+  background-repeat: no-repeat;
+}
+.couponText table {
+  border-top: 2px solid #19aa4b;
+  border-left: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.2rem;
+  margin-top: 0.1rem;
+}
+.couponText table tr {
+  line-height: 0.58rem;
+}
+.couponText table td:nth-child(even) {
+  width: 6rem;
+  word-warp: break-word;
+  word-break: break-all;
+}
+/*# sourceMappingURL=coupon.css.map */

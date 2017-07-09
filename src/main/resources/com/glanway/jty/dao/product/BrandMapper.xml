@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.product.BrandDao">
+	<!-- if need -->
+	<resultMap id="brandRM" type="Brand">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="brandCode" column="BRAND_CODE" />
+		<result property="alias" column="ALIAS" />
+		<result property="logo" column="LOGO" />
+		<result property="sort" column="SORT" />
+		<result property="recommend" column="RECOMMEND" />
+		<result property="deleted" column="DELETED" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="createdDate" column="CREATED_DATE" />
+		<result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+		<result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <result property="enabled" column="ENABLED" />
+	</resultMap>
+
+	<!--sql -->
+	<sql id="baseCols">
+		ALIAS,
+		BRAND_CODE,
+		CREATED_BY,
+		CREATED_DATE,
+		DELETED,
+		ID,
+		LAST_MODIFIED_BY,
+		LAST_MODIFIED_DATE,
+		LOGO,
+		NAME,
+		SORT,
+		ENABLED,
+		RECOMMEND
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+		<include refid="baseCols" />
+		FROM
+		T_BRAND
+	</sql>
+
+	<select id="brandNextId" resultType="long">
+		SELECT MAX(ID) FROM T_BRAND
+	</select>
+
+	<sql id="baseFilter">
+		<if test="alias != null">
+			AND ALIAS = #{alias}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="logo != null">
+			AND LOGO = #{logo}
+		</if>
+		<if test="name != null">
+			AND NAME = #{name}
+		</if>
+		<if test="sort != null">
+			AND SORT = #{sort}
+		</if>
+		<if test="recommend != null">
+			AND RECOMMEND = #{recommend}
+		</if>
+		AND DELETED = 0
+		<!-- more -->
+	</sql>
+	<!-- retrieve by id -->
+	<select id="find" parameterType="long" resultMap="brandRM">
+		SELECT
+			R.*
+		FROM (
+		<include refid="baseQuery" />
+		WHERE ID = #{id} AND DELETED = 0
+		) R
+
+	</select>
+
+	<!-- retrieve a unique entity -->
+	<select id="findOne" parameterType="map" resultType="Brand">
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultMap="brandRM">
+		SELECT
+			R.*
+		FROM (
+        <include refid="support.ph" />
+		<include refid="baseQuery" />
+		<where>
+			<include refid="support.dynamicFilters" />
+			<include refid="baseFilter" />
+
+		</where>
+		ORDER BY
+		<trim prefixOverrides=",">
+			<include refid="support.dynamicSort" />
+			, CREATED_DATE DESC
+		</trim>
+        <include refid="support.pf" />
+		) R
+
+	</select>
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM T_BRAND
+		<where>
+			<include refid="support.dynamicFilters" />
+			<include refid="baseFilter" />
+		</where>
+	</select>
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="Brand"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_BRAND (
+		<include refid="baseCols" />
+		) VALUES (
+		#{alias},
+		#{brandCode},
+		#{createdBy},
+		#{createdDate},
+		#{deleted},
+		#{id},
+		#{lastModifiedBy},
+		#{lastModifiedDate},
+		#{logo},
+		#{name},
+		#{sort},
+        #{enabled},
+		#{recommend}
+		)
+	</insert>
+
+
+
+	<!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+	<update id="update" parameterType="Brand">
+		UPDATE T_BRAND
+		<set>
+			<if test="alias != null">
+				ALIAS = #{alias},
+			</if>
+			<if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="deleted != null">
+				DELETED = #{deleted},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="logo != null">
+				LOGO = #{logo},
+			</if>
+			<if test="name != null">
+				NAME = #{name},
+			</if>
+			<if test="sort != null">
+				SORT = #{sort},
+			</if>
+            <if test="enabled != null">
+                ENABLED = #{enabled},
+            </if>
+			<if test="recommend != null">
+				RECOMMEND = #{recommend},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	<select  id="findTopBrandRecommend" parameterType="map" resultMap="brandRM">
+		<include refid="support.ph" />
+		SELECT TB.* from (SELECT * FROM T_CATEGORY WHERE PATH LIKE '${categoryId}%' AND VISIBLE=1 AND DELETED=0)PC
+		LEFT JOIN T_BRAND_CATEGORY BTC ON PC.ID=BTC.CATEGORY_ID AND BTC.DELETED=0
+		LEFT JOIN T_BRAND TB ON BTC.BRAND_ID= TB.ID AND TB.DELETED=0 AND TB.RECOMMEND=1 AND ENABLED=1
+		GROUP BY TB.ID
+		ORDER  BY TB.CREATED_DATE DESC
+		<include refid="support.pf" />
+	</select>
+	<!-- - - - - - - - - - - Delete - - - - - - - - - -->
+
+	<update id="delete" parameterType="Brand">
+		UPDATE T_BRAND SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.marketing.NewGoodsDao">
+
+	<resultMap type="NewGoods" id="NewGoodsRM">
+		<id column="ID" property="id"/>
+		<result column="SORT" property="sort"/>
+		<result column="DELETED" property="deleted"/>
+		<result column="CREATED_BY" property="createdBy"/>
+		<result column="CREATED_DATE" property="createdDate"/>
+		<result column="LAST_MODIFIED_BY" property="lastModifiedBy"/>
+		<result column="LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+		<association property="goods" javaType="Goods" columnPrefix="G_">
+			<id column="ID" property="id"/>
+            <result column="sn" property="sn"/>
+			<result column="TITLE" property="title"/>
+			<result column="INTRO" property="intro"/>
+			<result column="PRICE" property="price"/>
+			<result column="STOCK" property="stock"/>
+			<result column="IMAGE" property="image"/>
+			<association property="product" javaType="Product" columnPrefix="PT_">
+                <id column="ID" property="id"/>
+                <result column="IS_PUTAWAY" property="isPutaway"/>
+				<result column="SALES" property="sales"/>
+                <association property="category" javaType="Category" columnPrefix="C_">
+                    <id column="ID" property="id"/>
+                    <result column="NAME" property="name"/>
+			</association>
+				<association property="label" javaType="Label" columnPrefix="L_">
+					<id column="ID" property="id"/>
+				</association>
+		</association>
+		</association>
+	</resultMap>
+
+	<sql id="baseFilter">
+		<if test="goods != null and goods.id != null">
+			AND GOODS_ID = #{goods.id}
+		</if>
+		<if test="sort != null">
+			AND SORT = #{sort}
+		</if>
+		<if test="deleted != null">
+			AND DELETED = #{deleted}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+	</sql>
+
+	<insert id="save" parameterType="NewGoods" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_NEW_GOODS(
+              ID,
+              GOODS_ID,
+              SORT,
+              DELETED,
+              CREATED_BY,
+              CREATED_DATE,
+              LAST_MODIFIED_BY,
+              LAST_MODIFIED_DATE
+        ) VALUES(
+			  #{id}
+			,#{goods.id}
+			,#{sort}
+			,#{deleted}
+			,#{createdBy}
+			,#{createdDate}
+			,#{lastModifiedBy}
+			,#{lastModifiedDate}
+		)
+	</insert>
+	
+	<update id="update" parameterType="NewGoods">
+		UPDATE T_NEW_GOODS
+			<set>
+				<if test="goods != null and goods.id != null" >
+					GOODS_ID = #{goods.id},
+				</if>
+				<if test="sort != null">
+					SORT = #{sort},
+				</if>
+				<if test="deleted != null">
+					DELETED = #{deleted},
+				</if>
+				<if test="createdBy != null">
+					CREATED_BY = #{createdBy},
+				</if>
+				<if test="createdDate != null">
+					CREATED_DATE = #{createdDate},
+				</if>
+				<if test="lastModifiedBy != null">
+					LAST_MODIFIED_BY = #{lastModifiedBy},
+				</if>
+				<if test="lastModifiedDate != null">
+					LAST_MODIFIED_DATE = #{lastModifiedDate}
+				</if>
+			</set>
+			WHERE ID = #{id}
+	</update>
+	
+	<update id="delete" parameterType="NewGoods">
+		UPDATE T_NEW_GOODS SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+	<update id="deleteAll" >
+		UPDATE T_NEW_GOODS SET DELETED = 1
+	</update>
+	
+	<select id="find" parameterType="long" resultMap="NewGoodsRM">
+		SELECT 
+		NG.*,
+		G.ID G_ID,
+		G.TITLE G_TITLE,
+		G.SN G_SN,
+		G.PRICE G_PRICE,
+		G.STOCK G_STOCK,
+		PT.ID G_PT_ID,
+		PT.IS_PUTAWAY G_PT_IS_PUTAWAY,
+		C.ID G_PT_C_ID,
+		C.NAME G_PT_C_NAME
+		FROM
+		T_NEW_GOODS NG
+		INNER JOIN T_GOODS G ON NG.GOODS_ID = G.ID AND G.DELETED = 0
+		INNER JOIN T_PRODUCT PT ON G.PRODUCT_ID =PT.ID AND PT.DELETED = 0
+		INNER  JOIN T_CATEGORY C ON C.ID = PT.CATEGORY_ID AND C.DELETED = 0
+		WHERE
+		NG.ID = #{id}
+		AND
+		NG.DELETED = 0
+	</select>
+	
+	<select id="findMany" parameterType="map" resultMap="NewGoodsRM">
+		<include refid="support.ph"/>
+        SELECT * FROM (
+            SELECT
+            NG.*,
+            G.ID G_ID,
+            G.TITLE G_TITLE,
+			G.INTRO G_INTRO,
+            G.SN G_SN,
+            G.PRICE G_PRICE,
+            G.STOCK G_STOCK,
+			G.IMAGE G_IMAGE,
+            PT.ID G_PT_ID,
+            PT.IS_PUTAWAY G_PT_IS_PUTAWAY,
+			PT.SALES G_PT_SALES,
+		    PT.LABEL_ID G_PT_L_ID,
+            C.ID G_PT_C_ID,
+            C.NAME G_PT_C_NAME
+            FROM
+            T_NEW_GOODS NG
+            INNER JOIN T_GOODS G ON NG.GOODS_ID = G.ID AND G.DELETED = 0
+            INNER JOIN T_PRODUCT PT ON G.PRODUCT_ID =PT.ID AND PT.DELETED = 0
+            LEFT  JOIN T_CATEGORY C ON C.ID = PT.CATEGORY_ID AND C.DELETED = 0
+			<if test="_province != null">
+				INNER  JOIN T_PROVINCE_PRODUCT PP ON PP.PRODUCT_ID= PT.ID AND PP.PROVINCE_ID=#{_province}
+			</if>
+            WHERE
+            NG.DELETED = 0
+        ) A
+        <where>
+          <trim prefixOverrides="AND"> AND
+			  <include refid="support.dynamicFilters"/>
+              <include refid="baseFilter"/>
+          </trim>
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>,A.SORT ASC
+        </trim>
+		<include refid="support.pf"/>
+	</select>
+	
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM (
+            SELECT * FROM (
+                SELECT
+                    NG.*,
+                    G.ID G_ID,
+                    G.TITLE G_TITLE,
+                    G.SN G_SN,
+                    G.PRICE G_PRICE,
+                    G.STOCK G_STOCK,
+					G.IMAGE G_IMAGE,
+                    PT.ID G_PT_ID,
+                    PT.IS_PUTAWAY G_PT_IS_PUTAWAY,
+                    C.ID G_PT_C_ID,
+                    C.NAME G_PT_C_NAME
+                FROM T_NEW_GOODS NG
+                INNER JOIN T_GOODS G ON NG.GOODS_ID = G.ID AND G.DELETED = 0
+                INNER JOIN T_PRODUCT PT ON G.PRODUCT_ID =PT.ID AND PT.DELETED = 0
+				LEFT  JOIN T_CATEGORY C ON C.ID = PT.CATEGORY_ID AND C.DELETED = 0
+				<if test="_province != null">
+					INNER JOIN T_PROVINCE_PRODUCT PP ON PP.PRODUCT_ID= PT.ID AND PP.PROVINCE_ID=#{_province}
+				</if>
+                WHERE
+                NG.DELETED = 0
+            ) A
+            <where>
+                <trim prefixOverrides="AND">
+                  <include refid="support.dynamicFilters"/>
+                  <include refid="baseFilter"/>
+                </trim>
+            </where>
+		) B
+	</select>
+	
+	<select id="findOne" parameterType="map" resultMap="NewGoodsRM">
+        SELECT * FROM (
+        SELECT
+        NG.*,
+        G.ID G_ID,
+        G.TITLE G_TITLE,
+        G.SN G_SN,
+        G.PRICE G_PRICE,
+        G.STOCK G_STOCK,
+        PT.ID G_PT_ID,
+        PT.IS_PUTAWAY G_PT_IS_PUTAWAY,
+        C.ID G_PT_C_ID,
+        C.NAME G_PT_C_NAME
+        FROM
+        T_NEW_GOODS NG
+        INNER JOIN T_GOODS G ON NG.GOODS_ID = G.ID AND G.DELETED = 0
+        INNER JOIN T_PRODUCT PT ON G.PRODUCT_ID =PT.ID AND PT.DELETED = 0
+        INNER  JOIN T_CATEGORY C ON C.ID = PT.CATEGORY_ID AND C.DELETED = 0
+        WHERE
+        NG.ID = #{id}
+        AND
+        NG.DELETED = 0
+        ) A
+        <where>
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+                <include refid="baseFilter"/>
+            </trim>
+        </where>
+	</select>
+
+	
+</mapper>

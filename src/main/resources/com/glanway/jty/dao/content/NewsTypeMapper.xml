@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.NewsTypeDao">
+
+    <insert id="save" parameterType="NewsType" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_NEWS_TYPE (
+        	ID,
+        	NAME ,
+        	ACTIVATED,
+            SORT_NUM,
+            DELETED
+        ) VALUES (
+        #{id},
+        #{name},
+        #{activated},
+        #{sortNum},
+        0
+        )
+    </insert>
+
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultType="NewsType">
+    	SELECT 
+		A.*
+		FROM T_NEWS_TYPE A
+		WHERE A.ID=#{id}
+    </select>
+	
+
+	<select id="findMany" parameterType="map" resultType="NewsType">
+		<include refid="support.ph"/>
+		SELECT 
+		A.*
+		FROM T_NEWS_TYPE A
+		<where>
+			<include refid="support.dynamicFilters"/>
+			AND A.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		 <include refid="support.pf"/>
+	</select>
+	
+	<select id="findAllByBankId" parameterType="Long" resultType="NewsType">
+		SELECT 
+		A.*
+		FROM T_NEWS_TYPE A
+		WHERE DELETED = 0
+		ORDER BY A.ID DESC
+	</select>
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_NEWS_TYPE A
+		<where>
+			<include refid="support.dynamicFilters"/>
+		</where>
+
+	</select>
+    <update id="update" parameterType="NewsType">
+        UPDATE T_NEWS_TYPE
+        <set>
+        	<if test="name != null">
+           		 NAME = #{name},
+	        </if>
+            <if test="sortNum != null">
+           		 SORT_NUM = #{sortNum},
+	        </if>
+			<if test="activated != null">
+				ACTIVATED = #{activated},
+	        </if>
+	        <if test="deleted != null">
+				DELETED = #{deleted}
+	        </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="NewsType">
+        UPDATE T_NEWS_TYPE SET DELETED = 1 WHERE ID = #{id}
+    </update>
+</mapper>

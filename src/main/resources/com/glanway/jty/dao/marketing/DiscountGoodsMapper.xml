@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.marketing.DiscountGoodsDao">
+	<!-- if need -->
+	<resultMap id="discountGoodsRM" type="DiscountGoods">
+		<result column="ID" property="id"/>
+		<result column="SORT" property="sort"/>
+		<result column="DELETED" property="deleted"/>
+		<result column="CREATED_BY" property="createdBy"/>
+		<result column="CREATED_DATE" property="createdDate"/>
+		<result column="LAST_MODIFIED_BY" property="lastModifiedBy"/>
+		<result column="LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+		<result property="discount" column="DISCOUNT"/>
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<association property="goods" javaType="Goods">
+			<id property="id" column="G_ID"/>
+			<result property="sn" column="G_SN"/>
+			<result property="title" column="G_TITLE"/>
+			<result property="intro" column="G_INTRO" />
+			<result property="stock" column="G_STOCK" />
+			<result property="alertStock" column="G_ALERT_STOCK" />
+			<result column="G_IMAGE" property="image"/>
+			<result column="G_PRICE" property="price"/>
+			<association property="product" javaType="Product" columnPrefix="P_">
+				<id property="id" column="ID"/>
+				<result column="PRICE" property="price"/>
+				<result column="WEIGHT" property="weight"/>
+				<result column="IS_PUTAWAY" property="isPutaway"/>
+				<result column="SALES" property="sales"/>
+				<association property="category" javaType="Category">
+					<id property="id" column="C_ID"/>
+					<result property="name" column="NAME"/>
+				</association>
+			</association>
+
+		</association>
+	</resultMap>
+
+	<!--sql -->
+	<sql id="baseCols">
+		ID,
+		GOODS_ID,
+		DISCOUNT,
+		SORT,
+		START_DATE,
+		END_DATE,
+		DELETED,
+		CREATED_BY,
+		CREATED_DATE,
+		LAST_MODIFIED_BY,
+		LAST_MODIFIED_DATE
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+			AG.ID,
+			AG.GOODS_ID,
+			AG.DISCOUNT,
+			AG.SORT,
+			AG.START_DATE,
+			AG.END_DATE,
+			AG.DELETED,
+			AG.CREATED_BY,
+			AG.CREATED_DATE,
+			AG.LAST_MODIFIED_BY,
+			AG.LAST_MODIFIED_DATE,
+			TG.ID G_ID,
+			TG.SN G_SN,
+			TG.TITLE G_TITLE,
+	        TG.INTRO G_INTRO,
+			TG.PRICE G_PRICE,
+			TG.IMAGE G_IMAGE,
+			TP.ID P_ID,
+			TP.SALES P_SALES,
+			TC.ID P_C_ID,
+			TC.NAME P_NAME,
+			TP.IS_PUTAWAY P_IS_PUTAWAY
+		FROM
+		T_DISCOUNT_GOODS AG
+		INNER JOIN T_GOODS TG ON TG.ID= AG.GOODS_ID AND TG.DELETED=0
+		INNER JOIN T_PRODUCT TP ON TP.ID =TG.PRODUCT_ID AND TP.DELETED=0
+		LEFT JOIN T_CATEGORY TC ON TP.CATEGORY_ID = TC.ID AND TC.DELETED=0
+		<if test="_province != null">
+			INNER  JOIN T_PROVINCE_PRODUCT PP ON PP.PRODUCT_ID= TP.ID AND PP.PROVINCE_ID=#{_province}
+		</if>
+	</sql>
+
+
+
+	<sql id="baseFilter">
+		<if test="goods != null and goodsId != null">
+			AND GOODS_ID = #{goods.id}
+		</if>
+		<if test="sort != null">
+			AND SORT = #{sort}
+		</if>
+		<if test="startDate != null ">
+			AND START_DATE = #{startDate}
+		</if>
+		<if test="endDate != null ">
+			AND END_DATE = #{endDate}
+		</if>
+		<if test="discount != null ">
+			AND DISCOUNT = #{discount}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		AND DELETED = 0
+		<!-- more -->
+	</sql>
+	<!-- retrieve by id -->
+	<select id="find" parameterType="long" resultMap="discountGoodsRM">
+		SELECT
+			R.*
+		FROM (
+		<include refid="baseQuery" />
+		WHERE AG.ID = #{id} AND AG.DELETED = 0
+		) R
+
+	</select>
+
+	<!-- retrieve a unique entity -->
+	<select id="findOne" parameterType="map" resultType="DiscountGoods">
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultMap="discountGoodsRM">
+		SELECT
+			R.*
+		FROM (
+        <include refid="support.ph" />
+		<include refid="baseQuery" />
+		<where>
+			<include refid="support.dynamicFilters" />
+			AND AG.DELETED = 0
+		</where>
+		ORDER BY
+		<trim prefixOverrides=",">
+			<include refid="support.dynamicSort" />
+			, CREATED_DATE DESC
+		</trim>
+        <include refid="support.pf" />
+		) R
+	</select>
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT
+		COUNT(1)
+		FROM (
+		<include refid="baseQuery" />
+		<where>
+			<include refid="support.dynamicFilters" />
+			AND AG.DELETED = 0
+		</where>
+		) R
+	</select>
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="DiscountGoods"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_DISCOUNT_GOODS (
+		<include refid="baseCols" />
+		) VALUES (
+		#{id},
+		#{goods.id},
+		#{discount},
+		#{sort},
+		#{startDate},
+		#{endDate},
+		#{deleted},
+		#{createdBy},
+		#{createdDate},
+		#{lastModifiedBy},
+		#{lastModifiedDate}
+		)
+	</insert>
+
+
+
+	<!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+	<update id="update" parameterType="DiscountGoods">
+		UPDATE T_DISCOUNT_GOODS
+		<set>
+			<if test="goods != null and  goods.id != null">
+				 GOODS_ID = #{goods.id},
+			</if>
+			<if test="sort != null">
+				 SORT = #{sort},
+			</if>
+			<if test="discount != null">
+				DISCOUNT = #{discount},
+			</if>
+			<if test="startDate != null">
+				START_DATE = #{startDate},
+			</if>
+			<if test="endDate != null">
+				END_DATE = #{endDate},
+			</if>
+			<if test="deleted != null">
+				 DELETED = #{deleted},
+			</if>
+
+			<if test="lastModifiedBy != null">
+				 LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				 LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+	<!-- - - - - - - - - - - Delete - - - - - - - - - -->
+
+	<update id="delete" parameterType="DiscountGoods">
+		UPDATE T_DISCOUNT_GOODS SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+	<update id="deleteAll">
+		UPDATE T_DISCOUNT_GOODS SET DELETED = 1
+	</update>
+</mapper>

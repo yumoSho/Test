@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.platform.FlowBannerDao">
+    
+    <resultMap id="flowBannerRM" type="FlowBanner">
+        <id property="id" column="ID"/>
+        <result column="ID" property="id"/>
+        <result property="title" column="TITLE"/>
+        <result property="image" column="IMAGE"/>
+        <result property="url" column="URL"/>
+        <result property="isShow" column="IS_SHOW"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="sortNum" column="SORT_NUM"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="beginDate" column="BEGIN_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+
+        <!-- 关联数据字典 页面名称 -->
+        <association property="pageDictionary" javaType="Dictionary" columnPrefix="P_">
+            <id property="id" column="ID"/>
+            <result property="dicName" column="DIC_NAME"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+        
+        <!-- 关联数据字典 平台名称 -->
+        <association property="platformDictionary" javaType="Dictionary" columnPrefix="F_">
+            <id property="id" column="ID"/>
+            <result property="dicName" column="DIC_NAME"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+    </resultMap>
+
+
+    
+
+    <insert id="save" parameterType="FlowBanner" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_FLOW_BANNER (
+        	ID,
+        	TITLE,
+        	IMAGE,
+            URL,
+            IS_SHOW,
+            DICTIONARY_PAGE_ID,
+            DICTIONARY_PLATFORM_ID,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            SORT_NUM,
+            DELETED,
+            BEGIN_DATE,
+            END_DATE
+        ) VALUES (
+        #{id},
+        #{title},
+        #{image},
+        #{url},
+        #{isShow},
+        #{pageDictionary.id},
+        #{platformDictionary.id},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy},
+        #{sortNum},
+        #{deleted},
+        #{beginDate},
+        #{endDate}
+        )
+    </insert>
+
+    <sql id="baseQuery">
+      
+            ID,
+            DICTIONARY_ID,
+            CONTENT,
+            DELETED,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            SORT_NUM,
+            BEGIN_DATE,
+            END_DATE
+
+    </sql>
+    <sql id="baseFilter">
+        
+        
+        <if test="title != null">
+            AND TITLE = #{title}
+        </if>
+        <if test="image != null">
+            AND IMAGE = #{image}
+        </if>
+        <if test="url != null">
+            AND URL = #{url}
+        </if>
+        <if test="isShow != null">
+            AND IS_SHOW = #{isShow}
+        </if>
+        <if test="sortNum != null">
+            AND SORT_NUM = #{sortNum}
+        </if>
+        <if test="pageDictionary != null and pageDictionary.id != null">
+            AND DICTIONARY_PAGE_ID = #{pageDictionary.id}
+        </if>
+        <if test="platformDictionary != null and platformDictionary.id != null">
+            AND DICTIONARY_PLATFORM_ID = #{platformDictionary.id}
+        </if>
+        <if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+	    </if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+
+		<if test="beginDate != null">
+			AND BEGIN_DATE = #{beginDate}
+		</if>
+
+		<if test="endDate != null">
+			AND END_DATE = #{endDate}
+		</if>
+
+	
+    
+    </sql>
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="flowBannerRM">
+    	SELECT
+		S.*,
+		P.ID P_ID,
+		P.DIC_NAME P_DIC_NAME,
+		P.REMARK P_REMARK,
+		F.ID F_ID,
+		F.DIC_NAME F_DIC_NAME,
+		F.REMARK F_REMARK
+		FROM T_FLOW_BANNER S
+		LEFT JOIN T_DICTIONARY P ON P.ID=S.DICTIONARY_PAGE_ID AND P.DELETED=0
+		LEFT JOIN T_DICTIONARY F ON F.ID=S.DICTIONARY_PLATFORM_ID AND F.DELETED=0
+		WHERE S.ID=#{id}
+    </select>
+	
+	<select id="findMany" parameterType="map" resultMap="flowBannerRM">
+		
+		<include refid="support.ph"/>
+		SELECT
+		S.*,
+		P.ID P_ID,
+		P.DIC_NAME P_DIC_NAME,
+		P.REMARK P_REMARK,
+		F.ID F_ID,
+		F.DIC_NAME F_DIC_NAME,
+		F.REMARK F_REMARK
+		FROM T_FLOW_BANNER S
+		LEFT JOIN T_DICTIONARY P ON P.ID=S.DICTIONARY_PAGE_ID AND P.DELETED=0
+		LEFT JOIN T_DICTIONARY F ON F.ID=S.DICTIONARY_PLATFORM_ID AND F.DELETED=0
+
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND S.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		<include refid="support.pf"/>
+	</select>
+	
+	<select id="findAllByBankIdAndPageId"  resultMap="flowBannerRM">
+		SELECT 
+		S.*,
+		P.ID P_ID,
+		P.DIC_NAME P_DIC_NAME,
+		P.REMARK P_REMARK,
+		F.ID F_ID,
+		F.DIC_NAME F_DIC_NAME,
+		F.REMARK F_REMARK
+		FROM T_FLOW_BANNER S
+		LEFT JOIN T_DICTIONARY P ON P.ID=S.DICTIONARY_PAGE_ID AND P.DELETED=0
+		LEFT JOIN T_DICTIONARY F ON F.ID=S.DICTIONARY_PLATFORM_ID AND F.DELETED=0
+		WHERE S.DICTIONARY_PAGE_ID=#{dicPageId,jdbcType=INTEGER}
+		AND S.DICTIONARY_PLATFORM_ID=#{dicCodePlatId,jdbcType=INTEGER}
+		AND S.IS_SHOW=1
+		AND S.DELETED=0
+		ORDER BY S.SORT_NUM
+	</select>
+	
+	
+
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_FLOW_BANNER S
+		LEFT JOIN T_DICTIONARY P ON P.ID=S.DICTIONARY_PAGE_ID AND P.DELETED=0
+		LEFT JOIN T_DICTIONARY F ON F.ID=S.DICTIONARY_PLATFORM_ID AND F.DELETED=0
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND S.DELETED=0
+		</where>
+
+	</select>
+
+	<select id="findByDicPageIdAndDicplatIdAndBankId" parameterType="SeoSetting" resultMap="flowBannerRM">
+		SELECT
+		S.*,
+		P.ID P_ID,
+		P.DIC_NAME P_DIC_NAME,
+		P.REMARK P_REMARK,
+		F.ID F_ID,
+		F.DIC_NAME F_DIC_NAME,
+		F.REMARK F_REMARK
+		FROM T_FLOW_BANNER S
+		LEFT JOIN T_DICTIONARY P ON P.ID=S.DICTIONARY_PAGE_ID AND P.DELETED=0
+		LEFT JOIN T_DICTIONARY F ON F.ID=S.DICTIONARY_PLATFORM_ID AND F.DELETED=0
+		WHERE S.DICTIONARY_PAGE_ID=#{pageDictionary.id}
+		AND   S.DICTIONARY_PLATFORM_ID=#{platformDictionary.id}
+		AND   S.DELETED=0
+	</select>
+
+    <update id="update" parameterType="FlowBanner">
+        UPDATE T_FLOW_BANNER
+        <set>
+        
+        	<if test="title != null">
+           		 TITLE = #{title},
+	        </if>
+        	<if test="image != null">
+           		 IMAGE = #{image},
+	        </if>
+            <if test="url != null">
+           		 URL = #{url},
+	        </if> 
+	        <if test="isShow != null">
+           		 IS_SHOW = #{isShow},
+	        </if>
+	        <if test="sortNum != null">
+           		 SORT_NUM = #{sortNum},
+	        </if>     
+	        <if test="pageDictionary != null and pageDictionary.id != null">
+	            DICTIONARY_PAGE_ID = #{pageDictionary.id},
+	        </if>
+	        <if test="platformDictionary != null and platformDictionary.id != null">
+	            DICTIONARY_PLATFORM_ID = #{platformDictionary.id},
+	        </if>
+	        <if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+		    </if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+
+			<if test="beginDate != null">
+				BEGIN_DATE = #{beginDate},
+			</if>
+
+			<if test="endDate != null">
+				END_DATE = #{endDate},
+			</if>
+
+
+		</set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="FlowBanner">
+        UPDATE T_FLOW_BANNER SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+  
+
+</mapper>

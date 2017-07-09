@@ -1,0 +1,192 @@
+/*���ñ���*/
+/*������ʽ����*/
+.comingSoonBanner {
+  display: block;
+  height: 400px;
+}
+.comingSoonListNav {
+  height: 62px;
+  border-bottom: solid 1px #ccc;
+}
+.comingSoonListNav ul {
+  width: 1182px;
+  height: 62px;
+  margin-left: 18px;
+}
+.comingSoonListNav ul li {
+  float: left;
+  width: 154px;
+  height: 32px;
+  margin-top: 30px;
+  margin-left: 18px;
+  background: #eee;
+}
+.comingSoonListNav ul li a {
+  color: #666;
+  display: block;
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  line-height: 32px;
+  font-size: 14px;
+}
+.comingSoonListNav ul li a:hover {
+  background: #19aa4b;
+  color: #fff;
+}
+.comingSoonListNav ul .changeBgc {
+  background: #19aa4b;
+}
+.comingSoonListNav ul .changeBgc a {
+  color: #fff;
+}
+.comingSoonListNav ul .changeBgc a:hover {
+  color: #fff;
+}
+.comingSoonList {
+  overflow: hidden;
+}
+dl {
+  width: 230px;
+  height: 425px;
+  float: left;
+  margin: 38px 4px 0;
+  border: solid 1px #eee;
+  position: relative;
+}
+dl dt {
+  margin-bottom: 10px;
+}
+dl dd {
+  width: 200px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  margin: 0 auto;
+  clear: both;
+  color: #666;
+}
+dl dd a {
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: #666;
+}
+dl dd .countLeft {
+  float: left;
+}
+dl dd .countLeft b {
+  font-size: 14px;
+  color: #f00;
+}
+dl dd .countRight {
+  float: right;
+}
+dl .addHeight {
+  height: 40px;
+  line-height: 40px;
+}
+dl .nowPrice {
+  color: #f00;
+}
+dl .countDown {
+  width: 156px;
+  height: 26px;
+  background: #f0f0f0;
+  margin-top: 20px;
+}
+dl .countDown i {
+  float: left;
+  width: 15px;
+  margin-left: 24px;
+  height: 26px;
+  background: url(../../images/pc/timeBg.png) no-repeat center;
+}
+dl .countDown span {
+  float: left;
+  height: 26px;
+  line-height: 26px;
+  margin-left: 4px;
+}
+dl .mask {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+}
+/* .clearMargin{
+            margin-left:0;
+        }*/
+/*��ҳ*/
+.samePage {
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+.pageList {
+  margin: 0 auto;
+}
+.pageList a,
+.pageList span {
+  float: left;
+  margin-right: 10px;
+  padding: 4px 8px;
+  color: #000;
+  border: solid 1px #dfdfdf;
+}
+.pageList a:hover,
+.pageList span {
+  color: #fff;
+  border: solid 1px #9aa4b;
+  background: #19aa4b;
+}
+
+/*banner�ֲ�*/
+.bannerSlide {
+  position: relative;
+  height: 500px;
+}
+.bannerSlide a {
+  display: block;
+  height: 500px;
+}
+.bannerSlide .slidesjs-pagination {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  z-index: 27;
+}
+.bannerSlide .slidesjs-pagination li {
+  float: left;
+  width: 30px;
+  height: 30px;
+}
+.bannerSlide .slidesjs-pagination li a {
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 0;
+  background: url(/images/pc/bannerSlide.png) center no-repeat;
+}
+.bannerSlide .slidesjs-pagination li a.active {
+  background: url(/images/pc/bannerSlideOn.png) center no-repeat;
+}
+/*bannerͼ�¿���*/
+.topQuickLInks {
+  margin-top: 43px;
+}
+.topQuickLInks a {
+  float: left;
+  margin-left: 10px;
+}
+.topQuickLInks a:first-child {
+  margin-left: 0;
+}
+/*# sourceMappingURL=comingSoon.css.map */

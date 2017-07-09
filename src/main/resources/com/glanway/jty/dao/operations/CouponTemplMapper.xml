@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.operations.CouponTemplDao">
+    <select id="find" parameterType="long" resultType="CouponTempl">
+      SELECT * FROM T_COUPON_TEMPL
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="CouponTempl">
+        <include refid="support.ph"/>
+        SELECT
+        *
+        FROM
+        T_COUPON_TEMPL
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_COUPON_TEMPL
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="CouponTempl" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			T_COUPON_TEMPL(
+					ID,DISCOUNT,MIN_PRICE,AUTO_SEND
+					,AUTO_MIN_PRICE,AUTO_MAX_PRICE
+					,NAME,DELETED)
+ 		values(#{id},#{discount},#{minPrice},#{autoSend},#{autoMinPrice}
+ 		,#{autoMaxPrice},#{name},0)
+	</insert>
+
+    <update id="update" parameterType="CouponTempl">
+        update T_COUPON_TEMPL
+        <set>
+            <if test="discount != null">
+                DISCOUNT=#{discount},
+            </if>
+            <if test="minPrice != null">
+                MIN_PRICE=#{minPrice},
+            </if>
+            <if test="autoSend != null">
+                AUTO_SEND=#{autoSend},
+            </if>
+            <if test="autoMinPrice != null">
+                AUTO_MIN_PRICE=#{autoMinPrice},
+            </if>
+            <if test="autoMaxPrice != null">
+                AUTO_MAX_PRICE=#{autoMaxPrice},
+            </if>
+            <if test="name != null">
+                NAME=#{name},
+            </if>
+
+            <if test="deleted != null">
+                DELETED=#{deleted},
+            </if>
+        </set>
+        where ID=#{id} AND DELETED = 0
+    </update>
+
+
+    <update id="delete" parameterType="long">
+		UPDATE T_COUPON_TEMPL SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+
+    <!--批量删除-->
+    <update id="deleteBatch">
+        UPDATE T_COUPON_TEMPL SET DELETED = 1 WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

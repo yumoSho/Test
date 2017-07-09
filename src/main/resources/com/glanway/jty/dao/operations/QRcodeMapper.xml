@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.operations.QRcodeDao">
+    <select id="find" parameterType="long" resultType="QRcode">
+      SELECT * FROM T_QR_CODE
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="QRcode">
+        <include refid="support.ph"/>
+        SELECT
+        *
+        FROM
+        T_QR_CODE
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_QR_CODE
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="QRcode" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			T_QR_CODE(
+					ID,NAME,LINK
+					,VISITOR_COUNT,CREATED_DATE,DELETED)
+ 		values(#{id},#{name},#{link},#{visitorCount},NOW(),0)
+	</insert>
+
+    <update id="update" parameterType="QRcode">
+        update T_QR_CODE
+        <set>
+            <if test="name != null">
+                NAME=#{name},
+            </if>
+            <if test="link != null">
+                LINK=#{link},
+            </if>
+            <if test="visitorCount != null">
+                VISITOR_COUNT=#{visitorCount},
+            </if>
+        </set>
+        where ID=#{id} AND DELETED = 0
+    </update>
+
+
+    <update id="delete" parameterType="long">
+		UPDATE T_QR_CODE SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+
+    <!--批量删除-->
+    <update id="deleteBatch">
+        UPDATE T_QR_CODE SET DELETED = 1 WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

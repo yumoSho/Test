@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.cart.CartDao">
+
+    <select id="find" parameterType="long" resultType="Cart">
+      SELECT * FROM T_CART WHERE ID = #{id}
+    </select>
+
+    <select id="findOne" parameterType="map" resultType="Cart">
+        SELECT * FROM T_CART
+        <where>
+            MEMBER_ID = #{memberId}
+            AND GOODS_ID = #{goodsId}
+        </where>
+    </select>
+
+    <select id="findByParam" parameterType="map" resultType="Cart">
+        SELECT * FROM T_CART
+        <where>
+            MEMBER_ID = #{memberId}
+            AND GOODS_ID = #{goodsId}
+        </where>
+    </select>
+
+    <select id="findAllByMemberId" parameterType="long" resultType="Cart">
+    SELECT TC.* FROM T_CART TC WHERE  MEMBER_ID = #{memberId}
+    ORDER  BY TC.ID DESC;
+  </select>
+
+    <select id="findSelectedIdList" parameterType="long" resultType="long">
+        SELECT ID FORM T_CART WHERE MEMBER_ID = #{memberId} AND SELECTED = 1
+    </select>
+
+    <select id="totalBuyCount" parameterType="map" resultType="int">
+        SELECT SUM(BUY_COUNT) FROM T_CART WHERE MEMBER_ID = #{memberId}
+    </select>
+
+    <insert id="save" parameterType="Cart" useGeneratedKeys="true" keyProperty="id">
+		insert into T_CART(ID,GOODS_ID,GOODS_NAME,GOODS_IMG,
+		BUY_COUNT,MEMBER_ID,CREATED_DATE,SELECTED,SPEC_ONE,SPEC_TWO,GOODS_FROM,OTHER_ID)
+        values(#{id},#{goodsId},#{goodsName},#{goodsImg},
+        #{buyCount},#{memberId},NOW(),#{selected},#{specOne},#{specTwo},#{goodsFrom},#{otherId})
+	</insert>
+
+    <update id="update" parameterType="Cart">
+        update T_CART
+        <set>
+            <if test="goodsId != null">
+                GOODS_ID=#{goodsId},
+            </if>
+            <if test="goodsName != null">
+                GOODS_NAME=#{goodsName},
+            </if>
+            <if test="goodsImg != null">
+                GOODS_IMG=#{goodsImg},
+            </if>
+            <if test="buyCount != null">
+                BUY_COUNT=#{buyCount},
+            </if>
+            <if test="memberId != null">
+                MEMBER_ID=#{memberId},
+            </if>
+            <if test="selected != null">
+                SELECTED=#{selected}
+            </if>
+        </set>
+        where ID=#{id}
+    </update>
+
+    <update id="cancelSelect" parameterType="long">
+        UPDATE T_CART SET SELECTED = 0 WHERE MEMBER_ID = #{memberId}
+    </update>
+
+    <update id="selectGoods" parameterType="map">
+        UPDATE T_CART SET SELECTED = 1 WHERE MEMBER_ID = #{memberId}
+        AND ID IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM T_CART WHERE  ID = #{id}
+    </delete>
+
+    <delete id="clear" parameterType="long">
+        DELETE FROM T_CART WHERE MEMBER_ID = #{memberId}
+    </delete>
+
+    <delete id="deleteByGoodsId" parameterType="map">
+        DELETE FROM T_CART WHERE MEMBER_ID = #{memberId}
+        AND ID IN
+        <foreach collection="cartIds" item="cartId" index="index" open="(" close=")" separator=",">
+            #{cartId}
+        </foreach>
+    </delete>
+</mapper>

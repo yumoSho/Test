@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/task
+                           http://www.springframework.org/schema/task/spring-task-3.2.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <description>Spring MVC 配置</description>
+
+    <context:property-placeholder location="classpath:config.properties"/>
+    <context:annotation-config/>
+
+    <!-- task任务扫描注解 -->
+    <task:annotation-driven/>
+
+    <!--<context:component-scan base-package="com.glanway.jty.task"></context:component-scan>-->
+    <!-- 上传图片 -->
+    <!--
+    <context:component-scan base-package="org.ponly.webbase.controller">
+        <context:exclude-filter type="assignable" expression="org.ponly.webbase.controller.StorageController"/>
+    </context:component-scan>
+    -->
+    <context:component-scan base-package="com.glanway.jty.controller"/>
+    <context:component-scan base-package="com.glanway.jty.aspects"/>
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+        <mvc:argument-resolvers>
+            <!--<bean class="com.glanway.gone.spring.bind.PageableHandlerMethodArgumentResolver" />-->
+            <bean class="com.glanway.gone.spring.bind.PageableHandlerMethodArgumentResolver">
+                <property name="sizeParameterName" value="rows"/>
+            </bean>
+            <bean class="com.glanway.gone.spring.bind.FiltersHandlerMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+        <mvc:message-converters>
+            <ref bean="jackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+
+    </mvc:annotation-driven>
+
+    <bean id="runDownPnDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="indexingServiceImpl"/>
+        </property>
+        <property name="targetMethod">
+            <value>rebuildIndex</value>
+        </property>
+    </bean>
+
+    <bean id="runDownPnTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="runDownPnDetail"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 15 10 * * ?</value>
+        </property>
+    </bean>
+
+
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="mediaTypes">
+            <value>
+                json=application/json
+                xml=application/xml
+            </value>
+        </property>
+    </bean>
+
+    <bean id="jackson2HttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+                <value>application/*+json;charset=UTF-8</value>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+        <property name="objectMapper">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                <property name="failOnEmptyBeans" value="false"/>
+                <property name="featuresToDisable">
+                    <util:constant
+                            static-field="com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- id 不能省略 -_-! -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--one of the properties disabled; the maximum file size in bytes -->
+        <!--<property name="maxUploadSize" value="2097152"/>-->
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+        <!--设置拦截的路径-->
+        <mvc:mapping path="/admin/**"/>
+        <mvc:exclude-mapping path="/admin/login"/>
+        <mvc:exclude-mapping path="/admin/store/searchStoreByName"/>
+        <mvc:exclude-mapping path="/admin/store/searchLabelByName"/>
+        <bean class="com.glanway.jty.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+
+        <!--前台登录验证拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/order/**"/><!--订单-->
+            <mvc:mapping path="/deliveryAddress/**"/><!--收货地址-->
+            <mvc:mapping path="/memberInvoice/**"/><!--发票-->
+            <mvc:mapping path="/orderTemp/**"/><!--提交订单临时操作-->
+            <mvc:mapping path="/cart/**"/><!--购物车操作-->
+            <mvc:mapping path="/personalcenter/**"/><!--个人中心》》我的订单-->
+            <mvc:mapping path="/person-center/**"/><!--个人中心》》我的订单-->
+            <mvc:mapping path="/returned/**"/><!--个人中心》》退换货-->
+            <mvc:mapping path="/cookieCart/**"/><!--购物车cookie-->
+            <mvc:mapping path="/mobile/myCenter/**"/><!--手机端个人中心-我的订单-->
+            <mvc:mapping path="/mobile/person-center/**"/><!--手机端个人中心-个人中心-->
+            <mvc:exclude-mapping path="/order/paySuccess"/>
+            <mvc:exclude-mapping path="/mobile/person-center/index"/><!--手机端个人中心-个人中心-->
+            <bean class="com.glanway.jty.interceptor.WebInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/admin/**"/>
+            <mvc:exclude-mapping path="/css/**"/>
+            <mvc:exclude-mapping path="/payment/**"/>
+            <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/storage/**"/>
+            <mvc:exclude-mapping path="/images/**"/>
+            <mvc:exclude-mapping path="/captcha/**"/>
+            <bean class="com.glanway.jty.interceptor.AreaInterceptor"/>
+        </mvc:interceptor>
+
+
+
+        <!--放重复提交token-->
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <mvc:exclude-mapping path="/admin/login"/>
+            <mvc:exclude-mapping path="/css/**"/>
+            <mvc:exclude-mapping path="/payment/**"/>
+            <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/storage/**"/>
+            <mvc:exclude-mapping path="/images/**"/>
+            <mvc:exclude-mapping path="/captcha/**"/>
+            <bean class="com.glanway.jty.interceptor.TokenInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 资源映射 -->
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/payment/**" location="/payment/"/>
+    <mvc:resources mapping="/images/**" location="/images/"/>
+    <!--<mvc:resources mapping="/images/mobile" location="/images/mobile/"/>-->
+
+
+</beans>

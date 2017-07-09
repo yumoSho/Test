@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.product.CategoryDao">
+
+    <sql id="baseQuery">
+        SELECT
+          ID
+          ,CREATED_BY
+          ,CREATED_DATE
+          ,LAST_MODIFIED_BY
+          ,LAST_MODIFIED_DATE
+          ,NAME
+          ,PICTURE
+          ,PATH
+          ,PATH_NAMES
+          ,COLOR
+          ,VISIBLE
+          ,SORT
+          ,DELETED
+          ,MODEL_ID
+          ,PARENT_ID
+        FROM
+          T_CATEGORY
+    </sql>
+
+    <select id="find" parameterType="long" resultMap="categoryRM">
+        SELECT
+          TC.*,
+          TM.ID MODEL_ID,
+          TM.NAME MODEL_NAME,
+          TCC.ID PARENT_ID,
+          TCC.NAME PARENT_NAME,
+          TCC.PATH PARENT_PATH,
+          TCC.PATH_NAMES PARENT_PATH_NAMES,
+          TB.ID B_ID,
+          TB.NAME B_NAME
+        FROM T_CATEGORY TC
+        LEFT JOIN T_MODEL TM ON TC.MODEL_ID=TM.ID AND TM.DELETED=0
+        LEFT JOIN T_CATEGORY TCC ON TC.PARENT_ID = TCC.ID AND TCC.DELETED=0
+        LEFT JOIN T_BRAND_CATEGORY TBC ON TC.ID=TBC.CATEGORY_ID  AND TBC.DELETED=0
+        LEFT JOIN T_BRAND TB ON TBC.BRAND_ID=TB.ID AND TB.DELETED=0
+        WHERE TC.ID=#{id} AND TC.DELETED=0
+
+    </select>
+
+    <select id="findMany" parameterType="map" resultMap="categoryRM">
+        <include refid="support.ph" />
+            SELECT *  FROM (
+                SELECT
+                    TC.ID,
+                    TC.NAME,
+                    TC.PATH,
+                    TC.PATH_NAMES,
+                    TC.CATEGORY_CODE,
+                    TC.COLOR,
+                    TC.VISIBLE,
+                    TC.DELETED,
+                    TC.PICTURE,
+                    TC.SORT,
+                    TC.CREATED_BY,
+                    TC.CREATED_DATE,
+                    TC.LAST_MODIFIED_BY,
+                    TC.LAST_MODIFIED_DATE,
+                    TM.ID MODEL_ID,
+                    TM.NAME MODEL_NAME,
+                    TCC.ID PARENT_ID,
+                    TCC.NAME PARENT_NAME,
+                    TCC.PATH PARENT_PATH
+                FROM T_CATEGORY TC
+                LEFT JOIN T_MODEL TM ON TC.MODEL_ID=TM.ID AND TM.DELETED=0
+                LEFT JOIN T_CATEGORY TCC ON TC.PARENT_ID = TCC.ID AND TCC.DELETED=0
+            ) TC
+        <where>
+            <include refid="support.dynamicFilters" />
+            AND TC.DELETED=0
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort" />
+            , TC.CREATED_DATE DESC
+        </trim>
+        <include refid="support.pf" />
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1)  FROM (
+            SELECT
+                TC.ID,
+                TC.NAME,
+                TC.PATH,
+                TC.PATH_NAMES,
+                TC.CATEGORY_CODE,
+                TC.COLOR,
+                TC.VISIBLE,
+                TC.SORT,
+                TC.DELETED,
+                TC.PICTURE,
+                TC.CREATED_BY,
+                TC.CREATED_DATE,
+                TC.LAST_MODIFIED_BY,
+                TC.LAST_MODIFIED_DATE,
+                TM.ID MODEL_ID,
+                TM.NAME MODEL_NAME,
+                TCC.ID PARENT_ID,
+                TCC.NAME PARENT_NAME,
+                TCC.PATH PARENT_PATH
+            FROM T_CATEGORY TC
+            LEFT JOIN T_MODEL TM ON TC.MODEL_ID=TM.ID AND TM.DELETED=0
+            LEFT JOIN T_CATEGORY TCC ON TC.PARENT_ID = TCC.ID AND TCC.DELETED=0
+        ) TC
+        <where>
+            <include refid="support.dynamicFilters" />
+            AND TC.DELETED=0
+        </where>
+    </select>
+
+
+
+
+    <sql id="baseFilter">
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="path != null">
+            AND PATH = #{path}
+        </if>
+        <if test="pathNames != null">
+            AND PATH_NAMES = #{pathNames}
+        </if>
+        <if test="color != null">
+            AND COLOR = #{color}
+        </if>
+        <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+        <if test="picture != null">
+            AND PICTURE = #{picture}
+        </if>
+        <if test="visible != null">
+            AND VISIBLE = #{visible}
+        </if>
+        <if test="model.id != null">
+            AND MODEL_ID = #{model.id}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="parent.id != null">
+            AND PARENT_ID = #{parent.id}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        AND DELETED = 0
+        <!-- more -->
+    </sql>
+
+
+    <!-- =========================== CREATE ========================== -->
+
+    <insert id="save" parameterType="Category"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_CATEGORY (
+        <!-- self columns -->
+        ID
+        ,CREATED_BY
+        ,CREATED_DATE
+        ,LAST_MODIFIED_BY
+        ,LAST_MODIFIED_DATE
+        ,NAME
+        ,PICTURE
+        ,PATH
+        ,PATH_NAMES
+        ,CATEGORY_CODE
+        ,COLOR
+        ,VISIBLE
+        ,SORT
+        ,DELETED
+        ,MODEL_ID
+        ,PARENT_ID
+        )
+        VALUES (
+        <!-- self columns -->
+        #{id},
+        #{createdBy},
+        #{createdDate},
+        #{lastModifiedBy},
+        #{lastModifiedDate},
+        #{name},
+        #{picture},
+        #{path},
+        #{pathNames},
+        #{categoryCode},
+        #{color},
+        #{visible},
+        #{sort},
+        #{deleted},
+        #{model.id},
+        #{parent.id}
+        )
+    </insert>
+
+    <!-- =========================== UPDATE ========================== -->
+
+    <update id="update" parameterType="Category">
+        UPDATE T_CATEGORY
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="path != null">
+                PATH = #{path},
+            </if>
+            <if test="pathNames != null">
+                PATH_NAMES = #{pathNames},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="picture != null">
+                PICTURE = #{picture},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="color != null">
+                COLOR = #{color},
+            </if>
+            <if test="visible != null">
+                VISIBLE = #{visible},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="model != null and model.id != null">
+                MODEL_ID = #{model.id},
+            </if>
+            <if test="parent != null and parent.id != null">
+                PARENT_ID = #{_parameter.parent.id},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="long">
+      UPDATE T_CATEGORY SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <select id="findTree"  resultMap="categoryRM">
+    SELECT
+      T.*,
+      P.ID PARENT_ID,
+      P.NAME PARENT_NAME,
+      P.PATH PARENT_PATH,
+      P.PATH_NAMES PARENT_PATH_NAMES,
+      P.PICTURE PARENT_PICTURE,
+      M.ID MODEL_ID,
+      M.NAME MODEL_NAME,
+      B.ID B_ID,
+      B.NAME B_NAME
+    FROM (
+        SELECT
+            ID,
+            NAME,
+            PATH,
+            PATH_NAMES,
+            COLOR,
+            VISIBLE,
+            PICTURE,
+            SORT,
+            PARENT_ID,
+            MODEL_ID,
+            DELETED,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE
+        FROM
+          T_CATEGORY
+        where
+          DELETED = 0 AND VISIBLE=1
+        ORDER BY SORT ASC
+    ) T
+    LEFT JOIN T_MODEL M ON T.MODEL_ID = M.ID AND M.DELETED = 0
+    LEFT JOIN T_CATEGORY P ON T.PARENT_ID = P.ID AND P.DELETED = 0 AND P.VISIBLE=1
+    LEFT JOIN T_BRAND_CATEGORY BC ON BC.CATEGORY_ID = T.ID AND BC.DELETED = 0
+    LEFT JOIN T_BRAND B ON BC.BRAND_ID = B.ID AND B.DELETED = 0 AND B.ENABLED=1
+    ORDER BY T.SORT ASC
+    </select>
+
+    <select id="categoryHaveBeenUsedForGoods" parameterType="long" resultType="boolean">
+    SELECT 1 FROM  DUAL WHERE EXISTS (
+    SELECT * FROM T_CATEGORY TC
+    INNER JOIN T_PRODUCT P ON P.CATEGORY_ID= TC.ID AND P.DELETED=0
+    INNER JOIN T_MODEL TM ON TM.ID=TC.MODEL_ID AND TM.DELETED=0 AND TC.DELETED=0
+    INNER JOIN T_MODEL_SPEC TMS ON TM.ID = TMS.MODEL_ID AND TM.DELETED = 0 AND TMS.DELETED = 0
+    INNER JOIN T_PRODUCT TP  ON TP.MODEL_ID= TM.ID AND TP.DELETED=0 AND TM.DELETED=0
+    WHERE TC.DELETED=0 AND TC.ID=#{0}
+    )
+    </select>
+
+    <select id="categoryHaveChild" resultType="boolean" parameterType="long">
+        SELECT 1 FROM DUAL WHERE EXISTS (SELECT * FROM T_CATEGORY TP INNER JOIN T_CATEGORY TC ON  TC.PARENT_ID=TP.ID AND TC.DELETED=0 WHERE TP.ID=#{0})
+    </select>
+
+    <select id="categoryNextId" resultType="long">
+        SELECT MAX(ID) FROM T_CATEGORY
+    </select>
+
+    <select id="topSeven" parameterType="map" resultMap="baseRM">
+        <include refid="support.ph" />
+                SELECT
+                    ID,
+                    NAME,
+                    PATH,
+                    CREATED_DATE,
+                    SORT
+                FROM
+                    T_CATEGORY
+                WHERE
+                    DELETED = 0
+                AND VISIBLE = 1
+                AND PARENT_ID IS NULL
+                ORDER BY
+                    SORT ASC
+        <include refid="support.pf" />
+    </select>
+
+
+    <select id="getCategoryTreeByStoreId" parameterType="long" resultMap="categoryRM">
+        SELECT
+            T.*,
+            P.ID PARENT_ID,
+            P.NAME PARENT_NAME,
+            P.PATH PARENT_PATH,
+            P.PATH_NAMES PARENT_PATH_NAMES,
+            M.ID MODEL_ID,
+            M.NAME MODEL_NAME,
+            B.ID B_ID,
+            B.NAME B_NAME
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    T_CATEGORY TC
+                INNER JOIN (
+                    SELECT * FROM (SELECT
+                         CATEGORY_ID
+                    FROM
+                        T_PRODUCT
+                    WHERE
+                        DELETED =0 AND IS_PUTAWAY = 1 AND STORE_ID=#{storeId})PC
+                    GROUP BY PC.CATEGORY_ID
+                ) CC ON TC.ID = CC.CATEGORY_ID
+                AND TC.DELETED = 0
+                AND TC.VISIBLE = 1
+                ORDER BY
+                    SORT
+            ) T
+        LEFT JOIN (
+            SELECT
+                *
+            FROM
+                T_CATEGORY TC
+            INNER JOIN (
+                    SELECT * FROM (SELECT
+                         CATEGORY_ID
+                    FROM
+                        T_PRODUCT
+                    WHERE
+                        DELETED =0 AND IS_PUTAWAY = 1 AND STORE_ID=#{storeId})PC
+                    GROUP BY PC.CATEGORY_ID
+            ) CC ON TC.ID = CC.CATEGORY_ID
+            AND TC.DELETED = 0
+            AND TC.VISIBLE = 1
+            ORDER BY
+                SORT
+        ) P ON T.PARENT_ID = P.ID
+        AND P.DELETED = 0
+        AND P.VISIBLE = 1
+        LEFT JOIN T_MODEL M ON T.MODEL_ID = M.ID
+        AND M.DELETED = 0
+        LEFT JOIN T_BRAND_CATEGORY BC ON BC.CATEGORY_ID = T.ID
+        AND BC.DELETED = 0
+        LEFT JOIN T_BRAND B ON BC.BRAND_ID = B.ID
+        AND B.DELETED = 0
+        AND B.ENABLED = 1
+        ORDER BY
+            T.SORT ASC
+
+    </select>
+
+
+
+    <!-- ======================== RESULT MAP ========================= -->
+    <resultMap id="baseRM" type="Category">
+        <id property="id" column="ID"/>
+        <result property="id" column="ID"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="name" column="NAME"/>
+        <result property="path" column="PATH"/>
+        <result property="pathNames" column="PATH_NAMES"/>
+        <result property="color" column="COLOR"/>
+        <result property="picture" column="PICTURE"/>
+        <result property="visible" column="VISIBLE"/>
+        <result property="sort" column="SORT"/>
+        <result property="deleted" column="DELETED"/>
+        <!-- to one -->
+        <association property="model" javaType="Model">
+            <id property="id" column="MODEL_ID"/>
+            <result property="createdBy" column="MODEL_CREATED_BY"/>
+            <result property="createdDate" column="MODEL_CREATED_DATE"/>
+            <result property="lastModifiedBy" column="MODEL_LAST_MODIFIED_BY"/>
+            <result property="lastModifiedDate" column="MODEL_LAST_MODIFIED_DATE"/>
+            <result property="name" column="MODEL_NAME"/>
+            <result property="alias" column="MODEL_ALIAS"/>
+            <result property="useAttribute" column="MODEL_USE_ATTRIBUTE"/>
+            <result property="useSpec" column="MODEL_USE_SPEC"/>
+            <result property="useParameter" column="MODEL_USE_PARAMETER"/>
+            <result property="deleted" column="MODEL_DELETED"/>
+        </association>
+        <association property="parent" javaType="Category">
+            <id property="id" column="parent_ID"/>
+            <result property="createdBy" column="parent_CREATED_BY"/>
+            <result property="createdDate" column="parent_CREATED_DATE"/>
+            <result property="lastModifiedBy" column="parent_LAST_MODIFIED_BY"/>
+            <result property="lastModifiedDate" column="parent_LAST_MODIFIED_DATE"/>
+            <result property="name" column="parent_NAME"/>
+            <result property="path" column="parent_PATH"/>
+            <result property="picture" column="parent_PICTURE"/>
+            <result property="pathNames" column="parent_PATH_NAMES"/>
+            <result property="color" column="parent_COLOR"/>
+            <result property="visible" column="parent_VISIBLE"/>
+            <result property="sort" column="parent_SORT"/>
+            <result property="deleted" column="parent_DELETED"/>
+        </association>
+        <!-- to many -->
+        <collection property="brands" ofType="Brand">
+            <id property="id" column="brands_ID"/>
+            <result property="createdBy" column="brands_CREATED_BY"/>
+            <result property="createdDate" column="brands_CREATED_DATE"/>
+            <result property="lastModifiedBy" column="brands_LAST_MODIFIED_BY"/>
+            <result property="lastModifiedDate" column="brands_LAST_MODIFIED_DATE"/>
+            <result property="name" column="brands_NAME"/>
+            <result property="alias" column="brands_ALIAS"/>
+            <result property="logo" column="brands_LOGO"/>
+            <result property="sort" column="brands_SORT"/>
+            <result property="enabled" column="brands_ENABLED"/>
+            <result property="deleted" column="brands_DELETED"/>
+        </collection>
+    </resultMap>
+
+
+
+
+
+
+
+    <resultMap id="categoryRM" type="Category">
+        <id property="id" column="ID" />
+        <result property="name" column="NAME" />
+        <result property="categoryCode" column="CATEGORY_CODE" />
+        <result property="color" column="COLOR" />
+        <result property="visible" column="VISIBLE" />
+        <result property="sort" column="SORT" />
+        <result property="picture" column="PICTURE" />
+        <result property="path" column="PATH" />
+        <result property="pathNames" column="PATH_NAMES" />
+        <result property="deleted" column="DELETED" />
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <!-- 关联模型 -->
+        <association property="model" javaType="Model">
+            <id property="id" column="MODEL_ID" />
+            <result property="name" column="MODEL_NAME" />
+        </association>
+        <!-- 关联父级 -->
+        <association property="parent" javaType="Category">
+            <id property="id" column="PARENT_ID" />
+            <result property="name" column="PARENT_NAME" />
+            <result property="color" column="PARENT_COLOR" />
+            <result property="path" column="PARENT_PATH" />
+            <result property="picture" column="PARENT_PICTURE" />
+            <result property="pathNames" column="PARENT_PATH_NAMES" />
+        </association>
+        <!-- 关联子级 -->
+        <collection property="children" ofType="Category" columnPrefix="C_">
+            <id property="id" column="ID" />
+            <result property="name" column="NAME" />
+            <result property="color" column="COLOR" />
+            <result property="path" column="PATH" />
+            <result property="picture" column="PICTURE" />
+            <association property="model" javaType="Model">
+                <id property="id" column="MODEL_ID" />
+            </association>
+            <collection property="children" ofType="Category" columnPrefix="C_">
+                <id property="id" column="ID" />
+                <result property="name" column="NAME" />
+                <result property="color" column="COLOR" />
+            </collection>
+        </collection>
+        <collection property="brands" ofType="Brand" columnPrefix="B_">
+            <id property="id" column="ID" />
+            <result property="name" column="NAME" />
+        </collection>
+    </resultMap>
+
+
+
+</mapper>

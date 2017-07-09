@@ -1,0 +1,175 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<div class="head">
+    <!-- 头部快捷链接 -->
+    <%@include file="/WEB-INF/view/include/topbar.jspf"%>
+    <div class="headCenter cartHeadCenter ">
+        <div class="sameWidth clearfix">
+            <a href="${ctx}/" class="fleft logo">
+                <img src="${ctx}/${website.logo}_209x96.jpg" width="209" height="96" />
+            </a>
+            <!-- <div class="cartHeadNotice fleft">
+                <div>购物车</div>
+                <a href="../index/index.html">返回首页</a>
+            </div> -->
+            <div class="headSearchPart fleft clearfix">
+                <div class="searchSelect fleft">
+                    <a href="javascipt:void(0);" class="selectDefault" data-type="0">商品</a>
+                    <ul class="selectUl">
+                        <li>
+                            <a href="#" data-type="1">店铺</a>
+                        </li>
+                    </ul>
+                </div>
+                <input type="text" class="searchInput fleft" placeholder="请输入您要搜索的关键字" />
+                <a href="javascript:void(0)" class="searchBtn btn fleft"><img src="${ctx}/images/searchBtn.png" width="15" height="15" />搜索</a>
+            </div>
+            <a
+                    <c:choose>
+                        <c:when test="${memeber != null}">
+                            href="${ctx}/cart"
+                        </c:when>
+                        <c:otherwise>
+                            href="${ctx}/cookieCart"
+                        </c:otherwise>
+                    </c:choose>
+                    class="fright forCart">
+                <div>我的购物车</div>
+            </a>
+        </div>
+    </div>
+    <!-- 导航 -->
+    <div class="navBar">
+        <div class="sameWidth clearfix">
+            <div class="allProType fleft">
+                <div class="proTypeTitle">全部商品分类</div>
+                <ul class="subNav" id="subNav">
+                    <%--<li>
+                        <a href="javascript:void(0);">休闲零食</a>
+                        <div class="thirdNav">
+                            <!--<div class="hasNoType">暂无分类</div>-->
+                            <ul class="thirdNavUl" id="thirdNavUl">
+                                <li>
+                                    <a href="#">休闲零食</a>
+                                    <div class="fourthNav">
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">饼干糕点</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="#">休闲零食</a>
+                                    <div class="fourthNav">
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">饼干糕点</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">母婴用品</a>
+                        <div class="thirdNav">
+                            <!--<div class="hasNoType">暂无分类</div>-->
+                            <ul class="thirdNavUl" id="thirdNavUl">
+                                <li>
+                                    <a href="#">母婴用品</a>
+                                    <div class="fourthNav">
+                                        <a href="#">母婴用品</a>
+                                        <a href="#">母婴用品</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="#">休闲零食</a>
+                                    <div class="fourthNav">
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">饼干糕点</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">个人彩护</a>
+                        <div class="thirdNav">
+                            <!--<div class="hasNoType">暂无分类</div>-->
+                            <ul class="thirdNavUl" id="thirdNavUl">
+                                <li>
+                                    <a href="#">个人彩护</a>
+                                    <div class="fourthNav">
+                                        <a href="#">个人彩护</a>
+                                        <a href="#">个人彩护</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="#">休闲零食</a>
+                                    <div class="fourthNav">
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">饼干糕点</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                        <a href="#">牛奶饮料</a>
+                                        <a href="#">糖果/巧克力</a>
+                                        <a href="#">冲调饮品</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">营养保健</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">生活家居</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">鞋靴宝箱</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">时尚服饰</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">精美配饰</a>
+                    </li>--%>
+                </ul>
+            </div>
+            <ul class="navUl fleft clearfix">
+                <li>
+                    <a href="${ctx}/">首页</a>
+                </li>
+                <li>
+                    <a href="${ctx}/brand/list">品牌馆</a>
+                </li>
+                <li>
+                    <a href="${ctx}/new-goodses">精选新品</a>
+                </li>
+                <li>
+                    <a href="${ctx}/sale/on-sale">特价专区</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

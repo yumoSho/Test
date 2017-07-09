@@ -1,0 +1,327 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.backPwdMain {
+  width: 100%;
+  height: 770px;
+  background: #f9fbfd;
+}
+.backPwdMain p {
+  width: 902px;
+  margin: 0 auto;
+  padding-top: 73px;
+}
+.backPwdMain p .fl {
+  font-size: 22px;
+  font-weight: 400;
+  color: #7a7a7a;
+}
+.backPwdMain p .fr {
+  color: #b4b5b5;
+  font-size: 12px;
+}
+.backPwdMain p .fr a {
+  color: #0066ff;
+  line-height: 48px;
+}
+.backPwdMain .phoneBackPwd1 {
+  width: 902px;
+  height: 475px;
+  background: #fff;
+  margin: 52px auto;
+  box-shadow: 0 0 10px #ccc;
+  display: block;
+  /*手机找回密码第一步*/
+  /*邮箱找回密码第一步*/
+  /*手机找回密码第二步*/
+  /*邮箱找回密码第二步*/
+  /*手机找回密码第三步*/
+  /*手机找回密码第四步*/
+}
+.backPwdMain .phoneBackPwd1 p {
+  padding-top: 0;
+  height: 66px;
+  line-height: 66px;
+  text-align: center;
+}
+.backPwdMain .phoneBackPwd1 p a {
+  font-size: 22px;
+  color: #333;
+  cursor: pointer;
+  width: 50%;
+  border-bottom: solid 3px #ccc;
+}
+.backPwdMain .phoneBackPwd1 p .changeBorC {
+  border-color: #19aa4b;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 {
+  display: block;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table {
+  width: 396px;
+  margin: 80px auto;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table tr {
+  height: 66px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table tr td:first-child {
+  text-align: center;
+  height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table tr td {
+  line-height: 38px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table tr td .locat {
+  position: relative;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table tr td .locat .error {
+  right: -115px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table tr td .changeL1 .error {
+  right: -242px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table input {
+  width: 144px;
+  height: 36px;
+  line-height: 36px;
+  outline: none;
+  border: solid 1px #ccc;
+  /*color: #ccc;*/
+  background: #fff;
+  text-indent: 12px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table .nextBtn1 {
+  width: 140px;
+  height: 38px;
+  border: none;
+  color: #fff;
+  background: #19aa4b;
+  text-indent: 0;
+  margin-top: 50px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack1 table .txtWidth {
+  width: 310px;
+  text-indent: 12px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 {
+  display: none;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table {
+  width: 396px;
+  margin: 80px auto;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table tr {
+  height: 66px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table tr td:first-child {
+  text-align: center;
+  height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table tr td {
+  line-height: 38px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table tr td .locat {
+  position: relative;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table tr td .locat .error {
+  right: -115px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table tr td .changeL1 .error {
+  right: -242px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table input {
+  width: 144px;
+  height: 36px;
+  line-height: 36px;
+  outline: none;
+  border: solid 1px #ccc;
+  /*color: #ccc;*/
+  background: #fff;
+  text-indent: 12px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table .nextBtn1 {
+  width: 140px;
+  height: 38px;
+  border: none;
+  color: #fff;
+  background: #19aa4b;
+  text-indent: 0;
+  margin-top: 50px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack1 table .txtWidth {
+  width: 310px;
+  text-indent: 12px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 {
+  display: block;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 p {
+  font-size: 14px;
+  margin: 73px auto;
+  color: #323232;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table {
+  width: 340px;
+  margin: -82px auto;
+  font-size: 14px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr {
+  height: 66px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr td {
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr td .locat {
+  position: relative;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr td .locat .error {
+  right: -230px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr td input {
+  width: 144px;
+  height: 32px;
+  line-height: 32px;
+  outline: none;
+  border: solid 1px #ccc;
+  /*color: #ccc;*/
+  background: #fff;
+  text-indent: 12px;
+  font-size: 14px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr td .getCode {
+  width: 114px;
+  background: #19aa4b;
+  color: #fff;
+  height: 34px;
+  border: none;
+  text-indent: 0;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack2 table tr td .nextBtn2 {
+  width: 140px;
+  background: #19aa4b;
+  color: #fff;
+  height: 34px;
+  border: none;
+  text-indent: 0;
+  margin-top: 50px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack2 {
+  text-align: center;
+}
+.backPwdMain .phoneBackPwd1 #emailBack2 img {
+  margin-top: 96px;
+}
+.backPwdMain .phoneBackPwd1 #emailBack2 p {
+  height: 40px;
+  width: 340px;
+  line-height: 40px;
+  font-size: 12px;
+  color: #323232;
+  text-align: left;
+  margin: 0 auto;
+}
+.backPwdMain .phoneBackPwd1 #emailBack2 p a {
+  color: #03f;
+  border: none;
+  font-size: 12px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 {
+  width: 310px;
+  margin: 73px auto;
+  display: block;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 .locat {
+  position: relative;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 .locat label.error {
+  right: -138px;
+  top: 10px;
+  width: 120px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 p {
+  width: 310px;
+  text-align: left;
+  font-size: 14px;
+  height: 42px;
+  line-height: 48px;
+  color: #333;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 input {
+  width: 304px;
+  height: 34px;
+  line-height: 34px;
+  outline: none;
+  border: solid 1px #ccc;
+  /*color: #ccc;*/
+  background: #fff;
+  text-indent: 12px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 .addTop {
+  text-align: center;
+  margin-top: 44px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack3 .addTop .nextBtn3 {
+  width: 140px;
+  background: #19aa4b;
+  color: #fff;
+  height: 36px;
+  border: none;
+  text-indent: 0;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack4 {
+  display: block;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack4 .succTxt {
+  width: 376px;
+  margin: 130px auto;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack4 .succTxt span {
+  font-size: 22px;
+  height: 22px;
+  line-height: 18px;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack4 .backCenter {
+  width: 306px;
+  margin: -60px auto;
+}
+.backPwdMain .phoneBackPwd1 #phoneBack4 .backCenter a {
+  width: 150px;
+  height: 34px;
+  font-size: 14px;
+  background: #19aa4b;
+  color: #fff;
+  text-align: center;
+  line-height: 34px;
+}
+.backPwdMain .emailBackPwd1 {
+  width: 902px;
+  height: 475px;
+  background: #fff;
+  margin: 52px auto;
+  box-shadow: 0 0 10px #ccc;
+}
+.backPwdMain .emailBackPwd1 p {
+  padding-top: 0;
+  height: 66px;
+  line-height: 66px;
+  text-align: center;
+}
+.backPwdMain .emailBackPwd1 p a {
+  font-size: 22px;
+  color: #7a7a7a;
+  cursor: pointer;
+}
+.backPwdMain .emailBackPwd1 p .fl {
+  width: 50%;
+  border-bottom: solid 2px #ccc;
+}
+.backPwdMain .emailBackPwd1 p .fr {
+  width: 50%;
+  border-bottom: solid 2px #19aa4b;
+}
+/*# sourceMappingURL=backPwd.css.map */

@@ -1,0 +1,16 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+    <div class="friendLinks">
+            
+            <c:set var="index" value="1"/>
+        	<c:forEach items="${simpleLinks}" var="link" >
+        		<a href="${link.url }" target="_blank">${link.title }</a><c:if test="${index ne fn:length(links)}">|</c:if>
+        		
+        		<c:set var="index" value="${index+1}" />
+        	</c:forEach>
+            
+           <!--  <a href="#">友情链接</a>
+            <a href="#">友情链接</a>
+            <a href="#">友情链接</a>
+            <a href="#">友情链接</a> -->
+        </div>
+        <div class="copyRight color666">${simpleWebsite.description }</div>

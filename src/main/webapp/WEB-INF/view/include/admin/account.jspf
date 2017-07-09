@@ -1,0 +1,220 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@include file="/WEB-INF/view/include/taglibs.jspf" %>
+<style>
+     input[type="password"]{line-height:20px;}
+     table.table-module01 tr {line-height: 28px;}
+     .cms-pop{height: 222px;}
+     .table-module01 td{position: relative;}
+</style>
+<div class="fr top-r">
+	<div class="top-account" style="border: none;width: auto;">
+		<div class="top-account-info" style="    border-left: none">
+			<a href="javascript:void(0);" style="    border-left: none"> <img
+				src="${ctx}/images/admin/default-head.png" width="48" height="48" />
+                <span class="name" id="userName" ></span><input type="hidden" id="userId"/> <b class="caret"></b>
+			</a>
+		</div>
+		<div class="top-account-dropdown" style="position:absolute;z-index: 100;">
+			<b></b>
+			<ul>
+				<%--<li><a href="javascript:CMS_Pop.show('cms-pop-alert');"><s
+						class="icon-setting"></s>账户设置</a></li>--%>
+				<li><a href="javascript:showChangePwd();"><s
+						class="icon-key"></s>修改密码</a></li>
+				<li><a href="${ctx}/admin/login/logout"><s class="icon-shutdown"></s>退出</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- Begin 提示信息 -->
+<div class="cms-pop cms-pop-alert">
+	<div class="cms-pop-t">
+		<div class="cms-pop-title">
+			<b>提示信息</b>
+		</div>
+		<a href="javascript:closeChangePwd();" title="关闭" class="icon-close"></a>
+	</div>
+	<div class="cms-pop-body">
+		<div class="cms-pop-content">
+			<s class="icon-edit-alert"></s>
+			<h5>是否确认对信息的修改？</h5>
+			<p>如果是，请点确定；否则请点取消</p>
+		</div>
+		<div class="cms-pop-btns">
+			<span class="btn-sure-wrap"><input class="btn-sure" type="button" value="确定" onclick="CMS_Pop.hide('cms-pop-alert');" /></span>
+			<span class="btn-cancel-wrap"><input class="btn-cancel" type="button" value="取消" onclick="CMS_Pop.hide('cms-pop-alert');" /></span>
+		</div>
+	</div>
+</div>
+<!-- //End 提示信息 -->
+
+<!-- Begin 修改密码 -->
+<div class="cms-pop" id="cms-pop-changepwd">
+	<div class="cms-pop-t">
+		<div class="cms-pop-title">
+			<b>修改密码</b>
+		</div>
+		<a href="javascript:closeChangePwd();" title="关闭" class="icon-close"></a>
+	</div>
+	<div class="cms-pop-body">
+        <form id="resetPwd" method="post">
+			<table class="table-module01" cellpadding="0" cellspacing="0">
+				<tbody>
+					<tr>
+						<td width="30%" align="right">原始密码<b class="color-red">*</b></td>
+						<td width="65%">
+							<input type="password" name="origPassword" />
+                            <span class="errorTip"></span>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%" align="right">新密码<b class="color-red">*</b></td>
+						<td width="65%">
+							<input type="password" name="newPassword" />
+                            <span class="errorTip"></span>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%" align="right">确认密码<b class="color-red">*</b></td>
+						<td width="65%">
+							<input type="password" name="ensurePassword" />
+                            <span class="errorTip"></span>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%" align="right" colspan="2">
+                            <div class="cms-pop-btns">
+                                <span class="btn-sure-wrap"><input class="btn-sure btn-save" type="button" value="保存" onclick="changePwd()" /></span>
+                                <span class="btn-cancel-wrap"><input class="btn-cancel" type="reset" value="重置" /></span>
+                            </div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+        </form>
+		<%--<div class="cms-pop-btns">
+			<span class="btn-sure-wrap"><input class="btn-sure btn-save" type="button" value="保存" onclick="CMS_Pop.hide('cms-pop-changepwd');" /></span>
+			<span class="btn-cancel-wrap"><input class="btn-cancel" type="reset" value="重置" /></span>
+		</div>--%>
+	</div>
+</div>
+<script type="text/javascript">
+    $(function(){
+
+        $.ajax({
+            type:"post",
+            url: "${ctx}/admin/getCurrentUser",
+            data: null,
+            success: function(data){
+                if(data!=null){
+                    $("#userName").text(data.userName);
+                    $("#userId").text(data.id);
+                }
+            }
+        });
+        $.validator.addMethod("checkPwd", function(value, element){
+            return this.optional(element) || /^[a-zA-Z]{1}([a-zA-Z0-9]|[._#^~]){5,15}$/.test(value);
+        }, "密码由以字母开头，可包含._#^~等特殊字符的6~16位字符组成");
+
+        //账号下拉
+        $(".top-account-info").click(function(e){
+            $(".top-account-dropdown").show();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+
+        $(document).click(function(){
+            $(".top-account-dropdown").hide();
+        })
+    });
+    $("#resetPwd").validate({
+        rules:{
+            origPassword:{
+                required: true
+            },
+            newPassword:{
+                required: true,
+                checkPwd:true
+            },
+            ensurePassword:{
+                equalTo:"input[name=newPassword]"
+            }
+        },
+        messages:{
+            origPassword:{
+                required: "原始密码不能为空"
+            },
+            newPassword:{
+                required: "新密码不能为空"
+            },
+            ensurePassword:{
+                equalTo:"两次输入的密码不相同"
+            }
+        },
+        errorPlacement:function(error, element){
+            error.appendTo(element.siblings("span:.errorTip"));
+        },
+        submitHandler: function(form) {
+            $(form).find(":submit").attr("disabled", true).attr("value",
+                    "Submitting...").css("letter-spacing","0");
+            form.submit();
+        }
+    });
+
+    function changePwd(){
+        var origPassword = $("input[name=origPassword]").val();
+        var newPassword = $("input[name=newPassword]").val();
+        var $validator = $("#resetPwd").validate();
+        var userId = $("#userId").text();
+        if(!$validator.checkForm()){
+            $validator.showErrors();
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "${ctx}/admin/changePassword",
+            data: {
+            	userId: userId,
+                origPassword: origPassword,
+                newPassword: newPassword
+            },
+            success: function(data){
+                if(data == null){
+                    window.location.href = '${ctx}/admin/';
+                    return false;
+                }
+                if(data.result){
+                	Besture.Messager.alert("提示", "密码修改成功，请重新登录！");
+                    CMS_Pop.hide('cms-pop-changepwd');
+                    window.location.href = '${ctx}/admin/login/logout';
+                }else{
+                	Besture.Messager.alert("提示", "密码修改失败！" + data.errorMsg);
+                }
+            }
+        })
+    }
+
+    CMS_Pop={
+        show:function(str){
+            $(".pop-mask").show();
+            $("."+str).show();
+        },
+        hide:function(str){
+            $("."+str).hide();
+            $(".pop-mask").hide();
+        }
+    };
+    
+    function showChangePwd(){
+    	$(".pop-mask").show();
+        $("#cms-pop-changepwd").show();
+    }
+    
+    function closeChangePwd(){
+    	$("#cms-pop-changepwd").hide();
+        $(".pop-mask").hide();
+    }
+
+</script>
+<!-- //End 修改密码 -->

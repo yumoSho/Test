@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.system.OperationLogDao">
+
+    <select id="find" parameterType="long" resultType="OperationLog">
+        SELECT * FROM T_OPERATION_LOG
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="OperationLog">
+        <include refid="support.ph"/>
+        SELECT *  FROM (SELECT OL.*,U.USER_NAME "user.userName",U.USER_NAME USER_NAME FROM T_OPERATION_LOG OL LEFT JOIN T_USER U ON OL.USER_ID = U.ID) A
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM (SELECT OL.*,U.USER_NAME "user.userName",U.USER_NAME USER_NAME FROM T_OPERATION_LOG OL LEFT JOIN T_USER U ON OL.USER_ID = U.ID) A
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="OperationLog" useGeneratedKeys="true" keyProperty="id">
+		insert into T_OPERATION_LOG(ID,USER_ID,ACTION,OPERATE_RESULT,OPERATE_DATE,OPERATE_FROM,OPERATE_TYPE,OPERATE_IP,OTHER_FILED)
+    values(#{id},#{userId},#{action},#{operateResult},NOW(),#{operateFrom},#{operateType},#{operateIp},#{otherFiled})
+	</insert>
+</mapper>   

@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.order.OrderDao">
+    <resultMap id="ordersRM" type="Order">
+        <id property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="status" column="STATUS"/>
+        <result property="price" column="PRICE"/>
+        <result property="payment" column="PAYMENT"/>
+        <result property="bank" column="BANK"/>
+        <result property="source" column="SOURCE"/>
+        <result property="storeId" column="STOREID"/>
+        <result property="storeName" column="STORENAME"/>
+        <result property="memberId" column="MEMBERID"/>
+        <result property="memberName" column="MEMBERNAME"/>
+        <result property="receiver" column="RECEIVER"/>
+        <result property="contact" column="CONTACT"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="deliverId" column="DELIVERID"/>
+        <result property="deliverPrice" column="DELIVERPRICE"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="deliverCode" column="DELIVERCODE"/>
+        <result property="deliverCompanyCode" column="DELIVER_COMPANY_CODE"/>
+        <result property="deliveryDate" column="DELIVERYDATE"/>
+        <result property="receiveDate" column="RECEIVEDATE"/>
+        <result property="groupCode" column="GROUP_CODE"/>
+        <result property="payPrice" column="PAYPRICE"/>
+        <result property="payDate" column="PAYDATE"/>
+        <result property="finishDate" column="FINISHDATE"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="remark" column="REMARK"/>
+        <result property="psDate" column="PS_DATE"/>
+        <result property="otherId" column="OTHER_ID"/>
+        <association property="member" javaType="Member"
+                     columnPrefix="M_">
+            <id property="id" column="ID"/>
+            <result property="memberName" column="MEMBER_NAME"/>
+            <result property="memberCode" column="MEMBER_CODE"/>
+            <result property="phone" column="PHONE"/>
+            <result property="email" column="EMAIL"/>
+        </association>
+        <collection property="orderDetails" ofType="OrderDetail"
+                    columnPrefix="D_">
+            <id property="id" column="ID"/>
+            <result property="seqno" column="SEQNO"/>
+            <result property="orderId" column="ORDERID"/>
+            <result property="orderCode" column="ORDERCODE"/>
+            <result property="goodsId" column="GOODSID"/>
+            <result property="goodsCode" column="GOODSCODE"/>
+            <result property="goodsName" column="GOODSNAME"/>
+            <result property="goodsSpec" column="GOODSSPEC"/>
+            <result property="goodsNum" column="GOODSNUM"/>
+            <result property="goodsPrice" column="GOODSPRICE"/>
+            <result property="goodsImage" column="GOODSIMAGE"/>
+            <result property="safePrice" column="SAFEPRICE"/>
+            <result property="addPrice" column="ADDPRICE"/>
+            <result property="sellPrice" column="SELLPRICE"/>
+            <result property="deleted" column="DELETED"/>
+            <result property="returnedNum" column="RETURNEDNUM"/>
+            <result property="goodsFrom" column="GOODS_FROM"/>
+        </collection>
+    </resultMap>
+
+    <sql id="memberDynamicFilters">
+        <if test="_member_filters != null">
+            <foreach item="filter" collection="_member_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(M.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            M.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="orderDynamicFilters">
+        <if test="_order_filters != null">
+            <foreach item="filter" collection="_order_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(O.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            O.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- 根据订单ID查询订单信息 -->
+    <select id="getOrderById" parameterType="long" resultMap="ordersRM">
+        SELECT
+        O.*, M.MEMBER_CODE M_MEMBER_CODE,
+        M.MEMBER_NAME M_MEMBER_NAME,
+        M.EMAIL M_EMAIL,
+        M.PHONE M_PHONE,
+        D.GOODSID D_GOODSID,
+        D.GOODSCODE D_GOODSCODE,
+        D.GOODSNAME D_GOODSNAME,
+        D.GOODSSPEC D_GOODSSPEC,
+        D.GOODSNUM D_GOODSNUM,
+        D.GOODSPRICE D_GOODSPRICE,
+        D.GOODSIMAGE D_GOODSIMAGE,
+        D.SAFEPRICE D_SAFEPRICE,
+        D.ADDPRICE D_ADDPRICE,
+        D.SELLPRICE D_SELLPRICE,
+        D.GOODS_FROM D_GOODS_FROM,
+        IFNULL(D.RETURNEDNUM,0) D_RETURNEDNUM
+        FROM
+        T_ORDER O
+        LEFT JOIN T_MEMBER M ON M.ID = O.MEMBERID
+        AND M.DELETED = 0
+        LEFT JOIN T_ORDER_DETAIL D ON D.ORDERID = O.ID AND D.DELETED = 0
+        <where>
+            O.DELETED = 0
+            AND O.ID=#{id}
+        </where>
+    </select>
+    <!-- 根据会员ID查询订单信息 -->
+    <select id="countOrderByMemberId" parameterType="map" resultType="int">
+        SELECT
+        COUNT(DISTINCT(O.ID))
+        FROM
+        T_ORDER O
+        LEFT JOIN T_MEMBER M ON M.ID = O.MEMBERID
+        INNER JOIN T_ORDER_DETAIL TRD ON O.ID = TRD.ORDERID AND TRD.DELETED = 0
+        AND M.DELETED = 0
+        <where>
+            O.DELETED = 0
+            AND M.ID=#{memberId}
+            <if test="status != null">
+                AND O.STATUS = #{status}
+            </if>
+            <if test="para != null">
+                AND (TRD.GOODSNAME LIKE '%'||#{para}||'%' OR O.CODE LIKE '%'||#{para}||'%')
+            </if>
+            <if test="beginDate != null">
+                AND O.CREATED_DATE <![CDATA[ >= ]]>  #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND O.CREATED_DATE <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据会员ID查询订单信息 -->
+    <select id="findOrderByMemberId" parameterType="map" resultMap="ordersRM">
+
+        SELECT TOR.*,
+        M.MEMBER_CODE M_MEMBER_CODE,
+        M.MEMBER_NAME M_MEMBER_NAME,
+        M.EMAIL M_EMAIL,
+        M.PHONE M_PHONE,
+        D.GOODSID D_GOODSID,
+        D.GOODSCODE D_GOODSCODE,
+        D.GOODSNAME D_GOODSNAME,
+        D.GOODSSPEC D_GOODSSPEC,
+        D.GOODSNUM D_GOODSNUM,
+        D.GOODSPRICE D_GOODSPRICE,
+        D.GOODSIMAGE D_GOODSIMAGE,
+        D.SAFEPRICE D_SAFEPRICE,
+        D.ADDPRICE D_ADDPRICE,
+        D.SELLPRICE D_SELLPRICE,
+        D.GOODS_FROM D_GOODS_FROM
+        FROM (
+        SELECT * FROM (
+        SELECT
+        DISTINCT(O.ID)
+        FROM
+        T_ORDER O
+        INNER JOIN T_ORDER_DETAIL TRD ON O.ID = TRD.ORDERID AND TRD.DELETED = 0
+        <where>
+            O.DELETED = 0
+            AND O.MEMBERID=#{memberId}
+            <if test="status != null">
+                AND O.STATUS = #{status}
+            </if>
+            <if test="para != null">
+                AND (TRD.GOODSNAME LIKE #{para} OR O.CODE LIKE #{para})
+            </if>
+            <if test="beginDate != null">
+                AND O.CREATED_DATE <![CDATA[ >= ]]>  #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND O.CREATED_DATE <![CDATA[ <= ]]> #{endDate}
+            </if>
+            ORDER BY CREATED_DATE DESC
+        </where>
+        <include refid="support.pf"/>
+        ) AA
+        INNER JOIN T_ORDER TOR ON TOR.ID=AA.ID
+        LEFT JOIN T_MEMBER M ON M.ID = TOR.MEMBERID
+        AND M.DELETED = 0
+        LEFT JOIN T_ORDER_DETAIL D ON D.ORDERID = AA.ID AND D.DELETED = 0
+        ORDER BY
+        CREATED_DATE DESC
+    </select>
+
+    <select id="findCountForPage" parameterType="map" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        (
+        SELECT
+        O.*, M.MEMBER_CODE M_MEMBER_CODE,
+        M.MEMBER_NAME M_MEMBER_NAME,
+        M.EMAIL M_EMAIL,
+        M.PHONE M_PHONE,
+        D.GOODSCODE D_GOODSCODE,
+        D.GOODSNAME D_GOODSNAME
+        FROM
+        T_ORDER O
+        LEFT JOIN T_MEMBER M ON M.ID = O.MEMBERID
+        AND M.DELETED = 0
+        LEFT JOIN T_ORDER_DETAIL D ON D.ORDERID = O.ID AND D.DELETED = 0
+
+        <where>
+            O.DELETED = 0
+            <trim suffixOverrides="AND">AND
+                <include refid="memberDynamicFilters"/>
+            </trim>
+            <if test="beginDate != null">
+                AND O.CREATED_DATE <![CDATA[ >= ]]>  #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND O.CREATED_DATE <![CDATA[ <= ]]> #{endDate}
+            </if>
+            <trim suffixOverrides="AND">
+                AND
+                <include refid="orderDynamicFilters"/>
+            </trim>
+        </where>
+        )SUB
+        <where>
+            <trim suffixOverrides="AND">
+                AND
+                <include refid="support.dynamicFilters"/>
+            </trim>
+        </where>
+    </select>
+
+    <select id="findManyForPage" parameterType="map" resultMap="ordersRM">
+
+        SELECT
+        O.*,
+        D.GOODSCODE D_GOODSCODE,
+        D.GOODSNAME D_GOODSNAME,
+        D.GOODSNUM D_GOODSNUM,
+        D.GOODSPRICE D_GOODSPRICE
+        FROM (
+        <include refid="support.ph"/>
+        SELECT *
+        FROM (
+        SELECT
+        O.*, M.MEMBER_CODE M_MEMBER_CODE,
+        M.MEMBER_NAME M_MEMBER_NAME,
+        M.EMAIL M_EMAIL,
+        M.PHONE M_PHONE
+        FROM
+        T_ORDER O
+        LEFT JOIN T_MEMBER M ON M.ID = O.MEMBERID
+        AND M.DELETED = 0
+
+        <where>
+            O.DELETED = 0
+            <trim suffixOverrides="AND">AND
+                <include refid="memberDynamicFilters"/>
+            </trim>
+            <trim suffixOverrides="AND">
+                AND
+                <include refid="orderDynamicFilters"/>
+            </trim>
+
+            <if test="beginDate != null">
+                AND O.CREATED_DATE <![CDATA[ >= ]]>  #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND O.CREATED_DATE <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </where>
+        ) o
+        <where>
+            <trim suffixOverrides="AND"> AND
+                <include refid="support.dynamicFilters"/>
+            </trim>
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+        ) O LEFT JOIN T_ORDER_DETAIL D ON D.ORDERID = O.ID AND D.DELETED = 0
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+    </select>
+
+
+    <!--查询待发货、待收货订单数 - - - - - - - - - -->
+    <select id="countStatus" parameterType="map" resultType="map">
+        SELECT
+        <if test="status1 != null">
+            IFNULL(SUM(IF(STATUS = #{status1}, 1, 0)),0) COUNT1
+        </if>
+        <if test="status2 != null">
+            ,IFNULL(SUM(IF(STATUS = #{status2}, 1, 0)),0) COUNT2
+        </if>
+        <if test="status3 != null">
+            ,IFNULL(SUM(IF(STATUS = #{status3}, 1, 0)),0) COUNT3
+        </if>
+        <if test="status4 != null">
+            ,IFNULL(SUM(IF(STATUS = #{status4}, 1, 0)),0) COUNT4
+        </if>
+        FROM
+        T_ORDER
+        WHERE
+        DELETED = 0
+        <if test="memberId != null">
+            AND MEMBERID = #{memberId}
+        </if>
+        <if test="storeId != null">
+            AND STOREID = #{storeId}
+        </if>
+    </select>
+
+    <!--查询某会员有多少商品为评价 - - - - - - - - - -->
+    <select id="countComment" parameterType="map" resultType="int">
+        SELECT
+            IFNULL(COUNT(*),0) COUNT1
+        FROM
+        T_ORDER O,T_ORDER_DETAIL OD,T_GOODS TG
+        WHERE
+        O.DELETED = 0
+        AND O.STATUS = 6
+        AND O.ID = OD.ORDERID
+        AND OD.GOODSID = TG.ID
+        AND TG.DELETED=0
+        <if test="memberId != null">
+            AND O.MEMBERID = #{memberId}
+        </if>
+        AND OD.COMMENTED IS NULL OR OD.COMMENTED = 0
+
+
+    </select>
+
+    <!--查询此订单是否属于此会员 - - - - - - - - - -->
+    <select id="isOrderInMember" parameterType="map" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM
+        T_ORDER
+        WHERE
+        DELETED = 0
+        <if test="memberId != null">
+            AND MEMBERID = #{memberId}
+        </if>
+        <if test="orderId != null">
+            AND ID = #{orderId}
+        </if>
+    </select>
+
+    <!--根据会员ID和订单组号查询所有订单的总金额（支付专属） - - - - - - - - - -->
+    <select id="countAmountPriceByPayment" parameterType="map" resultType="decimal">
+        SELECT
+        SUM(O.PRICE)
+        FROM
+        T_ORDER O
+        WHERE
+        O.DELETED = 0
+        <if test="memberId != null">
+            AND MEMBERID = #{memberId}
+        </if>
+        <if test="groupCode != null">
+            AND GROUP_CODE = #{groupCode}
+        </if>
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="status != null">
+            AND STATUS = #{status}
+        </if>
+    </select>
+
+    <!--根据订单ID更新订单状态 - - - - - - - - - -->
+    <update id="updateOrderStatusById" parameterType="map">
+        <if test="status != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{status}
+            </set>
+            WHERE ID = #{id}
+        </if>
+    </update>
+
+    <!--根据订单ID更新订单状态以及交易成功时间 - - - - - - - - - -->
+    <update id="finishOrderById" parameterType="map">
+        <if test="status != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{status},FINISHDATE = #{finishDate}
+            </set>
+            WHERE ID = #{id}
+        </if>
+    </update>
+
+    <!--根据订单ID 删除订单 - - - - - - - - - -->
+    <update id="deleteOrderById" parameterType="long">
+        UPDATE T_ORDER
+        <set>
+            DELETED = 1
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!--订单支付- - - - - - - - - -->
+    <update id="payOrderById" parameterType="map">
+        <if test="status != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{status},
+                PAYPRICE = PRICE
+                <if test="payDate != null">
+                    ,PAYDATE = #{payDate}
+                </if>
+                <if test="payment != null">
+                    ,PAYMENT = #{payment}
+                </if>
+                <if test="rate != null">
+                    ,RATE = #{rate}
+                </if>
+                <if test="bank != null">
+                    ,BANK = #{bank}
+                </if>
+            </set>
+            <if test="id != null">
+                WHERE ID = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!--订单支付- - - - - - - - - -->
+    <update id="payOrderByGroupCode" parameterType="map">
+        <if test="status != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{status},
+                PAYPRICE = PRICE
+                <if test="payDate != null">
+                    ,PAYDATE = #{payDate}
+                </if>
+                <if test="payment != null">
+                    ,PAYMENT = #{payment}
+                </if>
+                <if test="rate != null">
+                    ,RATE = #{rate}
+                </if>
+                <if test="bank != null">
+                    ,BANK = #{bank}
+                </if>
+            </set>
+            <if test="groupCode != null">
+                WHERE GROUP_CODE = #{groupCode}
+            </if>
+        </if>
+    </update>
+
+    <!--订单发货 - - - - - - - - - -->
+    <update id="deliverOrderById" parameterType="map">
+        <if test="status != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{status}
+                <if test="deliveryDate != null">
+                    ,DELIVERYDATE = #{deliveryDate}
+                </if>
+            </set>
+            <if test="id != null">
+                WHERE ID = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!--订单收货- - - - - - - - - -->
+    <update id="receiveOrderById" parameterType="map">
+        <if test="status != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{status}
+                <if test="receiveDate != null">
+                    ,RECEIVEDATE = #{receiveDate}
+                </if>
+            </set>
+            <if test="id != null">
+                WHERE ID = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!--根据订单ID更新物流单号 - - - - - - - - - -->
+    <update id="updateDeliverCodeByOrderId" parameterType="map">
+        <if test="deliverCode != null">
+            UPDATE T_ORDER
+            <set>
+                DELIVERCODE = #{deliverCode},DELIVERCOMPANY = #{deliverCompany},DELIVER_COMPANY_CODE = #{deliverCompanyCode}
+            </set>
+            WHERE ID = #{id}
+        </if>
+    </update>
+
+    <!--自动更新所有确认收货且日期大于指定天数的订单为交易成功，并更新订单完成时间为收货时间+指定天数- - - - - - - - - -->
+    <select id="getOrderIdsByStatusAndDay" parameterType="map" resultType="long">
+        <if test="status != null">
+            SELECT ID FROM T_ORDER
+            WHERE
+            STATUS = #{status}
+            AND TIMESTAMPDIFF(DAY, RECEIVEDATE, SYSDATE()) > #{day}
+        </if>
+    </select>
+
+    <!--自动更新所有确认收货且日期大于指定天数的订单为交易成功，并更新订单完成时间为收货时间+指定天数- - - - - - - - - -->
+    <update id="autoUpdateOrderToFinish" parameterType="map">
+        <if test="oldStatus != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{newStatus},
+                FINISHDATE = DATE_ADD(RECEIVEDATE, INTERVAL #{day} DAY)
+            </set>
+            WHERE
+            STATUS = #{oldStatus}
+            AND TIMESTAMPDIFF(DAY, RECEIVEDATE, SYSDATE()) > #{day}
+        </if>
+    </update>
+
+    <!--自动更新所有待支付且日期大于指定天数的订单为交易取消- - - - - - - - - -->
+    <update id="autoUpdateOrderToCancle" parameterType="map">
+        <if test="oldStatus != null">
+            UPDATE T_ORDER
+            <set>
+                STATUS = #{newStatus}
+            </set>
+            WHERE
+            STATUS = #{oldStatus}
+            AND TIMESTAMPDIFF(DAY, RECEIVEDATE, SYSDATE()) > #{day}
+        </if>
+    </update>
+
+    <!--新增订单基本信息 -->
+    <insert id="save" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+     INSERT INTO T_ORDER (
+	              ID,
+	              CODE,
+	              STATUS,
+	              PRICE,
+	              PAYMENT,
+	              BANK,
+	              SOURCE,
+	              STOREID,
+	              STORENAME,
+	              MEMBERID,
+	              MEMBERNAME,
+	              RECEIVER,
+	              CONTACT,
+	              ADDRESS,
+	              CREATED_DATE,
+	              CREATED_BY,
+	              LAST_MODIFIED_DATE,
+	              LAST_MODIFIED_BY,
+	              DELETED,
+	              DELIVERID,
+	              DELIVERPRICE,
+	              DELIVERCODE,
+	              PAYDATE,
+	              PAYPRICE,
+	              DELIVERYDATE,
+	              RECEIVEDATE,
+	              GROUP_CODE,
+	              COUPON_ID,
+	              COUPON_NAME,
+	              DISCOUNT,
+	              REMARK,
+	              PS_DATE)
+      VALUES
+	            (
+                    #{id},
+                    #{code},
+                    #{status},
+                    #{price},
+                    #{payment},
+                    #{bank},
+                    #{source},
+                    #{storeId},
+                    #{storeName},
+                    #{memberId},
+                    #{memberName},
+                    #{receiver},
+                    #{contact},
+                    #{address},
+                    #{createdDate},
+                    #{createdBy},
+                    #{lastModifiedDate},
+                    #{lastModifiedBy},
+                    #{deleted},
+                    #{deliverId},
+                    #{deliverPrice},
+                    #{deliverCode},
+                    #{payDate},
+                    #{payPrice},
+                    #{deliveryDate},
+                    #{receiveDate},
+                    #{groupCode},
+                    #{couponId},
+                    #{couponName},
+                    #{discount},
+                    #{remark},
+                    #{psDate}
+                    )
+    </insert>
+</mapper>

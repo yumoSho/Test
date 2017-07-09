@@ -1,0 +1,42 @@
+<%-- 后台管理顶部菜单 --%>
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@include file="/WEB-INF/view/include/taglibs.jspf" %>
+<link rel="shortcut icon" href="/WEB-INF/view/favicon.ico"/>
+<script>
+    $(function(){
+        var h = $(document).height();
+        $(".pop-mask").height(h);
+    });
+</script>
+<!-- Begin 弹出框遮罩层 -->
+<div class="pop-mask" style="position: fixed;"></div>
+<!-- //End 弹出框遮罩层 -->
+<!-- Begin 顶部 -->
+<div class="top">
+     <%@include file="/WEB-INF/view/include/admin/anyforweb.jspf"%>
+    <div class="fl top-m">
+        <!-- Begin 菜单栏 -->
+        <div class="menuBar" id="menuBar">
+            <div class="menuBar_slides">
+                <ul class="JQ-slide-content">
+                    <c:forEach items="${modules}" var="module">
+                        <% int i=0;%>
+                        <c:forEach items="${module.pages}" var="pagez">
+                            <c:if test="${fn:contains(pagez.url,'index')}">
+                                <% if(i==0){%>
+			                        <li>
+			                            <a href="${ctx}/${fn:startsWith(pagez.url, '/') ? fn:substring(pagez.url, 1, fn:length(pagez.url)) : pageZ.url}" title="${pagez.name}">${module.name}</a>
+			                        </li>
+                              	<%} i=1;%>
+                            </c:if>
+                         </c:forEach>
+                    </c:forEach>
+                </ul>
+            </div>
+        </div>
+        <!-- //End 菜单栏 -->
+    </div>
+     <%@include file="account.jspf"%>
+</div>
+
+<!-- //End 顶部 -->

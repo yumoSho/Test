@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <typeHandlers>
+        <!--
+            对于 enum, mybatis 提供了以下两种转换器, 默认对所有都使用 EnumTypeHandler
+            org.apache.ibatis.type.EnumTypeHandler
+            org.apache.ibatis.type.EnumOrdinalTypeHandler
+            以下为全局配置, 也可以在 resultMap 中指定 及 #{property,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+            see http://mybatis.github.io/mybatis-3/zh/configuration.html#typeHandlers
+        -->
+    </typeHandlers>
+</configuration>

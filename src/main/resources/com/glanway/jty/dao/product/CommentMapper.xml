@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.product.CommentDao">
+    <resultMap id="commentRM" type="Comment">
+        <id column="ID" property="id"/>
+        <result column="GRADE" property="grade"/>
+        <result column="CONTENT" property="content"/>
+        <result column="PHOTOS" property="photos"/>
+        <result column="COMMENT_TIME" property="commentTime"/>
+        <result column="REPLY" property="reply"/>
+        <result column="REPLY_TIME" property="replyTime"/>
+        <result column="VISIBLE" property="visible"/>
+        <result column="CREATED_DATE" property="createdDate"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+        <result column="LAST_MODIFIED_BY" property="lastModifiedBy"/>
+        <association property="orderDetail" javaType="orderDetail" columnPrefix="D_">
+            <id column="ID" property="id"/>
+            <result column="GOODS_NAME" property="goodsName"/>
+            <result column="GOODS_ID" property="goodsId"/>
+        </association>
+        <association property="goods" javaType="Goods" columnPrefix="G_">
+            <id column="ID" property="id"/>
+            <result column="title" property="title"/>
+            <result column="IMAGE" property="image"/>
+            <result column="PRICE" property="price"/>
+            <association property="product" javaType="Product" >
+	            <id column="P_ID" property="id"/>
+        	</association>
+        </association>
+        <association property="member" javaType="Member" columnPrefix="M_">
+            <id column="ID" property="id"/>
+            <result column="MEMBER_NAME" property="memberName"/>
+        </association>
+
+    </resultMap>
+	<sql id="baseQuery">
+        SELECT * FROM (SELECT
+          TC.*,
+          TM.ID           M_ID,
+          TM.MEMBER_NAME   M_MEMBER_NAME,
+          TG.ID             G_ID,
+          TG.TITLE          G_TITLE,
+          TG.IMAGE          G_IMAGE,
+          TG.PRICE          G_PRICE,
+          TP.ID  			G_P_ID
+        FROM
+        T_COMMENT TC
+        INNER JOIN T_MEMBER TM ON TM.ID=TC.MEMBER_ID 
+        INNER  JOIN T_GOODS TG ON TC.GOODS_ID = TG.ID 
+        INNER JOIN T_PRODUCT TP ON TP.ID=TG.PRODUCT_ID
+      ) A
+    </sql>
+	<sql id="baseFilter">
+        <if test="orderDetail != null and orderDetail.id != null">
+            AND ORDER_ITEM_ID = #{orderDetail.id}
+        </if>
+        <if test="member != null and member.id != null">
+            AND MEMBER_ID = #{member.id}
+        </if>
+        <if test="grade != null">
+            AND GRADE = #{grade}
+        </if>
+        <if test="goods != null and goods.id != null ">
+            AND GOODS_ID = #{goods.id}
+        </if>
+        <if test="content != null">
+            AND CONTENT = #{content}
+        </if>
+        <if test="photos != null">
+            AND PHOTOS = #{photos}
+        </if>
+        <if test="commentTime != null">
+            AND COMMENT_TIME = #{commentTime}
+        </if>
+        <if test="reply != null">
+            AND REPLY = #{reply}
+        </if>
+        <if test="replyTime != null">
+            AND REPLY_TIME = #{replyTime}
+        </if>
+        <if test="visible != null">
+            AND VISIBLE = #{visible}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        AND DELETED = 0
+    </sql>
+	
+	<select id="findMany" parameterType="map" resultMap="commentRM">
+    	<include refid="support.ph"/>
+            <include refid="baseQuery"/>
+            <where>
+               <trim prefixOverrides="AND">
+                    <include refid="support.dynamicFilters"/>
+                    <include refid="baseFilter"/>
+               </trim>
+            </where>
+            ORDER BY
+               <trim prefixOverrides=",">
+                   <include refid="support.dynamicSort"/>, COMMENT_TIME DESC
+               </trim>
+        <include refid="support.pf"/>
+    </select>
+    
+    <select id="count" parameterType="map" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM (
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>  AND DELETED = 0
+        </where>
+        ) R
+    </select>
+    
+    <select id="getCommentById" parameterType="long" resultMap="commentRM">
+       <include refid="baseQuery" />
+        WHERE ID = #{ID} AND DELETED = 0
+    </select>
+
+    <insert id="save" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_COMMENT (
+            ID,
+            ORDER_ITEM_ID,
+            MEMBER_ID,
+            GRADE,
+            CONTENT,
+            PHOTOS,
+            COMMENT_TIME,
+            REPLY,
+            REPLY_TIME,
+            VISIBLE,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            DELETED,
+            GOODS_ID
+        ) VALUES (
+            #{id}
+            ,#{orderDetail.id}
+            ,#{member.id}
+            ,#{grade}
+            ,#{content}
+            ,#{photos}
+            ,#{commentTime}
+            ,#{reply}
+            ,#{replyTime}
+            ,#{visible}
+            ,#{createdBy}
+            ,#{createdDate}
+            ,#{lastModifiedBy}
+            ,#{lastModifiedDate}
+            ,#{deleted}
+            ,#{goods.id}
+        )
+    </insert>
+
+    <select id="find" parameterType="long" resultType="comment">
+        SELECT * FROM T_COMMENT WHERE DELETED=0 AND ID=#{id}
+    </select>
+    <update id="delete" parameterType="long">
+        UPDATE T_COMMENT SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <update id="update" parameterType="Comment">
+    	UPDATE T_COMMENT SET 
+    	<trim prefixOverrides=",">
+    		<if test="orderDetail != null and orderDetail.id != null">
+	            , ORDER_ITEM_ID = #{orderDetail.id}
+	        </if>
+	        <if test="member != null and member.id != null">
+	            , MEMBER_ID = #{member.id}
+	        </if>
+            <if test="goods != null and goods.id != null">
+                , GOODS_ID = #{goods.id}
+            </if>
+	        <if test="grade != null">
+	            , GRADE = #{grade}
+	        </if>
+	        <if test="content != null">
+	            , CONTENT = #{content}
+	        </if>
+	        <if test="photos != null">
+	            , PHOTOS = #{photos}
+	        </if>
+	        <if test="commentTime != null">
+	            , COMMENT_TIME = #{commentTime}
+	        </if>
+	        <if test="reply != null">
+	            , REPLY = #{reply}
+	        </if>
+	        <if test="replyTime != null">
+	            , REPLY_TIME = #{replyTime}
+	        </if>
+	        <if test="visible != null">
+	            , VISIBLE = #{visible}
+	        </if>
+	        <if test="createdBy != null">
+	            , CREATED_BY = #{createdBy}
+	        </if>
+	        <if test="createdDate != null">
+	            , CREATED_DATE = #{createdDate}
+	        </if>
+	        <if test="lastModifiedBy != null">
+	            , LAST_MODIFIED_BY = #{lastModifiedBy}
+	        </if>
+	        <if test="lastModifiedDate != null">
+	            , LAST_MODIFIED_DATE = #{lastModifiedDate}
+	        </if>
+    	</trim>
+    	WHERE ID = #{id}
+    </update>
+    
+</mapper>

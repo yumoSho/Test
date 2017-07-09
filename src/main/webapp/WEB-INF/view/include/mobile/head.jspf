@@ -1,0 +1,59 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<div class="head">
+<c:if test="${!notShowTop}">
+    <div class="headTop samePadding clearfix">
+        <a href="javascript:void(0);" class="menuBtn fleft">
+            <img src="${ctx}/images/mobile/icon1.png" />
+            <!--上海市-->
+        </a>
+        <div class="headSearch fleft">
+            <a href="${ctx}/mobile/input"><img src="${ctx}/images/mobile/icon2.png" class="searchBtn" /></a>
+            <input type="text" placeholder="请输入关键字进行搜索" class="searchInput" />
+        </div>
+        <a href="${ctx}/cart" class="headCart fright"><img src="${ctx}/images/mobile/icon3.png" /></a>
+    </div>
+    </c:if>
+
+    <%--购物车--%>
+    <c:if test="${isCart}">
+        <div class="pageTitle writeWrap samePadding clearfix headTop">
+            <a href="javascript:history.go(-1);" class="back fleft"><img src="${ctx}/images/mobile/icon14.png" /></a>
+            <span>购物车(<span class="cartNum" id="cartNum">0</span>)</span>
+            <a href="javascript:void(0);" class="editCart fright">编辑</a>
+        </div>
+    </c:if>
+    <c:if test="${not empty common}">
+        <div class="pageTitle writeWrap samePadding clearfix headTop">
+            <a href="
+                <c:choose>
+                    <c:when test="${not empty href}">${ctx}/${href}</c:when>
+                    <c:otherwise>javascript:history.back();</c:otherwise>
+                </c:choose>
+
+            " class="back fleft"><img src="${ctx}/images/mobile/icon14.png" /></a>
+            <span>${common}</span>
+        </div>
+    </c:if>
+</div><!-- //head -->
+
+
+<script>
+    /*计算购物车数量*/
+    function searchGoodSCart(){
+        var loginFlag = "${member != null}";
+        var URI = '/cart/findCount';
+        if(loginFlag == 'false'){
+            URI = '/cookieCart/findCount';
+        }
+        $.ajax({
+            url: contextPath + URI,
+            type: 'post',
+            async: false,
+            dataType: 'json',
+            success: function (message) {
+                var totalCount = message.data;
+                $("#cartNum").text(HgUtil.numberFormat(totalCount,0));
+            }
+        });
+    }
+</script>

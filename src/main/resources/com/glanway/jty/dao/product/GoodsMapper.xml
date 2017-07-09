@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-29 07:53:06
+ Last_modified_date on 2016-7-27 14:09 LiuJc
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.GoodsDao">
+
+    <resultMap id="goodsAndSpecValue" type="Goods">
+    	<id property="id" column="ID"/>
+        <result property="title" column="TITLE" />
+        <result property="sn" column="SN" />
+        <result property="intro" column="INTRO" />
+        <result property="stock" column="STOCK" />
+        <result property="alertStock" column="ALERT_STOCK" />
+        <result column="IMAGE" property="image"/>
+        <result column="SV_STR" property="svStr"/>
+        <result column="PRICE" property="price"/>
+        <result property="tempOrderDetailId" column="P_S_ID"/>
+        <result property="isDefault" column="IS_DEFAULT"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <association property="product" javaType="Product" columnPrefix="P_" >
+            <id property="id" column="ID"/>
+            <result column="TITLE" property="title"/>
+            <result column="INTRO" property="intro"/>
+            <result column="SN" property="sn"/>
+            <result column="PRICE" property="price"/>
+            <result column="WEIGHT" property="weight"/>
+            <result column="REAL_SALES" property="realSales"/>
+            <result column="SALES" property="sales"/>
+            <result column="PROMOTIONAL_INFO" property="promotionalInfo"/>
+            <result column="SERVICE" property="service"/>
+            <result column="TIP" property="tip"/>
+            <result column="IMAGE" property="image"/>
+            <result column="IS_PUTAWAY" property="isPutaway"/>
+            <result column="REGISTER_DATE" property="registerDate"/>
+            <result column="SALES_OFF_DATE" property="salesOffDate"/>
+            <result column="DELETED" property="deleted"/>
+            <result column="ENABLE_SPECS" property="enableSpecs"/>
+            <result column="STOCK" property="stock"/>
+            <result column="ALERT_STOCK" property="alertStock"/>
+            <result column="DETAIL" property="detail"/>
+            <result column="MOBILE_DETAIL" property="mobileDetail"/>
+            <result column="SEO_TITLE" property="seoTitle"/>
+            <result column="SEO_KEYWORD" property="seoKeyword"/>
+            <result column="SEO_DESCRIPTION" property="seoDescription"/>
+            <association property="category" javaType="Category">
+                <id property="id" column="C_ID"/>
+                <result property="name" column="C_NAME"/>
+                <result property="path" column="C_PATH"/>
+            </association>
+            <association property="label" javaType="Label">
+                <id property="id" column="LID"/>
+                <result property="labelName" column="LABEL_NAME"/>
+                <result property="labelPath" column="LABEL_PATH"/>
+            </association>
+            <association property="brand" javaType="Brand">
+                <id property="id" column="B_ID"/>
+                <result property="name" column="B_NAME"/>
+            </association>
+            <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+                <id property="id" column="ID"/>
+                <result property="path" column="PATH"/>
+            </collection>
+            <collection property="attributeValues" ofType="AttributeValue">
+                <id property="id" column="AV_ID"/>
+                <result property="value" column="AV_VALUE"/>
+                <association property="attribute" javaType="Attribute">
+                    <id property="id" column="A_ID"/>
+                    <result property="name" column="A_NAME"/>
+                </association>
+            </collection>
+            <collection property="parameterValues" ofType="ParameterValue">
+                <id property="id" column="PV_ID"/>
+                <result property="value" column="PV_VALUE"/>
+                <association property="parameter" javaType="Parameter">
+                    <id property="id" column="PP_ID"/>
+                    <result property="name" column="PP_NAME"/>
+                    <result property="sort" column="PP_SORT"/>
+                </association>
+            </collection>
+            <collection property="areas" ofType="HatProvince">
+                <id property="id" column="H_ID"/>
+                <result property="provinceCode" column="PROVINCE_CODE"/>
+                <result property="provinceName" column="PROVINCE_NAME"/>
+            </collection>
+        </association>
+        <collection property="specValues" ofType="SpecValue">
+        	<id property="id" column="SV_ID"/>
+            <result property="name" column="SV_NAME" />
+            <association property="spec" javaType="Spec">
+                <id property="id" column="S_ID" />
+                <result property="name" column="S_NAME" />
+            </association>
+        </collection>
+        <collection property="productImgs" ofType="ProductImg">
+            <id property="id" column="IMG_ID" />
+            <result property="path" column="IMG_PATH" />
+            <result property="sort" column="IMG_SORT" />
+        </collection>
+    </resultMap>
+    <!--baseCols -->
+    <sql id="baseCols">
+            ID,
+            TITLE,
+            INTRO,
+            SN,
+            PRICE,
+            STOCK,
+            ALERT_STOCKM
+            IMAGE,
+            SV_STR,
+            PRODUCT_ID,
+            DELETED,
+            IS_DEFAULT,
+            DELETED,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE
+    </sql>
+    <!--baseQuery-->
+    <sql id="baseQuery">
+        SELECT
+            ID,
+            TITLE,
+            INTRO,
+            SN,
+            PRICE,
+            STOCK,
+            ALERT_STOCK,
+            IMAGE,
+            SV_STR,
+            PRODUCT_ID,
+            DELETED,
+            IS_DEFAULT,
+            CREATED_BY,
+            CREATED_DATE,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE
+        FROM
+            T_GOODS
+    </sql>
+    <!--baseFilters-->
+    <sql id="baseFilter">
+        <if test="product != null and product.id != null">
+            AND PRODUCT_ID = #{productId}
+        </if>
+        <if test="title != null">
+            AND TITLE = #{title}
+        </if>
+        <if test="intro != null">
+            AND INTRO = #{intro}
+        </if>
+        <if test="price != null">
+            AND PRICE = #{price}
+        </if>
+        <if test="stock != null">
+            AND STOCK = #{stock}
+        </if>
+        <if test="alertStock != null">
+            AND ALERT_STOCK = #{ALERT_STOCK}
+        </if>
+        <if test="image != null">
+            AND IMAGE = #{image}
+        </if>
+        <if test="svStr != null">
+            AND SV_STR = #{svStr}
+        </if>
+        <if test="sn != null">
+            AND SN = #{sn}
+        </if>
+        <if test="isDefault != null">
+            AND IS_DEFAULT = #{isDefault}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        AND DELETED = 0
+        <!-- more -->
+    </sql>
+    <!--findAll-->
+    <select id="findAll" resultMap="goodsAndSpecValue">
+        SELECT
+            G.ID, G.TITLE, G.ALIAS, G.CODE, G.PROMOTE_PRICE, G.MARKET_PRICE, G.STOCK, G.SALES, G.IMAGE, G.TAOBAO_ITEM_ID,
+            P.ID P_ID, P.TITLE P_TITLE, P.SN P_SN, P.REGISTER_DATE P_REGISTER_DATE, P.CREATED_DATE P_CREATED_DATE, P.LAST_MODIFIED_DATE P_LAST_MODIFIED_DATE,
+            C.ID P_C_ID, C.NAME P_C_NAME,
+            B.ID P_B_ID, B.NAME P_B_NAME,
+            AV.ID P_AV_ID, AV.FIRST_VALUE P_AV_FIRST_VALUE, AV.SECOND_VALUE P_AV_SECOND_VALUE,
+            ATT.ID P_AV_ATT_ID, ATT.NAME P_AV_ATT_NAME, ATT.ALIAS P_AV_ATT_ALIAS,
+            SV.ID SV_ID, SV.NAME SV_NAME, SV.ALIAS SV_ALIAS,
+            SP.ID SV_SP_ID, SP.NAME SV_SP_NAME, SP.ALIAS SV_SP_ALIAS
+        FROM T_GOODS G
+        INNER JOIN T_PRODUCT P ON P.DELETED = 0 AND G.PRODUCT_ID = P.ID AND P.STOCK > 0 AND P.IS_PUTAWAY = 1
+        INNER JOIN T_CATEGORY C ON C.DELETED = 0 AND P.CATEGORY_ID = C.ID AND C.IS_SHOW = 1
+        LEFT JOIN T_BRAND B ON B.DELETED = 0 AND P.BRAND_ID = B.ID AND B.IS_MANAGE = 1
+        LEFT JOIN T_PRODUCT_ATTRIBUTE_VALUE PAV ON PAV.DELETED = 0 AND PAV.PRODUCT_ID = P.ID
+        LEFT JOIN T_ATTRIBUTE_VALUE AV ON AV.DELETED = 0 AND PAV.ATTRIBUTE_VALUE_ID = AV.ID
+        LEFT JOIN T_ATTRIBUTE ATT ON ATT.DELETED = 0 AND AV.ATTRIBUTE_ID = ATT.ID AND ATT.IS_SHOW = 1
+        LEFT JOIN T_PRODUCT_SPEC_VALUE PSV ON PSV.DELETED = 0 AND PSV.GOODS_ID = G.ID
+        LEFT JOIN T_SPEC_VALUE SV ON PSV.DELETED = 0 AND PSV.SPEC_VALUE_ID = SV.ID
+        LEFT JOIN T_SPEC SP ON SP.DELETED = 0 AND SV.SPEC_ID = SP.ID
+        WHERE G.DELETED = 0 AND G.STOCK > 0
+    </select>
+    <!-- retrieve by id -->
+    <select id="find" parameterType="string" resultType="Goods">
+        <include refid="baseQuery"/>
+        WHERE ID = #{id} AND DELETED = 0
+    </select>
+    <!-- retrieve a unique entity -->
+    <select id="findOne" parameterType="map" resultType="Goods">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+    <!-- retrieve many entities -->
+    <select id="findMany" parameterType="map" resultMap="goodsAndSpecValue">
+        SELECT
+        R.*,
+        SV.ID     SV_ID,
+        SV.NAME   SV_NAME,
+        SPEC.ID   S_ID,
+        SPEC.NAME S_NAME,
+        PI.ID     IMG_ID,
+        PI.PATH   IMG_PATH,
+        PI.SORT   IMG_SORT,
+        I.ID 	  P_I_ID,
+        I.PATH    P_I_PATH,
+        PRO.ID                P_ID,
+        PRO.PRICE             P_PRICE,
+        PRO.WEIGHT            P_WEIGHT,
+        PRO.IS_PUTAWAY        P_IS_PUTAWAY,
+        PRO.SALES             P_SALES,
+        PRO.PROMOTIONAL_INFO  P_PROMOTIONAL_INFO,
+        PRO.SERVICE           P_SERVICE,
+        PRO.TIP               P_TIP,
+        TC.ID                 P_C_ID,
+        TC.NAME               P_C_NAME,
+        LL.ID                 P_LID,
+        LL.LABEL_PATH         P_LABEL_PATH,
+        HP.ID                 P_H_ID,
+        HP.PROVINCE_CODE,
+        HP.PROVINCE_NAME
+        FROM (
+        <include refid="support.ph"/>
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>, CREATED_DATE
+        </trim>
+        <include refid="support.pf" />
+        ) R
+        LEFT JOIN T_GOODS_SPEC_VALUE PSV ON R.ID = PSV.GOODS_ID AND PSV.DELETED = 0
+        LEFT JOIN T_SPEC_VALUE SV ON PSV.SPEC_VALUE_ID = SV.ID AND SV.DELETED = 0
+        LEFT JOIN T_SPEC SPEC ON SV.SPEC_ID = SPEC.ID AND SPEC.DELETED = 0
+        INNER JOIN T_PRODUCT PRO ON PRO.DELETED = 0
+        AND R.PRODUCT_ID = PRO.ID
+        LEFT JOIN T_CATEGORY TC ON PRO.CATEGORY_ID = TC.ID AND TC.DELETED=0
+        LEFT JOIN (
+        SELECT ID, PRODUCT_ID, PATH, SORT
+        FROM T_PRODUCT_IMG
+        WHERE DELETED = 0
+        ORDER BY SORT
+        ) I ON I.PRODUCT_ID = R.PRODUCT_ID
+        LEFT JOIN (
+        SELECT ID, GOODS_ID, PATH, SORT
+        FROM T_PRODUCT_IMG
+        WHERE DELETED = 0
+        ORDER BY SORT
+        ) PI ON PI.GOODS_ID = R.ID
+        LEFT JOIN T_LABEL LL ON PRO.LABEL_ID =LL.ID AND LL.DELETED=0
+        LEFT JOIN T_PROVINCE_PRODUCT TPR ON PRO.ID = TPR.PRODUCT_ID
+        LEFT JOIN HAT_PROVINCE HP ON TPR.PROVINCE_ID = HP.ID
+        ORDER BY R.LAST_MODIFIED_DATE, R.ID, SV.SORT, SV.ID, PI.SORT
+    </select>
+
+    <!-- retrieve many entities -->
+    <select id="findGoodsDetail" parameterType="map" resultMap="goodsAndSpecValue">
+        SELECT
+        R.*,
+        SV.ID     SV_ID,
+        SV.NAME   SV_NAME,
+        SPEC.ID   S_ID,
+        SPEC.NAME           S_NAME,
+        PI.ID               IMG_ID,
+        PI.PATH             IMG_PATH,
+        PI.SORT             IMG_SORT,
+        I.ID 	            P_I_ID,
+        I.PATH              P_I_PATH,
+        P.WEIGHT            P_WEIGHT,
+        P.ID                P_ID,
+        P.PRICE             P_PRICE,
+        PV.ID               P_PV_ID,
+        PV.VALUE            P_PV_VALUE,
+        PP.ID               P_PP_ID,
+        PP.NAME             P_PP_NAME,
+        AB.ID               P_B_ID,
+        AB.NAME             P_B_NAME,
+        AV.ID               P_AV_ID,
+        AV.VALUE            P_AV_VALUE,
+        A.ID                P_A_ID,
+        A.NAME              P_A_NAME,
+        C.ID                P_C_ID,
+        C.NAME              P_C_NAME,
+        C.PATH              P_C_PATH,
+        P.SEO_TITLE         P_SEO_TITLE,
+        P.SEO_KEYWORD       P_SEO_KEYWORD,
+        P.SEO_DESCRIPTION   P_SEO_DESCRIPTION,
+        P.DETAIL            P_DETAIL,
+        P.ENABLE_SPECS      P_ENABLE_SPECS,
+        P.MOBILE_DETAIL     P_MOBILE_DETAIL,
+        P.WEIGHT            P_WEIGHT,
+        P.IS_PUTAWAY        P_IS_PUTAWAY,
+        P.SALES             P_SALES,
+        P.PROMOTIONAL_INFO  P_PROMOTIONAL_INFO,
+        P.SERVICE           P_SERVICE,
+        P.TIP               P_TIP,
+        P.INTRO           P_INTRO,
+        LL.ID               P_LID,
+        LL.LABEL_PATH,
+        HP.ID                 P_H_ID,
+        HP.PROVINCE_CODE     P_PROVINCE_CODE,
+        HP.PROVINCE_NAME      P_PROVINCE_NAME
+        FROM (
+        <include refid="support.ph"/>
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>, CREATED_DATE
+        </trim>
+        <include refid="support.pf" />
+        ) R
+        LEFT JOIN T_GOODS_SPEC_VALUE PSV ON R.ID = PSV.GOODS_ID AND PSV.DELETED = 0
+        LEFT JOIN T_SPEC_VALUE SV ON PSV.SPEC_VALUE_ID = SV.ID AND SV.DELETED = 0
+        LEFT JOIN T_SPEC SPEC ON SV.SPEC_ID = SPEC.ID AND SPEC.DELETED = 0
+        INNER JOIN T_PRODUCT P ON P.DELETED = 0
+        AND R.PRODUCT_ID = P.ID
+        LEFT JOIN T_LABEL LL ON P.LABEL_ID = LL.ID AND LL.DELETED=0
+        LEFT JOIN (
+        SELECT ID, PRODUCT_ID, PATH, SORT
+        FROM T_PRODUCT_IMG
+        WHERE DELETED = 0
+        ORDER BY SORT
+        ) I ON I.PRODUCT_ID = R.PRODUCT_ID
+        LEFT JOIN (
+        SELECT ID, GOODS_ID, PATH, SORT
+        FROM T_PRODUCT_IMG
+        WHERE DELETED = 0
+        ORDER BY SORT
+        ) PI ON PI.GOODS_ID = R.ID
+        LEFT JOIN T_CATEGORY C ON C.ID = P.CATEGORY_ID AND C.DELETED = 0
+        LEFT JOIN T_MODEL M ON C.MODEL_ID = M.ID AND M.DELETED = 0
+        LEFT JOIN T_PRODUCT_ATTRIBUTE_VALUE PAV ON PAV.PRODUCT_ID = P.ID AND PAV.DELETED = 0
+        LEFT JOIN T_ATTRIBUTE_VALUE AV ON PAV.ATTRIBUTE_VALUE_ID = AV.ID AND AV.DELETED = 0 AND EXISTS( select 1 from T_ATTRIBUTE where ID=AV.ATTRIBUTE_ID and DELETED=0)
+        LEFT JOIN T_ATTRIBUTE A ON AV.ATTRIBUTE_ID = A.ID AND A.DELETED = 0
+        LEFT JOIN T_PARAMETER_VALUE PV ON PV.PRODUCT_ID = P.ID AND PV.DELETED = 0
+        LEFT JOIN T_BRAND AB ON P.BRAND_ID = AB.ID AND AB.DELETED = 0
+        LEFT JOIN T_PARAMETER PP ON PP.ID = PV.PARAMETER_ID AND PP.DELETED = 0
+        LEFT JOIN T_PROVINCE_PRODUCT TPR ON P.ID = TPR.PRODUCT_ID
+        LEFT JOIN HAT_PROVINCE HP ON TPR.PROVINCE_ID = HP.ID
+        ORDER BY PI.SORT
+    </select>
+
+    <select id="selectGoodsByCategoryId" parameterType="map" resultMap="goodsAndSpecValue">
+        SELECT
+          TG.ID,
+          TG.INTRO,
+          TG.IMAGE,
+          TG.TITLE,
+          TG.PRICE,
+          TP.ID     P_ID,
+          TP.REAL_SALES   P_REAL_SALES,
+          TP.SALES    P_SALES,
+          TP.LABEL_ID P_LID
+        FROM T_GOODS TG
+        INNER JOIN T_PRODUCT TP ON TP.CATEGORY_ID= #{categoryId} AND TP.DELETED=0 AND TG.PRODUCT_ID = TP.ID AND TG.DELETED=0 AND TP.IS_PUTAWAY=1
+        <if test="provinceId != null">
+        INNER JOIN T_PROVINCE_PRODUCT TPP ON TP.ID= TPP.PRODUCT_ID  AND TPP.PROVINCE_ID=#{provinceId}
+        </if>
+        ORDER BY TP.SALES DESC
+        LIMIT 0,#{maxResult}
+    </select>
+
+
+    <!-- count -->
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_GOODS
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+    
+    <!-- 计算评分-->
+    <select id="calcsCore" parameterType="long" resultType="double">
+        select IFNULL(IFNULL(SUM(C.GRADE),0)/COUNT(1),0) from T_COMMENT C where C.GOODS_ID=#{id}
+    </select>
+
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+    <insert id="save" parameterType="Goods" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_GOODS (
+        ID,
+        TITLE,
+        INTRO,
+        SN,
+        PRICE,
+        STOCK,
+        ALERT_STOCK,
+        IMAGE,
+        SV_STR,
+        PRODUCT_ID,
+        DELETED,
+        IS_DEFAULT,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE
+        )
+        VALUES (
+        <!-- self columns -->
+        #{id},
+        #{title},
+        #{intro},
+        #{sn},
+        #{price},
+        #{stock},
+        #{alertStock},
+        #{image},
+        #{svStr},
+        #{product.id},
+        #{deleted},
+        #{isDefault},
+        #{createdBy},
+        #{createdDate},
+        #{lastModifiedBy},
+        #{lastModifiedDate}
+        )
+    </insert>
+    <!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+    <update id="update" parameterType="Goods">
+        UPDATE T_GOODS
+        <set>
+            <if test="title != null">
+                TITLE = #{title},
+            </if>
+            <if test="intro != null">
+                INTRO = #{intro},
+            </if>
+            <if test="sn != null">
+                SN = #{sn},
+            </if>
+            <if test="price != null">
+                PRICE = #{price},
+            </if>
+            <if test="stock != null">
+                STOCK = #{stock},
+            </if>
+            <if test="alertStock != null">
+                ALERT_STOCK = #{alertStock},
+            </if>
+            <if test="image != null">
+                IMAGE = #{image},
+            </if>
+            <if test="svStr != null">
+                SV_STR = #{svStr},
+            </if>
+            <if test="product != null and product.id != null">
+                PRODUCT_ID = #{product.id},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="isDefault != null">
+                IS_DEFAULT = #{isDefault},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+
+    <update id="delete" parameterType="Goods">
+    <!-- DELETE FROM TB_GOODS WHERE ID = #{id} -->
+        UPDATE T_GOODS SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <update id="deleteGoodsSpecValues" >
+        UPDATE T_GOODS_SPEC_VALUE SET DELETED = 1 WHERE GOODS_ID = #{id}
+    </update>
+
+    <update id="deleteProductGoods" >
+        UPDATE T_GOODS SET DELETED = 1 WHERE PRODUCT_ID = #{pid}
+    </update>
+
+    <select id="getStock" parameterType="long" resultType="int">
+    SELECT TG.STOCK FROM T_GOODS TG
+    INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID = TP.ID AND TP.DELETED=0
+    WHERE TG.ID=#{0} AND TG.DELETED=0
+    </select>
+
+    <update id="updateStock" parameterType="map">
+        UPDATE T_GOODS SET STOCK=STOCK${op}#{num}  WHERE ID=${goodsId}
+    </update>
+
+    <update id="updateSaleNum" parameterType="map">
+        UPDATE T_PRODUCT SET SALES=SALES${op}#{num},LAST_MODIFIED_DATE=NOW()  WHERE ID=(SELECT PRODUCT_ID FROM T_GOODS WHERE ID=#{goodsId});
+    </update>
+
+    <update id="updateRealSaleNum" parameterType="map">
+        UPDATE T_PRODUCT SET REAL_SALES=REAL_SALES${op}#{num} WHERE ID=(SELECT PRODUCT_ID FROM T_GOODS WHERE ID=#{goodsId});
+    </update>
+
+    <!--获取某件商品的库存和销量-->
+    <select id="getSaleNumAndStock" parameterType="long" resultMap="goodsAndSpecValue">
+        SELECT
+            TG.ID,
+            TG.STOCK,
+            TP.ID P_ID,
+            TP.REAL_SALES P_REAL_SALES,
+            TP.SALES P_SALES
+        FROM T_GOODS TG
+        INNER JOIN  T_PRODUCT TP ON TP.ID = TG.PRODUCT_ID AND TP.DELETED=0
+        WHERE TG.ID=#{goodsId}
+    </select>
+    <!--库存警戒findMany-->
+    <select id="alertStockFindMany" parameterType="map" resultMap="goodsAndSpecValue">
+        <include refid="support.ph"/>
+        SELECT * FROM(
+            SELECT
+            TG.ID,
+            TG.SN,
+            TG.TITLE,
+            TG.PRICE,
+            TG.STOCK,
+            TG.CREATED_DATE,
+            TC.ID       P_C_ID,
+            TC.NAME     P_C_NAME,
+            TB.ID       P_B_ID,
+            TB.NAME     P_B_NAME,
+            TP.IS_PUTAWAY P_IS_PUTAWAY,
+            TP.TITLE      P_TITLE,
+            TP.ID         P_ID
+            FROM (SELECT * FROM T_GOODS WHERE STOCK <![CDATA[<]]> ALERT_STOCK AND DELETED=0)TG
+            INNER JOIN T_PRODUCT TP ON TP.ID= TG.PRODUCT_ID AND TP.DELETED=0
+            LEFT JOIN T_CATEGORY TC ON TC.ID= TP.CATEGORY_ID AND TC.DELETED=0
+            LEFT JOIN T_BRAND TB ON TB.ID =TP.BRAND_ID AND TB.DELETED=0)A
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+          ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>, A.CREATED_DATE
+        </trim>
+        <include refid="support.pf"/>
+    </select>
+    <!--库存警戒统计-->
+    <select id="alertStockCount" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM(
+        SELECT
+        TG.ID,
+        TG.SN,
+        TG.TITLE,
+        TG.PRICE,
+        TG.STOCK,
+        TG.CREATED_DATE,
+        TC.ID       P_C_ID,
+        TC.NAME     P_C_NAME,
+        TB.ID       P_B_ID,
+        TB.NAME     P_B_NAME,
+        TP.IS_PUTAWAY P_IS_PUTAWAY,
+        TP.TITLE      P_TITLE,
+        TP.ID         P_ID
+        FROM (SELECT * FROM T_GOODS WHERE STOCK <![CDATA[<]]> ALERT_STOCK AND DELETED=0)TG
+        INNER JOIN T_PRODUCT TP ON TP.ID= TG.PRODUCT_ID AND TP.DELETED=0
+        LEFT JOIN T_CATEGORY TC ON TC.ID= TP.CATEGORY_ID AND TC.DELETED=0
+        LEFT JOIN T_BRAND TB ON TB.ID =TP.BRAND_ID AND TB.DELETED=0)A
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+    </select>
+
+    <select id="storeSelectGoods" parameterType="map" resultMap="goodsAndSpecValue">
+        <include refid="support.ph" />222
+        SELECT *  FROM (
+        SELECT
+            TG.ID,
+            TG.TITLE,
+            TG.PRICE,
+            TG.IMAGE,
+            TP.ID P_ID,
+            TP.LABEL P_LABEL,
+            TP.CATEGORY_ID P_C_ID,
+            TP.REAL_SALES P_REAL_SALES,
+            TP.IS_PUTAWAY        P_IS_PUTAWAY,
+            TP.STORE_ID P_S_ID,
+            TAG.ID              AG_ID,
+            TAG.DISCOUNT        AG_DISCOUNT,
+            TAG.START_DATE      AG_START_DATE,
+            TAG.END_DATE        AG_END_DATE
+        FROM T_GOODS TG
+        INNER JOIN T_PRODUCT TP ON TP.ID=TG.PRODUCT_ID AND IS_PUTAWAY=1 AND TP.DELETED=0 AND TG.DELETED=0
+        INNER JOIN T_CATEGORY TC ON TC.ID= TP.CATEGORY_ID AND TC.DELETED=0
+        LEFT JOIN T_ACTIVITY_GOODS TAG ON TAG.GOODS_ID = TG.ID AND TAG.DELETED=0
+        ) TG
+        <where>
+          <include refid="support.dynamicFilters" />
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort" />
+            , TG.ID DESC
+        </trim>
+        <include refid="support.pf"/>
+    </select>
+
+    <select id="storeSelectGoodsCount" resultType="int">
+        SELECT COUNT(1) FROM (
+        SELECT
+            TG.ID,
+            TG.TITLE,
+            TG.PRICE,
+            TG.IMAGE,
+            TP.ID P_ID,
+            TP.LABEL P_LABEL,
+            TP.IS_PUTAWAY        P_IS_PUTAWAY,
+            TP.CATEGORY_ID P_C_ID,
+            TP.REAL_SALES P_REAL_SALES,
+            TP.STORE_ID P_S_ID,
+            TAG.ID              AG_ID,
+            TAG.DISCOUNT        AG_DISCOUNT,
+            TAG.START_DATE      AG_START_DATE,
+            TAG.END_DATE        AG_END_DATE
+        FROM T_GOODS TG
+        INNER JOIN T_PRODUCT TP ON TP.ID=TG.PRODUCT_ID AND IS_PUTAWAY=1 AND TP.DELETED=0 AND TG.DELETED=0
+        INNER JOIN T_CATEGORY TC ON TC.ID= TP.CATEGORY_ID AND TC.DELETED=0
+        LEFT JOIN T_ACTIVITY_GOODS TAG ON TAG.GOODS_ID = TG.ID AND TAG.DELETED=0) TG
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+    </select>
+    <!--订单商品未评论FindMany-->
+    <select id="getGoodsByOrderDetailNoCommented"  parameterType="map" resultMap="goodsAndSpecValue">
+        <include refid="support.ph" />
+        SELECT * FROM(
+        SELECT
+            TG.ID,
+            TG.TITLE,
+            TG.PRICE,
+            TG.IMAGE,
+            TOD.ID              P_S_ID,
+            TAG.ID              AG_ID,
+            TAG.DISCOUNT        AG_DISCOUNT,
+            TAG.START_DATE      AG_START_DATE,
+            TAG.END_DATE        AG_END_DATE,
+            TOR.MEMBERID        M_ID,
+            TOR.ID              TOR_ID
+         FROM T_ORDER TOR
+        INNER JOIN T_ORDER_DETAIL TOD ON TOR.STATUS=6 AND TOR.ID= TOD.ORDERID AND (TOD.COMMENTED IS NULL OR  TOD.COMMENTED = 0)
+        LEFT JOIN T_GOODS TG ON TG.ID = TOD.GOODSID  AND TG.DELETED=0
+        INNER JOIN T_PRODUCT TP ON TP.ID= TG.PRODUCT_ID AND  TP.DELETED=0
+        LEFT JOIN T_ACTIVITY_GOODS  TAG ON  TAG.GOODS_ID = TG.ID AND TAG.DELETED=0
+      ) TG
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort" />
+            , TG.P_S_ID DESC
+        </trim>
+        <include refid="support.pf"/>
+    </select>
+    <!--订单商品未评论Count-->
+    <select id="getGoodsByOrderDetailNoCommentedCount" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM (
+          SELECT
+            TG.ID,
+            TG.TITLE,
+            TG.PRICE,
+            TG.IMAGE,
+            TOD.ID              P_S_ID,
+            TAG.ID              AG_ID,
+            TAG.DISCOUNT        AG_DISCOUNT,
+            TAG.START_DATE      AG_START_DATE,
+            TAG.END_DATE        AG_END_DATE,
+            TOR.MEMBERID        M_ID,
+            TOR.ID              TOR_ID
+         FROM T_ORDER TOR
+        INNER JOIN T_ORDER_DETAIL TOD ON TOR.STATUS=6 AND TOR.ID= TOD.ORDERID AND (TOD.COMMENTED IS NULL OR  TOD.COMMENTED = 0)
+        LEFT JOIN T_GOODS TG ON TG.ID = TOD.GOODSID  AND TG.DELETED=0
+        INNER JOIN T_PRODUCT TP ON TP.ID= TG.PRODUCT_ID AND  TP.DELETED=0
+        LEFT JOIN T_ACTIVITY_GOODS  TAG ON  TAG.GOODS_ID = TG.ID AND TAG.DELETED=0
+      ) TG
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+    </select>
+
+    <select id="findGoodsList" parameterType="map" resultMap="goodsAndSpecValue">
+        <include refid="support.ph"/>
+        SELECT * FROM (
+          SELECT
+            TG.ID,
+            TG.TITLE,
+            TG.PRICE,
+            TG.SN,
+            TG.LAST_MODIFIED_DATE,
+            TG.IMAGE,
+            TP.ID       P_ID,
+            TC.ID       P_C_ID,
+            TC.NAME     P_C_NAME
+          FROM T_GOODS TG
+          INNER JOIN T_PRODUCT  TP ON TG.PRODUCT_ID = TP.ID AND TG.DELETED=0 AND TP.DELETED=0
+          LEFT JOIN T_CATEGORY  TC ON TP.CATEGORY_ID =  TC.ID AND TC.DELETED=0
+        )TG
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort" />
+            , TG.ID DESC
+        </trim>
+        <include refid="support.pf"/>
+    </select>
+
+    <select id="findGoodsListCount" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM (
+        SELECT
+        TG.ID,
+        TG.TITLE,
+        TG.SN,
+        TG.PRICE,
+        TG.LAST_MODIFIED_DATE,
+        TG.IMAGE,
+        TP.ID       P_ID,
+        TC.ID       P_C_ID,
+        TC.NAME     P_C_NAME
+        FROM T_GOODS TG
+        INNER JOIN T_PRODUCT  TP ON TG.PRODUCT_ID = TP.ID AND TG.DELETED=0 AND TP.DELETED=0
+        LEFT JOIN T_CATEGORY  TC ON TP.CATEGORY_ID =  TC.ID AND TC.DELETED=0
+        ) TG
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+    </select>
+</mapper>

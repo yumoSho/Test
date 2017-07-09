@@ -1,0 +1,558 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.personlBut {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.15rem;
+  background: #fff;
+}
+.personlBut a {
+  width: 100%;
+  background: #19aa4b;
+  border-radius: 50rem;
+  height: 0.95rem;
+  border: none;
+  font-size: 0.35rem;
+  color: #fff;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+}
+/*返回图标*/
+.head a img {
+  width: .49rem;
+}
+a:hover {
+  color: #fff;
+}
+/*购物车*/
+.editCart {
+  font-size: .3rem;
+  color: #fff;
+}
+.cartItem {
+  border-bottom: 1px solid #dfdfdf;
+  font-size: 0;
+  margin-bottom: .1rem;
+  border-top: 1px solid #dfdfdf;
+}
+.cartItem:first-child {
+  border-top: none;
+}
+.cartItem .itemTop {
+  height: .6rem;
+  border-bottom: 1px solid #dedede;
+}
+.cartItem .itemTop input {
+  width: .4rem;
+  height: .4rem;
+  margin-left: .15rem;
+  margin-top: .15rem;
+}
+.cartItem .itemBottom {
+  padding: .4rem .15rem;
+}
+.cartItem .itemBottom .cartProImg {
+  display: inline-block;
+  width: 1.79rem;
+}
+.cartItem .itemBottom .cartProImg img {
+  border: 1px solid #dcdcdc;
+  width: 1.79rem;
+  height: 1.98rem;
+}
+.cartItem .itemBottom .cartProDes {
+  width: 70%;
+}
+.cartItem .itemBottom .cartProDes .cartProName {
+  font-size: .24rem;
+  color: #666;
+  height: .9rem;
+  letter-spacing: 1.5px;
+  line-height: .46rem;
+}
+.cartItem .itemBottom .cartProDes .cartProNameHandel .cartDetail {
+  font-size: .24rem;
+  color: #666;
+  line-height: .43rem;
+}
+.cartItem .itemBottom .cartProDes .cartProNameHandel .price {
+  font-size: .24rem;
+  color: #666;
+  padding-top: .1rem;
+}
+.cartItem .itemBottom .cartProDes .cartProNameHandel .price span {
+  color: #e60019;
+  font-weight: bold;
+}
+.cartItem .itemBottom .cartProDes .cartProNameHandel .numWrap {
+  width: 2.06rem;
+}
+.cartItem .itemBottom .cartProDes .cartProNameHandel .numWrap a {
+  display: inline-block;
+  font-size: .26rem;
+  width: .53rem;
+  height: .53rem;
+  text-align: center;
+  line-height: .53rem;
+  background-color: #e6e6e6;
+  color: #191919;
+}
+.cartItem .itemBottom .cartProDes .cartProNameHandel .numWrap .numInput {
+  font-size: .24rem;
+  color: #191919;
+  border: none;
+  outline: none;
+  text-align: center;
+  width: 1rem;
+  height: .5rem;
+  line-height: .5rem;
+}
+.cartBottom {
+  position: fixed;
+  height: .4rem;
+  width: 7.2rem;
+  border-top: 1px solid #ebebeb;
+  font-size: .3rem;
+  bottom: 0;
+  padding: .5rem .15rem;
+}
+.cartBottom span {
+  color: #e60019;
+  font-weight: bold;
+}
+.cartBottom label {
+  font-size: .28rem;
+  color: #000;
+}
+.cartBottom label input {
+  width: .4rem;
+  height: .4rem;
+  vertical-align: middle;
+  margin-top: -0.02rem;
+  margin-right: .1rem;
+}
+.cartBottom .cartAccount {
+  margin-left: .5rem;
+}
+.cartBottom .goForPay {
+  display: inline-block;
+  width: 2.2rem;
+  height: .96rem;
+  line-height: .96rem;
+  text-align: center;
+  font-size: .35rem;
+  background-color: #19aa4b;
+  color: #fff;
+  border-radius: .5rem;
+  margin-left: .2rem;
+  margin-top: -0.25rem;
+}
+.cartEdit {
+  height: 1.4rem;
+  position: fixed;
+  width: 7.2rem;
+  border-top: 1px solid #ebebeb;
+  font-size: 0;
+  bottom: 0;
+}
+.cartEdit label {
+  font-size: .28rem;
+  color: #000;
+  margin-top: .5rem;
+}
+.cartEdit label input {
+  width: .3rem;
+  height: .3rem;
+  vertical-align: middle;
+  margin-top: -0.02rem;
+  margin-right: .1rem;
+}
+.cartEdit .forCollect {
+  display: inline-block;
+  font-size: .35rem;
+  background-color: #f4bc1c;
+  color: #fff;
+  text-align: center;
+  border-radius: .5rem;
+  width: 3.1rem;
+  height: .96rem;
+  line-height: .96rem;
+  margin-top: .22rem;
+  margin-left: .7rem;
+}
+.cartEdit .forCollect img {
+  width: .45rem;
+  margin-right: .05rem;
+  margin-top: -0.1rem;
+}
+.cartEdit .deleteChecked {
+  display: inline-block;
+  border-radius: .5rem;
+  width: 2.2rem;
+  height: .96rem;
+  line-height: .96rem;
+  color: #fff;
+  font-size: .35rem;
+  background-color: #19aa4b;
+  text-align: center;
+  margin-top: .22rem;
+  margin-left: .2rem;
+}
+.cartEdit .deleteChecked img {
+  width: .3rem;
+  margin-right: .05rem;
+  margin-top: -0.1rem;
+}
+/*购物车为空提示*/
+.cartNull {
+  text-align: center;
+  font-size: 0;
+  padding: 3rem 0;
+  background: #fff;
+}
+.cartNull img {
+  width: .98rem;
+}
+.cartNull p {
+  font-size: .3rem;
+  padding-top: .05rem;
+  color: #333;
+  line-height: 1rem;
+}
+/*填写订单*/
+.selectAdd {
+  display: block;
+  font-size: 0;
+  margin: .12rem 0;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: .76rem .15rem;
+}
+.selectAdd span {
+  font-size: .28rem;
+  color: #191919;
+}
+.selectAdd img {
+  width: .24rem;
+}
+.addrShow {
+  display: none;
+  background: #ffffff url(../../images/mobile/icon37.png) 98% center no-repeat;
+  padding: .3rem .15rem;
+  background-size: .24rem;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-top: .12rem;
+}
+.addrShow .topMessage {
+  width: 90%;
+  font-size: .28rem;
+  color: #191919;
+}
+.addrShow .topMessage .fleft {
+  display: inline-block;
+  width: 70%;
+  height: .4rem;
+  overflow: hidden;
+}
+.addrShow .detailAddr {
+  width: 90%;
+  font-size: .26rem;
+  color: #959595;
+  margin-top: .6rem;
+}
+.orderProMessage .storePart {
+  margin-bottom: .25rem;
+}
+.orderProMessage .storePart:first-child {
+  margin-bottom: 0;
+}
+.orderPart {
+  margin-top: .12rem;
+  margin-bottom: .3rem;
+  border-bottom: 1px solid #dedede;
+}
+.orderPart .proPart {
+  padding: .18rem .15rem;
+  margin-top: .1rem;
+  border-top: 1px solid #dedede;
+  border-bottom: 1px solid #dedede;
+}
+.orderPart .proPart:first-child {
+  margin-top: 0;
+}
+.orderPart .proPart .proImg {
+  display: inline-block;
+  width: 1.79rem;
+}
+.orderPart .proPart .proImg img {
+  border: 1px solid #dcdcdc;
+  width: 1.79rem;
+  height: 1.98rem;
+}
+.orderPart .proPart .rightProDes {
+  width: 70%;
+}
+.orderPart .proPart .rightProDes a {
+  font-size: .24rem;
+  height: .9rem;
+  color: #666;
+  line-height: .46rem;
+  margin-top: .2rem;
+}
+.orderPart .proPart .rightProDes .numbers,
+.orderPart .proPart .rightProDes .proPrice {
+  font-size: .24rem;
+  color: #666;
+  margin-top: .05rem;
+}
+.orderPart .proPart .rightProDes .proPrice span {
+  color: #e60019;
+  font-weight: bold;
+}
+.orderPart .storeSale .saleType {
+  color: #666;
+  border-bottom: 1px solid #ebebeb;
+  padding: .25rem .5rem .25rem .15rem;
+  background: url(../../images/mobile/icon39.png) 98% center no-repeat;
+  background-size: .13rem;
+}
+.orderPart .storeSale .saleMoney {
+  color: #666;
+  border-bottom: 1px solid #ebebeb;
+  padding: .25rem .15rem;
+}
+.orderPart .storeSale .saleMoney .fright {
+  color: #E60019;
+}
+.orderPart .storeSale .remarkTxt {
+  font-size: .24rem;
+  padding: .25rem .5rem 1.5rem .15rem;
+  color: #666;
+}
+.orderPart .storeSale .remarkTxt .fright {
+  width: 85%;
+  height: 1.2rem;
+  border: none;
+}
+.orderPart .logisticsTime {
+  text-align: right;
+  padding: .25rem .5rem .25rem .15rem;
+  color: #666;
+  border-bottom: 1px solid #ebebeb;
+  background: url(../../images/mobile/icon39.png) 98% center no-repeat;
+  background-size: .13rem;
+}
+.satement {
+  position: fixed;
+  width: 7.2rem;
+  bottom: 0;
+  padding: 0.5rem .15rem;
+  font-size: 0;
+  border-top: 1px solid #ebebeb;
+}
+.addorder.satement{
+  height: .3rem;
+}
+.satement span {
+  font-size: .3rem;
+  color: #000;
+}
+.satement .sateProNum {
+ /* margin-left: .2rem;*/
+  margin-right: .2rem;
+}
+.satement .sateMoney span {
+  color: #e60019;
+  font-weight: bold;
+}
+.satement a {
+  display: inline-block;
+  width: 2.2rem;
+  height: .96rem;
+  line-height: .96rem;
+  text-align: center;
+  background-color: #19aa4b;
+  color: #fff;
+  font-size: .35rem;
+  border-radius: .5rem;
+  /*margin-left: .4rem;*/
+  margin-top: -4%;
+}
+/*使用优惠券*/
+.storeSaleWrap {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: url(../../images/mobile/mask.png) left top repeat;
+}
+.storeSaleWrap .saleInner {
+  position: fixed;
+  width: 7.1rem;
+  padding: .2rem;
+  bottom: 0;
+  max-height: 8.1rem;
+  overflow: auto;
+}
+.storeSaleWrap .saleInner .saleTitle {
+  font-size: .28rem;
+  color: #000;
+  padding: .08rem 0 .15rem 0;
+  text-align: center;
+}
+.storeSaleWrap .saleInner .activeList {
+  max-height: 6.5rem;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+.storeSaleWrap .saleInner .activeList li {
+  font-size: .24rem;
+  color: #000;
+  border-bottom: 1px solid #ebebeb;
+  padding: .2rem 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.storeSaleWrap .saleInner .activeList li.on {
+  background: url(../../images/mobile/icon35.png) right center no-repeat;
+  background-size: .45rem;
+}
+.storeSaleWrap .saleInner .closePop {
+  background-color: #19aa4b;
+  color: #fff;
+  text-align: center;
+  font-size: .24rem;
+  height: .6rem;
+  line-height: .6rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+/*配送时间*/
+.logisticsTimeShow {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: url(../../images/mobile/mask.png) left top repeat;
+}
+.logisticsTimeShow .saleTime {
+  position: fixed;
+  width: 7.1rem;
+  padding: .2rem;
+  bottom: 0;
+}
+.logisticsTimeShow .saleTime .saleTitle {
+  font-size: .28rem;
+  color: #000;
+  padding: .08rem 0 .15rem 0;
+  text-align: center;
+}
+.logisticsTimeShow .saleTime .activeList {
+  max-height: 6.5rem;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+.logisticsTimeShow .saleTime .activeList li {
+  font-size: .24rem;
+  color: #000;
+  border-bottom: 1px solid #ebebeb;
+  padding: .2rem 0;
+}
+.logisticsTimeShow .saleTime .activeList li.on {
+  background: url(../../images/mobile/icon35.png) right center no-repeat;
+  background-size: .45rem;
+}
+.logisticsTimeShow .saleTime .closePop {
+  background-color: #19aa4b;
+  color: #fff;
+  text-align: center;
+  font-size: .24rem;
+  height: .6rem;
+  line-height: .6rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.addrIframe {
+  display: none;
+  height: 12rem;
+}
+.addrIframe iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/*选择支付页*/
+.writeWrap.wrap {
+  height: 100%;
+  background: #fff;
+}
+.payList {
+  width: 100%;
+}
+.payList a {
+  display: block;
+  font-size: .28rem;
+  color: #000;
+  padding: .2rem .2rem .2rem .15rem;
+  border-bottom: 1px solid #dcdcdc;
+}
+.payList .changeL {
+  padding: .3rem .2rem .3rem .3rem;
+  width: 94%;
+}
+.payList .changeL .hideWidth {
+  display: block;
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.payList .changeL .hideWidth .money {
+  color: #e60019;
+}
+.payList img {
+  width: .83rem;
+  height: .55rem;
+  margin-right: .25rem;
+}
+.payList .on {
+  background: url(../../images/mobile/icon38.png) 98% center no-repeat;
+  background-size: .45rem;
+}
+/*支付成功提醒*/
+.payNotice {
+  text-align: center;
+  padding: 3rem .15rem;
+}
+.payNotice img {
+  width: 1.33rem;
+  height: 1.4rem;
+}
+.payNotice p {
+  font-size: .4rem;
+  color: #000;
+  padding-top: .15rem;
+}
+.changeBgc1 {
+  background: #f0f0f0;
+}
+/*# sourceMappingURL=cart.css.map */

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.SupportCategoryDao">
+						  
+    
+
+    <select id="find" parameterType="long" resultMap="supportCategoryRM">
+        
+         SELECT TC.ID,
+		 TC.NAME, 
+		 TC.DELETED,
+	     TC.SORT_NUM,
+	     TC.CREATED_BY,
+	     TC.CREATED_DATE,
+	     TC.LAST_MODIFIED_BY,
+	     TC.LAST_MODIFIED_DATE,
+		 TCC.ID PARENT_ID,
+		 TCC.NAME PARENT_NAME
+		 
+        FROM T_SUPPORT_CATEGORY TC
+        LEFT JOIN T_SUPPORT_CATEGORY TCC ON TC.PARENT_ID = TCC.ID AND TCC.DELETED=0
+        WHERE TC.ID=#{id} AND TC.DELETED=0
+
+    </select>
+
+	<select id="findByParentId" parameterType="SupportCategory" resultMap="supportCategoryRM">
+        
+                 SELECT TC.ID,
+						TC.NAME, 
+						TC.DELETED,
+	                    TC.SORT_NUM,
+	                    TC.CREATED_BY,
+	                    TC.CREATED_DATE,
+	                    TC.LAST_MODIFIED_BY,
+	                    TC.LAST_MODIFIED_DATE,
+						TCC.ID PARENT_ID,
+						TCC.NAME PARENT_NAME
+						FROM T_SUPPORT_CATEGORY TC 
+						LEFT JOIN T_SUPPORT_CATEGORY TCC ON TC.PARENT_ID=TCC.ID AND TCC.DELETED=0
+				 WHERE TC.PARENT_ID=#{parent.id} AND TC.DELETED=0
+
+    </select>
+    <select id="findAllByBankId" parameterType="long" resultMap="supportCategoryRM">
+        
+                SELECT * FROM T_SUPPORT_CATEGORY 
+                WHERE PARENT_ID IS NULL AND  DELETED = 0
+                ORDER BY SORT_NUM
+
+    </select>
+   
+	<select id="findAllCategoryAndContentsByBankId" resultMap="supportCategoryAndContentRM">
+
+	                SELECT
+					C.*,
+					T.ID T_ID,
+					T.TITLE T_TITLE
+					FROM T_SUPPORT_CATEGORY C
+					INNER JOIN T_SUPPORT_CONTENT T
+					ON T.SUPPORT_CATEGORY_ID=C.ID AND T.DELETED=0
+					WHERE C.PARENT_ID IS NULL
+	                ORDER BY C.SORT_NUM,T.SORT_NUM
+
+	 </select>
+
+    <select id="findFullCategoryAndContentsByBankId" resultMap="supportCategoryAndContentRM">
+
+        SELECT
+        C.*,
+        T.ID T_ID,
+        T.TITLE T_TITLE
+        FROM T_SUPPORT_CATEGORY C
+        LEFT JOIN T_SUPPORT_CONTENT T
+        ON T.SUPPORT_CATEGORY_ID=C.ID AND T.DELETED=0
+        WHERE C.PARENT_ID IS NULL
+        ORDER BY C.SORT_NUM,T.SORT_NUM
+
+    </select>
+
+	<select id="findMany" parameterType="map" resultMap="supportCategoryRM">
+        <include refid="support.ph" />
+                    SELECT * FROM (
+					SELECT TC.ID,
+						TC.NAME, 
+						TC.DELETED,
+	                    TC.SORT_NUM,
+	                    TC.CREATED_BY,
+	                    TC.CREATED_DATE,
+	                    TC.LAST_MODIFIED_BY,
+	                    TC.LAST_MODIFIED_DATE,
+						TCC.ID PARENT_ID,
+						TCC.NAME PARENT_NAME
+						FROM T_SUPPORT_CATEGORY TC 
+						LEFT JOIN T_SUPPORT_CATEGORY TCC ON TC.PARENT_ID=TCC.ID AND TCC.DELETED=0
+                        WHERE  TC.DELETED=0 AND TC.PARENT_ID is NULL ) A
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort" />
+            , CREATED_DATE DESC
+        </trim>
+        <include refid="support.pf" />
+    </select>
+	<select id="count" parameterType="map" resultType="int">
+             SELECT COUNT(*) FROM (
+					SELECT
+                    TC.NAME
+						FROM T_SUPPORT_CATEGORY TC 
+						LEFT JOIN T_SUPPORT_CATEGORY TCC ON TC.PARENT_ID=TCC.ID AND TCC.DELETED=0
+                WHERE TC.DELETED=0 AND TC.PARENT_ID is NULL
+        ) A
+        <where>
+            <include refid="support.dynamicFilters" />
+        </where>
+    </select>
+
+
+
+
+    <sql id="baseFilter">
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="path != null">
+            AND PATH = #{path}
+        </if>
+        <if test="pathNames != null">
+            AND PATH_NAMES = #{pathNames}
+        </if>
+        <if test="color != null">
+            AND COLOR = #{color}
+        </if>
+        <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+        <if test="visible != null">
+            AND VISIBLE = #{visible}
+        </if>
+        <if test="model.id != null">
+            AND MODEL_ID = #{model.id}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="parent.id != null">
+            AND PARENT_ID = #{parent.id}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        AND DELETED = 0
+        <!-- more -->
+    </sql>
+
+
+    <!-- =========================== CREATE ========================== -->
+
+    <insert id="save" parameterType="SupportCategory"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_SUPPORT_CATEGORY (
+        <!-- self columns -->
+        ID
+        ,CREATED_BY
+        ,CREATED_DATE
+        ,LAST_MODIFIED_BY
+        ,LAST_MODIFIED_DATE
+        ,NAME
+        ,SORT_NUM
+        ,DELETED
+        ,PARENT_ID
+        )
+        VALUES (
+        <!-- self columns -->
+        #{id},
+        #{createdBy},
+        #{createdDate},
+        #{lastModifiedBy},
+        #{lastModifiedDate},
+        #{name},      
+        #{sortNum},
+        #{deleted},
+        #{parent.id}
+        )
+    </insert>
+
+    <!-- =========================== UPDATE ========================== -->
+
+    <update id="update" parameterType="SupportCategory">
+        UPDATE T_SUPPORT_CATEGORY
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            
+            <if test="sortNum != null">
+                SORT_NUM = #{sortNum},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="parent != null and parent.id != null">
+                PARENT_ID = #{parent.id},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+
+	<update id="updateByParentId" parameterType="SupportCategory">
+        UPDATE T_SUPPORT_CATEGORY
+        <set>
+          
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+
+        </set>
+        WHERE PARENT_ID = #{id}
+    </update>
+    
+    <update id="delete" parameterType="long">
+      UPDATE T_SUPPORT_CATEGORY SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+
+    <!-- ======================== RESULT MAP ========================= -->
+   
+
+
+
+	<resultMap id="supportCategoryRM" type="SupportCategory">
+        <id property="id" column="ID" />
+        <result property="name" column="NAME" />
+        <result property="deleted" column="DELETED" />
+        <result property="sortNum" column="SORT_NUM" />
+        
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <!-- 关联父级 -->
+        <association property="parent" javaType="SupportCategory">
+            <id property="id" column="PARENT_ID" />
+            <result property="name" column="PARENT_NAME" />
+        </association>
+        <!-- 关联子级 -->
+        <collection property="children" ofType="SupportCategory">
+            <id property="id" column="ID" />
+            <result property="name" column="NAME" />
+        </collection>
+    </resultMap>
+
+
+	<resultMap id="supportCategoryAndContentRM" type="SupportCategory">
+        <id property="id" column="ID" />
+        <result property="name" column="NAME" />
+        <result property="deleted" column="DELETED" />
+        <result property="sortNum" column="SORT_NUM" />
+        
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        
+        <collection property="supportContents" ofType="SupportContent" columnPrefix="T_">
+            <id property="id" column="ID" />
+            <result property="title" column="TITLE" />
+           
+        </collection>
+    </resultMap>
+</mapper>

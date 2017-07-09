@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.cart.OrderTempDao">
+
+    <select id="find" parameterType="long" resultType="OrderTemp">
+      SELECT * FROM T_ORDER_TEMP WHERE ID = #{id}
+    </select>
+
+    <select id="findAllByMemberId" parameterType="long" resultType="OrderTemp">
+    SELECT * FROM T_ORDER_TEMP WHERE MEMBER_ID = #{memberId} ORDER  BY ID DESC;
+  </select>
+
+  <select id="countPrce" parameterType="long" resultType="map">
+      SELECT SUM(TOTAL_PRICE) as totalPrice,SUM(BUY_COUNT) as totalNum,SUM(GOODS_FROM) as goodsFrom FROM T_ORDER_TEMP WHERE MEMBER_ID = #{memberId}
+  </select>
+
+    <insert id="save" parameterType="OrderTemp" useGeneratedKeys="true" keyProperty="id">
+		insert into T_ORDER_TEMP(ID,GOODS_ID,GOODS_NAME,GOODS_IMG,
+		PRICE,BUY_COUNT,TOTAL_PRICE,MEMBER_ID,GOODS_FROM,OTHER_ID,CART_ID,ORIGINAL_PRICE)
+        values(#{id},#{goodsId},#{goodsName},#{goodsImg},#{price},
+        #{buyCount},#{totalPrice},#{memberId},#{goodsFrom},#{otherId},#{cartId},#{originalPrice})
+	</insert>
+
+    <update id="update" parameterType="OrderTemp">
+      update T_ORDER_TEMP
+      <set>
+        <if test="goodsId != null">
+          GOODS_ID=#{goodsId},
+        </if>
+        <if test="goodsName != null">
+          GOODS_NAME=#{goodsName},
+        </if>
+        <if test="goodsImg != null">
+          GOODS_IMG=#{goodsImg},
+        </if>
+        <if test="price != null">
+          PRICE=#{price},
+        </if>
+        <if test="buyCount != null">
+          BUY_COUNT=#{buyCount},
+        </if>
+        <if test="totalPrice != null">
+          TOTAL_PRICE=#{totalPrice},
+        </if>
+        <if test="memberId != null">
+          MEMBER_ID=#{memberId},
+        </if>
+      </set>
+      where ID=#{id}
+    </update>
+
+    <delete id="deleteByMemberId" parameterType="long">
+        DELETE FROM T_ORDER_TEMP WHERE  MEMBER_ID = #{memberId}
+    </delete>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM T_ORDER_TEMP WHERE  ID = #{id}
+    </delete>
+</mapper>

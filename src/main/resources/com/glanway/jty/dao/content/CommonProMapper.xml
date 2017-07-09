@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.CommonProDao">
+    <resultMap id="CommonProRM" type="CommonPro">
+        <id property="id" column="ID"/>
+        <result column="ID" property="id"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="sortNum" column="SORT_NUM"/> 
+        <result property="deleted" column="DELETED"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+
+    </resultMap>
+
+
+    
+
+    <insert id="save" parameterType="CommonPro" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_COMMON_PRO (
+        	ID,
+        	TITLE,
+            CONTENT,
+            SORT_NUM,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DISPLAY,
+            DELETED
+        ) VALUES (
+        #{id},
+        #{title},
+        #{content},
+        #{sortNum},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy},
+        #{display},
+        0
+        )
+    </insert>
+
+    <sql id="baseQuery">
+      
+         	ID,
+        	TITLE,
+            CONTENT,
+            SORT_NUM,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DISPLAY,
+            DELETED
+
+    </sql>
+    <sql id="baseFilter">
+    	
+    	<if test="title != null">
+            AND TITLE = #{title}
+        </if>
+        <if test="content != null">
+            AND CONTENT = #{content}
+        </if>
+        
+
+        <if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+	    </if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="sortNum != null">
+			AND SORT_NUM = #{sortNum}
+	    </if>
+		<if test="display != null">
+			AND DISPLAY = #{display}
+		</if>
+        
+    
+    </sql>
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="CommonProRM">
+		SELECT 
+		A.*
+		FROM T_COMMON_PRO A
+		WHERE A.ID=#{id}
+    </select>
+	
+
+	<select id="findMany" parameterType="map" resultMap="CommonProRM">
+		<include refid="support.ph"/>
+		SELECT 
+		A.*
+		FROM T_COMMON_PRO A
+
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND A.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		 <include refid="support.pf"/>
+	</select>
+	
+	
+	
+	<select id="findAllByBankId"  resultMap="CommonProRM">
+		SELECT
+		A.*
+		FROM T_COMMON_PRO A
+		WHERE DELETED = 0
+		ORDER BY A.SORT_NUM
+	</select>
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_COMMON_PRO A
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND A.DELETED=0
+		</where>
+
+	</select>
+
+
+   
+
+    <update id="update" parameterType="CommonPro">
+        UPDATE T_COMMON_PRO
+        <set>
+        	<if test="title != null">
+           		 TITLE = #{title},
+	        </if>
+            <if test="content != null">
+           		 CONTENT = #{content},
+	        </if>      
+
+	        <if test="sortNum != null">
+	            SORT_NUM = #{sortNum},
+	        </if>
+
+	        <if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+		    </if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="display != null">
+				DISPLAY = #{display},
+			</if>
+		
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="CommonPro">
+        UPDATE T_COMMON_PRO SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    
+
+    
+
+
+
+</mapper>

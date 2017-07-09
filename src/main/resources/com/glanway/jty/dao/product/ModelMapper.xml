@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-17 16:54:02
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.ModelDao">
+    
+    <resultMap type="Model" id="modelBase">
+    	<id property="id" column="ID"/>
+        <result property="alias" column="ALIAS" />
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="deleted" column="DELETED" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <result property="name" column="NAME" />
+        <result property="useAttribute" column="USE_ATTRIBUTE" />
+        <result property="useParameter" column="USE_PARAMETER" />
+        <result property="useSpec" column="USE_SPEC" />
+    </resultMap>
+    <!-- -->
+    <sql id="baseCols">
+            ALIAS, 
+            CREATED_BY, 
+            CREATED_DATE, 
+            DELETED, 
+            ID, 
+            LAST_MODIFIED_BY, 
+            LAST_MODIFIED_DATE, 
+            NAME,
+            MODEL_CODE,
+            USE_ATTRIBUTE, 
+            USE_PARAMETER, 
+            USE_SPEC
+    </sql>
+
+    <sql id="baseQuery">
+        SELECT
+            ALIAS,
+            CREATED_BY,
+            CREATED_DATE,
+            DELETED,
+            ID,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            NAME,
+            MODEL_CODE,
+            USE_ATTRIBUTE,
+            USE_PARAMETER,
+            USE_SPEC
+        FROM
+            T_MODEL
+    </sql>
+
+    <select id="modelNextId" resultType="long">
+        SELECT MAX(ID) FROM T_MODEL
+    </select>
+
+    <sql id="baseFilter">
+        <if test="alias != null">
+            AND ALIAS = #{alias}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="deleted != null">
+            AND DELETED = #{deleted}
+        </if>
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="useAttribute != null">
+            AND USE_ATTRIBUTE = #{useAttribute}
+        </if>
+        <if test="useParameters != null">
+            AND USE_PARAMETER = #{useParameter}
+        </if>
+        <if test="useSpec != null">
+            AND USE_SPEC = #{useSpec}
+        </if>
+        AND DELETED = 0
+        <!-- more -->
+    </sql>
+
+    <!-- - - - - - - - - - Retrieve  - - - - - - - - - -->
+
+    <!-- retrieve by id -->
+    <select id="find"  resultType="Model">
+        <include refid="baseQuery"/>
+        WHERE ID = #{id}
+    </select>
+
+    <!-- retrieve a unique entity -->
+    <select id="findOne" parameterType="map" resultType="Model">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- retrieve many entities -->
+    <select id="findMany" parameterType="map" resultType="Model">
+    	<include refid="support.ph"/>
+        <include refid="baseQuery"/>
+        <where>
+        	<include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>
+        </where>
+        <!-- TODO default sort -->
+        ORDER BY
+        <trim prefixOverrides=",">
+        	<include refid="support.dynamicSort"/>, CREATED_DATE
+        </trim>
+    	<include refid="support.pf"/>
+        <!-- ORDER BY ROWID -->
+    </select>
+
+    <!-- count -->
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_MODEL
+        <where>
+            <include refid="support.dynamicFilters" />
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+    
+
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+    <insert id="save" parameterType="Model" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_MODEL (
+            <include refid="baseCols"/>
+        ) VALUES (
+            #{alias},
+            #{createdBy},
+            #{createdDate},
+            #{deleted},
+            #{id},
+            #{lastModifiedBy},
+            #{lastModifiedDate},
+            #{name},
+            #{modelCode},
+            #{useAttribute},
+            #{useParameter},
+            #{useSpec}
+        )
+    </insert>
+
+    <!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+    <update id="update" parameterType="Model">
+        UPDATE T_MODEL
+        <set>
+            <if test="alias != null">
+                ALIAS = #{alias},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="useAttribute != null">
+                USE_ATTRIBUTE = #{useAttribute},
+            </if>
+            <if test="useParameter != null">
+                USE_PARAMETER = #{useParameter},
+            </if>
+            <if test="useSpec != null">
+                USE_SPEC = #{useSpec},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+
+    <update id="delete" parameterType="Model">
+        UPDATE T_MODEL SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <select id="isReferenced"  resultType="boolean">
+        SELECT
+          1
+        FROM
+          T_MODEL M
+        WHERE
+          ID = #{mid}
+        AND (
+            EXISTS (
+              SELECT 1 FROM T_CATEGORY WHERE MODEL_ID = M.ID AND DELETED = 0
+            )
+        )
+    </select>
+
+    <select id="modelHaveBeenUsedForGoods" parameterType="long" resultType="boolean">
+        SELECT 1 FROM  DUAL	WHERE EXISTS (
+         SELECT * FROM  T_MODEL TM
+            INNER JOIN T_MODEL_SPEC TMS ON TM.ID=TMS.MODEL_ID AND TM.DELETED=0 AND TMS.DELETED=0
+            INNER JOIN T_PRODUCT TP  ON TP.MODEL_ID= TM.ID AND TP.DELETED=0 AND TM.DELETED=0
+            WHERE TM.DELETED=0 AND TM.USE_SPEC=1 AND TM.ID=#{0}
+        )
+    </select>
+
+    <select id="modelSpecHaveBeenUsedForGoods" parameterType="long" resultType="boolean">
+        SELECT 1 FROM  DUAL	WHERE EXISTS (
+         SELECT * FROM  T_MODEL TM
+            INNER JOIN T_MODEL_SPEC TMS ON TM.ID=TMS.MODEL_ID AND TM.DELETED=0 AND TMS.DELETED=0
+            INNER JOIN T_PRODUCT TP  ON TP.MODEL_ID= TM.ID AND TP.DELETED=0 AND TM.DELETED=0
+            WHERE TM.DELETED=0 AND TM.USE_SPEC=1 AND TMS.ID=#{0}
+        )
+    </select>
+</mapper>

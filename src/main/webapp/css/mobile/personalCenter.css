@@ -1,0 +1,728 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.footMargin {
+  margin-bottom: 2rem;
+}
+.writeWrap {
+  height: 100%;
+}
+/*个人信息*/
+.bgblack {
+  background: #fff;
+}
+.personalImg {
+  background: #fff;
+  padding: 0 0.7rem;
+  border-bottom: 1px solid #dcdcdc;
+  height: 2.2rem;
+}
+.personalImg span {
+  display: inline-block;
+}
+.spanPadding {
+  line-height: 2.16rem;
+  float: left;
+  font-size: 0.28rem;
+}
+.spanImg {
+  background: #f7f7f7;
+  border-radius: 50%;
+  float: left;
+  margin-left: 0.25rem;
+  margin-top: 0.28rem;
+  margin-bottom: 0.28rem;
+}
+.spanImg img {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.05rem;
+  border-radius: 50%;
+}
+.personalCenter {
+  background: #f0f0f0;
+  margin-bottom: .5rem;
+}
+.personalText {
+  background: #fff;
+  margin-top: 0.1rem;
+  border-top: 1px solid #dcdcdc;
+}
+.personl {
+  border-bottom: 1px #dcdcdc solid;
+  font-size: 0.28rem;
+  height: 1rem;
+  line-height: 1rem;
+}
+.personl input {
+  border: none;
+  outline: medium;
+}
+.personl .radioPadding {
+  padding-right: 0.42rem;
+}
+.personlBut {
+  bottom: 0;
+  /*position: fixed;*/
+  width: 100%;
+  max-width: 750px;
+  box-sizing: border-box;
+  padding: 0 0.15rem;
+  background: #fff;
+  margin-top: 50px;
+}
+.personlBut a {
+  width: 100%;
+  background: #e60019;
+  border-radius: 50rem;
+  height: 0.95rem;
+  border: none;
+  font-size: 0.35rem;
+  color: #fff;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+}
+.greenBut {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  max-width: 750px;
+  box-sizing: border-box;
+  padding: 0 0.15rem;
+  background: #fff;
+}
+.greenBut .greenHold {
+  width: 100%;
+  background: #19aa4b;
+  border-radius: 50rem;
+  height: 0.95rem;
+  border: none;
+  font-size: 0.35rem;
+  color: #fff;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+}
+.magicRadio {
+  position: absolute;
+  display: none;
+}
+.magicRadio + label {
+  position: relative;
+  padding: 0 0.42rem 0 0.35rem;
+  cursor: pointer;
+}
+.magicRadio + label:before {
+  position: absolute;
+  top: 35%;
+  left: 0;
+  display: inline-block;
+  width: 0.17rem;
+  height: 0.17rem;
+  content: '';
+  background: url("../../images/mobile/radeo2.png") no-repeat;
+  background-size: 100% 100%;
+}
+.magicRadio:checked + label:after {
+  display: block;
+}
+.magicRadio:checked + label:before {
+  background: url("../../images/mobile/radeo1.png") no-repeat;
+  background-size: 100% 100%;
+}
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+}
+.fileUpload input.upload {
+  position: absolute;
+  top: 0.28rem;
+  left: 0.25rem;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  float: left;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+/*管理收货地址*/
+.receipName {
+  line-height: 0.6rem;
+  padding: 0 0.15rem;
+}
+.receipAddress {
+  font-size: 0.24rem;
+  padding-bottom: .3rem;
+}
+.receipR {
+  padding-right: 1rem;
+}
+.receipText {
+  color: #959595;
+  line-height: 0.45rem;
+  margin-bottom: 0.128rem;
+  padding: 0 0.15rem;
+  width: 90%;
+}
+.delet {
+  background: url("../../images/mobile/icon33.png") no-repeat;
+  margin: -0.03rem 0.1rem;
+  width: 0.21rem;
+  height: 0.28rem;
+  background-size: 100% 100%;
+}
+.edit {
+  background: url("../../images/mobile/icon34.png") no-repeat;
+  margin: -0.03rem 0.2rem;
+  width: 0.25rem;
+  height: 0.25rem;
+  background-size: 100% 100%;
+}
+.receipEdit,
+.receipDelet {
+  padding-left: 0.25rem;
+  display: inline-block;
+  color: #959595;
+}
+.receipDefault {
+  height: 0.67rem;
+  line-height: 0.67rem;
+  border-bottom: 1px solid #dcdcdc;
+  padding: 0 0.15rem;
+  border-top: 1px solid #dcdcdc;
+}
+.receipD {
+  background: url("../../images/mobile/chk2.png") 1% center no-repeat;
+  background-size: 0.24rem;
+  padding: 0 0.35rem;
+  color: #959595;
+}
+.receipD.on {
+  background: url("../../images/mobile/chk1.png") 1% center no-repeat;
+  background-size: 0.24rem;
+  color: #19aa4b;
+}
+.receipEdit i,
+.receipDelet i {
+  display: inline-block;
+}
+.receipL {
+  width: 50%;
+  overflow: hidden;
+  height: 0.5rem;
+}
+/*修改密码*/
+.hold {
+  border: none;
+  font-size: 0.3rem;
+  background: none;
+  outline: medium;
+}
+.changPassword {
+  border-bottom: 1px solid #dcdcdc;
+  font-size: 0.28rem;
+  height: 1rem;
+  line-height: 1rem;
+  padding: 0 0.15rem;
+}
+.changPassword input {
+  border: none;
+  outline: medium;
+}
+/*收货地址*/
+.manDefault {
+  color: #19aa4b;
+}
+.receipCent {
+  border-bottom: 1px solid #dcdcdc;
+  padding: 0.25rem 0;
+  position: relative;
+}
+.receipCent img {
+  width: 0.45rem;
+  height: 0.45rem;
+  position: absolute;
+  right: 0.15rem;
+  top: 0.64rem;
+}
+.receipCent.on {
+  background: url("../../images/mobile/icon35.png") 98% center no-repeat;
+  background-size: 0.45rem;
+}
+/*个人中心首页*/
+.hSett {
+  display: inline-block;
+  width: .53rem;
+}
+.personImg {
+  position: relative;
+  font-size: 0.3rem;
+  border-bottom: 1px solid #dcdcdc;
+  margin-top: 0.07rem;
+  padding: 0.14rem 0.15rem;
+}
+.personImg a.homeImg {
+  display: inline-block;
+  background: #f7f7f7;
+  border-radius: 50%;
+}
+.personImg a.homeImg img {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.05rem;
+  border-radius: 50%;
+}
+.personImg .userName .userLevel{
+    display: inline-block;
+    background: orange;
+    color: #fff;
+    font-size: .22rem;
+    padding: .03rem .08rem;
+    border-radius: 3px;
+    margin-left: .05rem;
+}
+.personImg .userName span {
+  display: inline-block;
+  padding-left: 0.2rem;
+  margin-top: .1rem;
+}
+.personImg .userName p {
+  padding-left: 0.2rem;
+  margin-top: .05rem;
+}
+.personImg .userName p .rechLook,
+.personImg .userName p .rechHisLook {
+  margin-left: .2rem;
+  color: #0030ff;
+}
+.personImg .userName p .rechHisLook {
+  margin-left: 1.17rem;
+}
+.spanName {
+  line-height: 0.48rem;
+  padding: 0.31rem 0;
+}
+.spanName a {
+  line-height: 0.9rem;
+  margin-left: 0.28rem;
+}
+.personImg span.settImg {
+  position: absolute;
+  right: 2%;
+  top: 35%;
+  width: .22rem;
+}
+.homeMass {
+  font-size: 0;
+  color: #191919;
+  margin-top: 0.1rem;
+  border-top: 1px solid #19aa4b;
+  border-bottom: 1px solid #dcdcdc;
+}
+.homeMass a {
+  font-size: 0.24rem;
+  width: 25%;
+  text-align: center;
+  float: left;
+  height: 1.3rem;
+  border-left: 1px solid #dcdcdc;
+  box-sizing: border-box;
+  padding: 0.17rem 0 0.14rem 0;
+}
+.homeMass a img {
+  width: 0.45rem;
+  height: 0.45rem;
+}
+.homeMass a p {
+  padding-top: 0.1rem;
+  color: #191919;
+}
+.homeMass a:first-child {
+  border-left: 0;
+}
+.HomeMassage {
+  margin-top: 0.1rem;
+  font-size: 0;
+}
+.HomeMassage a {
+  display: inline-block;
+  border-top: 1px solid #dcdcdc;
+  width: 100%;
+  font-size: 0.28rem;
+  color: #666;
+  height: 1rem;
+  line-height: 1rem;
+  position: relative;
+}
+.HomeMassage img.lfImg {
+  margin-left: 0.55rem;
+  width: 0.46rem;
+}
+.HomeMassage img.rImg {
+  right: 2%;
+  position: absolute;
+  top: 35%;
+  width: .22rem;
+}
+.HomeMassage span {
+  margin-left: 0.34rem;
+}
+/*我的订单页和我的评价页面公用样式*/
+.messageForMargin {
+  margin-top: .2rem;
+}
+.storeMessage {
+  padding: .1rem .15rem;
+  border-top: 1px solid #dfdfdf;
+}
+.storeMessage .storeName {
+  line-height: .45rem;
+}
+.storeMessage .orderMessage {
+  line-height: .45rem;
+}
+.storeMessage .orderMessage .orderState {
+  color: #f0821e;
+}
+.storeMessage .orderMessage .storeOrderState {
+  color: #19aa4b;
+}
+.evaledItem {
+  position: relative;
+  padding: .2rem .15rem;
+  border-top: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  margin-top: .1rem;
+}
+.evaledItem:first-child {
+  margin-top: 0;
+}
+.evaledItem .evalTop a img {
+  width: 1.2rem;
+  border: 1px solid #dcdcdc;
+}
+.evaledItem .evalTop .evalRight {
+  width: 80%;
+}
+.evaledItem .evalTop .evalRight a {
+  font-size: .24rem;
+  color: #666;
+  margin-top: .05rem;
+  height: .7rem;
+  line-height: .38rem;
+  margin-bottom: .1rem;
+}
+.evaledItem .evalTop .evalRight p {
+  font-size: .22rem;
+  color: #666;
+  font-weight: normal;
+}
+.evaledItem .evalText {
+  font-size: .22rem;
+  padding-top: .2rem;
+  overflow: hidden;
+}
+.evaledItem .evaledImgs {
+  font-size: 0;
+  margin-right: -0.3rem;
+}
+.evaledItem .evaledImgs img {
+  width: 1.43rem;
+  margin: .1rem .3rem .1rem 0;
+}
+.evaledItem .evaledImgs img:first-child {
+  margin-left: 0;
+}
+.evaledItem .goEval {
+  position: absolute;
+  right: .2rem;
+  bottom: .2rem;
+  font-size: .22rem;
+  display: block;
+  width: 1.2rem;
+  height: .4rem;
+  line-height: .4rem;
+  text-align: center;
+  border: 0.02rem solid #19aa4b;
+  border-radius: .5rem;
+  color: #19aa4b;
+}
+.orderMoney li {
+  display: block;
+  text-align: right;
+  border-bottom: 1px solid #ebebeb;
+  padding: .23rem .15rem;
+  color: #666;
+}
+.orderMoney li .seeExpress {
+  font-size: .22rem;
+  display: block;
+  width: 1.2rem;
+  height: .4rem;
+  line-height: .4rem;
+  text-align: center;
+  border: .02rem solid #999;
+  border-radius: .5rem;
+  color: #999;
+}
+.orderMoney li .forBorderColor {
+  border: 0.02rem solid #19aa4b;
+  color: #19aa4b;
+}
+.orderMoney li .forRedBorderColor {
+  border: 0.02rem solid #19aa4b;
+  color: #19aa4b;
+  margin-right: .2rem;
+}
+/*我的订单页*/
+.orderNull {
+  font-size: .3rem;
+  text-align: center;
+  padding: 3rem 0 4rem 0;
+}
+/*我的收藏页*/
+.pageTitle a {
+  color: #fff;
+}
+.collectProList {
+  margin-top: 1.2rem;
+}
+.collectProList .collectProItem {
+  float: left;
+  font-size: 0;
+  width: 48%;
+  margin-left: .28rem;
+}
+.collectProList .collectProItem:nth-child(2n-1) {
+  margin-left: 0;
+}
+.collectProList .collectProItem .checkOneInput {
+  display: none;
+  width: .3rem;
+  height: .3rem;
+  margin-bottom: .15rem;
+  margin-left: .1rem;
+}
+.collectProList .proItem {
+  border-radius: .2rem;
+  padding-bottom: .1rem;
+  width: 100%;
+  margin-left: 0 !important;
+}
+.productList .proItem .proImg img {
+  border-top-left-radius: .2rem;
+  border-top-right-radius: .2rem;
+}
+.proImg img {
+  width: 3.46rem;
+  height: 3.78rem;
+}
+.sureDelete {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  width: 7.5rem;
+  height: 1.3rem;
+  background: #fff;
+}
+.sureDelete a {
+  width: 3.4rem;
+  height: .95rem;
+  line-height: .95rem;
+  margin-top: .2rem;
+  background: #19aa4b;
+  color: #fff;
+}
+.sureDelete a:first-child {
+  border: solid 2px #19aa4b;
+  background: #fff;
+  color: #19aa4b;
+  box-sizing: border-box;
+  margin-top: -1em;
+}
+.sureDelete img {
+  width: .45rem;
+  margin-right: .05rem;
+  margin-top: -0.02rem;
+}
+/*会员中心-编辑收货地址页*/
+.editAddr li {
+  display: block;
+  border-bottom: 1px solid #dcdcdc;
+  padding: 0 .15rem;
+  background-color: #fff;
+  font-size: 0;
+}
+.editAddr li .addrInput {
+  width: 7rem;
+  height: 1rem;
+  line-height: 1rem;
+  font-size: .28rem;
+  padding: 0 .1rem;
+  border: none;
+  outline: none;
+}
+.setDefault {
+  font-size: 0;
+  padding-top: .15rem;
+  margin-bottom: .2rem;
+}
+.setDefault label {
+  font-size: .28rem;
+  padding-left: .25rem;
+}
+.setDefault label input {
+  width: .3rem;
+  height: .3rem;
+  vertical-align: middle;
+  margin-right: .1rem;
+}
+/*修改密码页*/
+#alterForm .changPassword {
+  background: #fff;
+}
+.wholeHei {
+  height: 100%;
+}
+.redBut input {
+  width: 100%;
+  height: 0.95rem;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  font-size: 0.35rem;
+  color: #ffffff;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+  background: #19aa4b;
+  border-radius: 50rem;
+  border-width: initial;
+  border-style: none;
+  border-color: initial;
+}
+/*充值页面*/
+.rechangeTop {
+  width: 100%;
+  height: 2.25rem;
+  text-align: center;
+  padding-top: .35rem;
+  border-bottom: solid 1px #dedede;
+  margin-bottom: .1rem;
+}
+.rechangeTop img {
+  width: .61rem;
+  height: .72rem;
+  margin-bottom: .15rem;
+}
+.rechangeTop p {
+  line-height: .36rem;
+}
+.rechangeT {
+  width: 100%;
+  color: #333;
+}
+.rechangeT td {
+  height: .7rem;
+  line-height: .7rem;
+  border-bottom: solid 1px #dedede;
+}
+.rechangeT .tTitle {
+  width: 1.3rem;
+}
+.rechangeT input {
+  margin-right: .1rem;
+  height: .36rem;
+  vertical-align: text-top;
+  margin-top: 0;
+}
+.rechangeDeal {
+  padding-left: 1.7rem;
+  margin-top: .2rem;
+  margin-right: .1rem;
+  color: #000;
+}
+.rechangeDeal input {
+  height: .36rem;
+  vertical-align: text-top;
+  margin-top: 0;
+}
+.rechangeDeal p {
+  display: inline-block;
+  width: 5rem;
+}
+.rechangeDeal .dealDialogBtn {
+  color: #003cff;
+}
+.agreeBtn {
+  bottom: -1rem;
+  position: relative;
+  height: .95rem;
+}
+.agreeBtn a {
+  width: 7.1rem;
+  height: .95rem;
+  background: #fff;
+  border: solid 1px #19aa4b;
+  border-radius: 5px;
+  font-size: 0.35rem;
+  color: #19aa4b;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+}
+/*充值记录页面*/
+.rechangeHistoryText table {
+  border-top: 2px solid #19aa4b;
+  border-left: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.2rem;
+  margin-top: 0.15rem;
+}
+.rechangeHistoryText table tr {
+  line-height: 0.6rem;
+}
+/*注册协议弹窗*/
+.agreementsContent {
+  padding: .4rem .25rem .1rem;
+  font-size: .14rem;
+  color: #666;
+  line-height: .4rem;
+  letter-spacing: 0.8px;
+}
+.agreeBtnBox {
+  display: block;
+  height: .86rem;
+  padding: .4rem 0.2rem;
+}
+.agreementBtn {
+  display: block;
+  width: 100%;
+  height: .86rem;
+  line-height: .86rem;
+  text-align: center;
+  font-size: .3rem;
+  letter-spacing: .06rem;
+  color: #fff;
+  border: solid 1px #19aa4b;
+  color: #19aa4b;
+  margin: 0 auto;
+}
+#iframeDiv {
+  display: none;
+}
+/*# sourceMappingURL=personalCenter.css.map */

@@ -1,0 +1,100 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.noticelist {
+  font-size: 0;
+}
+.noticelist a {
+  font-size: 0.28rem;
+  color: #353535;
+  padding: 0 1%;
+  line-height: 1rem;
+  height: 1rem;
+  border-bottom: 1px solid #dcdcdc;
+  display: inline-block;
+  width: 98%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nDtext {
+  border-top: 1px solid #ebebeb;
+  background: #fff;
+  padding-top: 0.24rem;
+}
+.nDtext img {
+  width: 6.64rem;
+  height: 4.17rem;
+}
+.bgGrey {
+  background: #f0f0f0;
+  height: 1.2rem;
+  padding-top: 0.1rem;
+}
+.headline {
+  background: #fff;
+  height: 1.1rem;
+  border-bottom: 1px solid #ebebeb;
+}
+.headline p {
+  font-size: 0.28rem;
+  text-align: center;
+  color: #353535;
+  line-height: 0.7rem;
+  height: 0.7rem;
+}
+.headline .headlineTime {
+  text-align: center;
+  font-size: 0.2rem;
+  color: #969696;
+  margin-top: -0.06rem;
+}
+.writeWrap {
+  background: #fff;
+}
+.noticeOverflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/*设置*/
+.bgblack {
+  background: #fff;
+}
+.setting {
+  font-size: 0.28rem;
+  color: #666;
+  height: 1rem;
+  line-height: 1.05rem;
+  border-bottom: 1px solid #dcdcdc;
+  padding: 0 .15rem;
+  margin-bottom: 9rem;
+}
+.setting .settImg {
+  width: .22rem;
+}
+.personalHome {
+  margin-bottom: 2rem;
+}
+.personlBut {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.15rem;
+  background: #fff;
+}
+.personlBut a {
+  width: 100%;
+  background: #19aa4b;
+  border-radius: 50rem;
+  height: 0.95rem;
+  border: none;
+  font-size: 0.35rem;
+  color: #fff;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+}
+/*# sourceMappingURL=userCenter.css.map */

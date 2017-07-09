@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.hg.dao.content.InterceptorDao">
+	<select id="findModuleByUserId" parameterType="Long" resultType="Module">
+		SELECT DISTINCT T_MODULE.* FROM 
+		  T_USER,
+		  T_USER_ROLE,
+		  T_ROLE,
+		  T_ROLE_PAGE,
+		  T_PAGE,
+		  T_MODULE
+		WHERE T_USER.ID = T_USER_ROLE.USER_ID AND 
+		      T_USER_ROLE.ROLE_ID = T_ROLE.ID AND 
+		      T_ROLE.ID = T_ROLE_PAGE.ROLE_ID AND 
+		      T_ROLE_PAGE.PAGE_ID = T_PAGE.ID AND 
+		      T_PAGE.MODULE_ID = T_MODULE.ID AND 
+		      T_USER.ID = #{userId}
+	</select>
+	
+	<select id="findPageByModuleId" parameterType="long" resultType="Page">
+		SELECT * FROM T_PAGE, T_ROLE_PAGE 
+		WHERE 
+			T_PAGE.ID = T_ROLE_PAGE.PAGE_ID 
+		AND 
+			MODULE_ID = #{moduleId} AND T_ROLE_PAGE.DELETED = 0 AND T_PAGE.DELETED = 0
+		ORDER BY T_PAGE.SORT
+	</select>
+</mapper>

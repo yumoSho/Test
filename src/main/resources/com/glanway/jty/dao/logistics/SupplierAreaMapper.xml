@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.logistics.SupplierAreaDao">
+
+    <resultMap id="SupplierAreaRM" type="SupplierArea">
+        <id column="ID" property="id"/>
+        <result column="AREA_NAME" property="areaName"/>
+        <result column="PRICE" property="price"/>
+        <result column="SUPPLIER_ID" property="supplierId"/>
+        <result column="SUPPLIER_NAME" property="supplierName"/>
+        <result column="FIELD1" property="field1"/>
+        <result column="FIELD2" property="field2"/>
+        <result column="FIELD3" property="field3"/>
+        <result column="FIELD4" property="field4"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="deleted" column="DELETED"/>
+        <collection property="hatCityList" ofType="SupplierAreaCity" columnPrefix="SAC_">
+            <id column="ID" property="id"/>
+            <result column="SUPPLIER_AREA_ID" property="supplierAreaId"/>
+            <result column="DELETED" property="deleted"/>
+            <association column="CITY_ID"  property="hatCity" javaType="HatCity" columnPrefix="HC_">
+            	<id column="ID" property="id"/>
+		        <result property="CITY_CODE" column="cityCode"/>
+		        <result property="CITY_NAME" column="cityName"/>
+		        <result property="SUPER_CODE" column="superCode"/>
+ 		 	</association>
+        </collection>
+    </resultMap>
+    
+    <sql id="baseFilter">
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="supplierId != null">
+			SUPPLIER_ID = #{supplierId}
+		</if>
+		<if test="supplierName != null">
+			SUPPLIER_NAME = #{supplierName}
+		</if>
+		<if test="areaName != null">
+			AREA_NAME = #{areaName}
+		</if>
+		AND DELETED = 0
+	</sql>
+    
+    <!-- 查询数量  -->
+	<select id="countBySupplierId" parameterType="map" resultType="int">
+		SELECT	 COUNT(1)	FROM	T_SUPPLIER_AREA
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+	
+	<!-- 获取物流信息列表 -->
+	<select id="findManyBySupplierId" parameterType="map" resultMap="SupplierAreaRM">
+		<include refid="support.ph"/>
+		SELECT
+		    ID,
+		    AREA_NAME,
+		    SUPPLIER_ID,
+		    PRICE,
+		    CREATED_DATE,
+		    LAST_MODIFIED_DATE,
+		    SUPPLIER_NAME
+		FROM
+		    T_SUPPLIER_AREA	 
+		<where>
+			<trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+				<include refid="baseFilter" />
+            </trim>
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim>
+        <include refid="support.pf"/>
+	</select>
+	
+	<!-- 根据ID查询(包含城市信息,城市信息不能为空) -->
+	<select id="findList" parameterType="long" resultMap="SupplierAreaRM">
+		SELECT
+		    SA.ID,
+		    SA.AREA_NAME,
+		    SA.SUPPLIER_ID,
+		    SA.PRICE,
+		    SA.CREATED_DATE,
+		    SA.LAST_MODIFIED_DATE,
+		    SA.SUPPLIER_NAME,
+		    SAC.ID SAC_ID,
+		    SAC.CITY_ID SAC_HC_ID
+		FROM
+		    T_SUPPLIER_AREA SA
+		JOIN T_SUPPLIER_AREA_CITY SAC
+		ON SAC.SUPPLIER_AREA_ID = SA.ID
+		WHERE SA.ID = #{id}
+		AND SA.DELETED = 0
+		AND SAC.DELETED = 0
+	</select>
+	
+	<select id="find" parameterType="long" resultType="SupplierArea">
+		SELECT
+		    ID,
+		    AREA_NAME,
+		    SUPPLIER_ID,
+		    PRICE,
+		    CREATED_DATE,
+		    LAST_MODIFIED_DATE,
+		    SUPPLIER_NAME
+		FROM
+		    T_SUPPLIER_AREA
+		WHERE ID = #{id}
+		AND DELETED = 0
+	</select>
+	
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+	<insert id="saveAndReturnId" parameterType="SupplierArea" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_SUPPLIER_AREA (
+	        AREA_NAME,
+	        SUPPLIER_ID,
+	        PRICE,
+	        FIELD1,
+	        FIELD2,
+	        FIELD3,
+	        FIELD4,
+	        CREATED_DATE,
+	        CREATED_BY,
+	        DELETED,
+	        SUPPLIER_NAME
+		) VALUES (
+			#{areaName},
+			#{supplierId},
+			#{price},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{createdDate},
+			#{createdBy},
+			#{deleted},
+			#{supplierName}
+		)
+	</insert>
+	
+	<!-- 更新数据 -->
+    <update id="update" parameterType="SupplierArea">
+		UPDATE T_SUPPLIER_AREA
+		<set>
+			<if test="areaName != null">
+				AREA_NAME = #{areaName},
+			</if>
+			<if test="supplierId != null">
+				SUPPLIER_ID = #{supplierId},
+			</if>
+			<if test="supplierName != null">
+				SUPPLIER_NAME = #{supplierName},
+			</if>
+			<if test="price != null">
+				PRICE = #{price},
+			</if>
+			<if test="field1 != null">
+				FIELD1 = #{field1},
+			</if>
+			<if test="field2 != null">
+				FIELD2 = #{field2},
+			</if>
+			<if test="field3 != null">
+				FIELD3 = #{field3},
+			</if>
+			<if test="field4 != null">
+				FIELD4 = #{field4},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 批量删除 -->
+    <delete id="batchDelete" parameterType="List">
+		UPDATE 
+			T_SUPPLIER_AREA
+		SET 
+			DELETED = 1
+		WHERE ID IN
+		<foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	
+<!-- 	   <resultMap id="UserRM" type="User">
+        <id property="id" column="ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="remark" column="REMARK"/>
+        <result property="isFreeze" column="IS_FREEZE"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="lastLoginTime" column="LAST_LOGIN_TIME"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <collection property="roles" ofType="Role">
+            <id property="id" column="R_ID"/>
+            <result property="name" column="R_NAME"/>
+        </collection>
+    </resultMap> -->
+  
+	<select id="getPriceBySupplierIdAndCity" resultType="SupplierArea">
+		SELECT 
+		    MIN(SA.PRICE) PRICE
+		FROM
+		    T_SUPPLIER_AREA SA 
+		LEFT JOIN 
+		    T_SUPPLIER_AREA_CITY SAC
+		ON 
+			SA.ID = SAC.SUPPLIER_AREA_ID
+	    LEFT JOIN 
+	    	HAT_CITY HC
+	    ON 
+	    	HC.ID = SAC.CITY_ID
+	    WHERE 
+		 HC.CITY_CODE = #{cityCode}
+	</select>
+</mapper>

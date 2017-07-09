@@ -1,0 +1,6 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+	<!-- Begin 客服中心 -->
+	<%--<a class="img-reservation" href="javascript: Besture.Messager.alert('提示', '尽请期待！');" title="点击联系我们">
+		<img src="${ctx}/images/admin/img-reservation.png" width="68" height="102" alt="客服中心" />
+	</a>--%>
+	<!-- //End 客服中心 -->

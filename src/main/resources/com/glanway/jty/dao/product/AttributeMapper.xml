@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Created on 2014-07-17 16:54:02 @author crud generated -->
+<mapper namespace="com.glanway.jty.dao.product.AttributeDao">
+
+	<resultMap id="attributeNoRecommend" type="Attribute">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<collection property="attributeValues" ofType="AttributeValue"
+			columnPrefix="v_">
+			<id property="id" column="ID" />
+			<result property="value" column="VALUE" />
+		</collection>
+	</resultMap>
+
+
+
+	<resultMap id="attributeDetail" type="Attribute">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="alias" column="ALIAS" />
+		<result property="displayType" column="DISPLAY_TYPE" />
+		<result property="isBase" column="IS_BASE" />
+		<result property="visible" column="VISIBLE" />
+		<result property="sort" column="SORT" />
+		<collection property="attributeValues" ofType="AttributeValue" columnPrefix="V_">
+			<id property="id" column="ID" />
+			<result property="value" column="VALUE" />
+			<result property="code" column="CODE" />
+			<result property="sort" column="SORT" />
+		</collection>
+	</resultMap>
+
+	<!-- -->
+	<sql id="baseCols">
+		ALIAS,
+		CREATED_BY,
+		CREATED_DATE,
+		DELETED,
+		DISPLAY_TYPE,
+		ID,
+		IS_BASE,
+		VISIBLE,
+		LAST_MODIFIED_BY,
+		LAST_MODIFIED_DATE,
+		NAME,
+		SORT,
+		MODEL_ID
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+			ALIAS,
+			CREATED_BY,
+			CREATED_DATE,
+			DELETED,
+			DISPLAY_TYPE,
+			ID,
+			IS_BASE,
+			VISIBLE,
+			LAST_MODIFIED_BY,
+			LAST_MODIFIED_DATE,
+			NAME,
+			SORT,
+			MODEL_ID
+		FROM
+			T_ATTRIBUTE
+	</sql>
+
+	<sql id="baseFilter">
+		<if test="alias != null">
+			AND ALIAS = #{alias}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="displayType != null">
+			AND DISPLAY_TYPE = #{displayType}
+		</if>
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="isBase != null">
+			AND IS_BASE = #{isBase}
+		</if>
+		<if test="visible != null">
+			AND VISIBLE = #{visible}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="name != null">
+			AND NAME = #{name}
+		</if>
+		<if test="sort != null">
+			AND SORT = #{sort}
+		</if>
+		AND DELETED = 0
+		<!-- more -->
+	</sql>
+
+	<!-- - - - - - - - - - Retrieve - - - - - - - - - -->
+
+
+
+	<!-- retrieve by id -->
+	<select id="find"  resultType="Attribute">
+		<include refid="baseQuery" />
+		WHERE ID = #{id}
+	</select>
+
+	<!-- retrieve a unique entity -->
+	<select id="findOne" parameterType="map" resultType="Attribute">
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultMap="attributeDetail">
+		SELECT
+			A.*,
+			AV.ID V_ID,
+			AV.VALUE V_VALUE,
+			AV.SORT V_SORT
+		FROM (
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+		ORDER BY ID
+		) A
+		LEFT JOIN T_ATTRIBUTE_VALUE AV ON AV.ATTRIBUTE_ID = A.ID AND AV.DELETED = 0
+		ORDER BY A.SORT, A.LAST_MODIFIED_DATE, AV.SORT, AV.LAST_MODIFIED_DATE
+	</select>
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM T_ATTRIBUTE
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="Attribute" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO T_ATTRIBUTE (
+		<include refid="baseCols" />
+		) VALUES (
+		#{alias},
+		#{createdBy},
+		#{createdDate},
+		#{deleted},
+		#{displayType},
+		#{id},
+		#{isBase},
+		#{visible},
+		#{lastModifiedBy},
+		#{lastModifiedDate},
+		#{name},
+		#{sort},
+		#{model.id}
+		)
+	</insert>
+
+	<!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+	<update id="update" parameterType="Attribute">
+		UPDATE T_ATTRIBUTE
+		<set>
+			<if test="alias != null">
+				ALIAS = #{alias},
+			</if>
+			<if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="deleted != null">
+				DELETED = #{deleted},
+			</if>
+			<if test="displayType != null">
+				DISPLAY_TYPE = #{displayType},
+			</if>
+			<if test="isBase != null">
+				IS_BASE = #{isBase},
+			</if>
+			<if test="visible != null">
+				VISIBLE = #{visible},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="name != null">
+				NAME = #{name},
+			</if>
+			<if test="sort != null">
+				SORT = #{sort},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+	<!-- - - - - - - - - - - Delete - - - - - - - - - -->
+
+	<update id="delete" parameterType="Attribute">
+		<!-- DELETE FROM T_ATTRIBUTE WHERE ID = #{id} -->
+		UPDATE T_ATTRIBUTE SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+	<select id="findModelAttributes" resultMap="attributeDetail">
+		SELECT
+			A.ALIAS,
+			A.DELETED,
+			A.DISPLAY_TYPE,
+			A.ID,
+			A.IS_BASE,
+			A.VISIBLE,
+			A.NAME,
+			A.SORT,
+			AV.ID V_ID,
+			AV.VALUE V_VALUE,
+			AV.CODE V_CODE,
+			AV.SORT V_SORT
+		FROM
+			T_ATTRIBUTE A
+		LEFT JOIN T_ATTRIBUTE_VALUE AV ON AV.ATTRIBUTE_ID = A.ID AND AV.DELETED = 0 AND A.DISPLAY_TYPE != 1
+		WHERE
+			A.DELETED = 0 AND A.MODEL_ID = #{mid}
+		ORDER BY A.SORT
+	</select>
+
+	<update id="deleteModelAttributes">
+		UPDATE T_ATTRIBUTE SET DELETED = 1 WHERE MODEL_ID = #{mid}
+	</update>
+
+</mapper>

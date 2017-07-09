@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.SupportContentDao">
+    <resultMap id="supportContentRM" type="SupportContent">
+        <id property="id" column="ID"/>
+        <result column="ID" property="id"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="sortNum" column="SORT_NUM"/> 
+        <result property="deleted" column="DELETED"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+		
+		<!-- 关联帮助中心分类 -->
+        <collection property="supportCategory" ofType="SupportCategory" columnPrefix="C_">
+            <id property="id" column="ID"/>
+            <result property="name" column="NAME"/>
+        </collection>
+
+    </resultMap>
+
+
+    
+
+    <insert id="save" parameterType="SupportContent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_SUPPORT_CONTENT (
+        	ID,
+        	TITLE,
+            CONTENT,
+            SUPPORT_CATEGORY_ID,
+            SORT_NUM,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DELETED
+        ) VALUES (
+        #{id},
+        #{title},
+        #{content},
+        #{supportCategory.id},
+        #{sortNum},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy},
+       0
+        )
+    </insert>
+
+    <sql id="baseQuery">
+      
+         	ID,
+        	TITLE,
+            CONTENT,
+            SUPPORT_CATEGORY_ID,
+            SORT_NUM,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DELETED
+
+    </sql>
+    <sql id="baseFilter">
+    	
+    	<if test="title != null">
+            AND TITLE = #{title}
+        </if>
+        <if test="content != null">
+            AND CONTENT = #{content}
+        </if>
+        
+       <if test="supportCategory != null and supportCategory.id != null">
+            AND SUPPORT_CATEGORY_ID = #{supportCategory.id}
+        </if>
+        <if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+	    </if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="sortNum != null">
+			AND SORT_NUM = #{sortNum}
+	    </if>
+        
+    
+    </sql>
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="supportContentRM">
+		SELECT 
+		A.*,
+    	C.ID   		C_ID,
+    	C.NAME 		C_NAME
+		FROM T_SUPPORT_CONTENT A
+		LEFT JOIN T_SUPPORT_CATEGORY C ON C.ID=A.SUPPORT_CATEGORY_ID AND C.DELETED=0
+		WHERE A.ID=#{id}
+    </select>
+	
+
+	<select id="findMany" parameterType="map" resultMap="supportContentRM">
+		<include refid="support.ph"/>
+		SELECT 
+		A.*,
+    	C.ID   		C_ID,
+    	C.NAME 		C_NAME
+		FROM T_SUPPORT_CONTENT A
+		LEFT JOIN T_SUPPORT_CATEGORY C ON C.ID=A.SUPPORT_CATEGORY_ID AND C.DELETED=0
+		
+	
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND A.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		 <include refid="support.pf"/>
+	</select>
+	
+	
+	
+	<select id="findAllByBankId"  resultMap="supportContentRM">
+		SELECT
+		A.*,
+    	C.ID   		C_ID,
+    	C.NAME 		C_NAME
+		FROM T_SUPPORT_CONTENT A
+		LEFT JOIN T_SUPPORT_CATEGORY C ON A.DELETED=0 AND C.ID=A.SUPPORT_CATEGORY_ID AND C.DELETED=0
+		ORDER BY A.SORT_NUM
+	</select>
+
+	<select id="findListByCategoryId"  parameterType="long" resultType="SupportContent">
+		SELECT
+			*
+		FROM T_SUPPORT_CONTENT A
+		WHERE DELETED = 0
+		AND SUPPORT_CATEGORY_ID = #{cId}
+	</select>
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_SUPPORT_CONTENT A
+		LEFT JOIN T_SUPPORT_CATEGORY C ON C.ID=A.SUPPORT_CATEGORY_ID AND C.DELETED=0
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND A.DELETED=0
+		</where>
+
+	</select>
+
+
+   
+
+    <update id="update" parameterType="SupportContent">
+        UPDATE T_SUPPORT_CONTENT
+        <set>
+        	<if test="title != null">
+           		 TITLE = #{title},
+	        </if>
+            <if test="content != null">
+           		 CONTENT = #{content},
+	        </if>      
+	        <if test="supportCategory != null and supportCategory.id!=null">
+	            SUPPORT_CATEGORY_ID = #{supportCategory.id},
+	        </if>
+	        <if test="sortNum != null">
+	            SORT_NUM = #{sortNum},
+	        </if>
+
+	        <if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+		    </if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+		
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="SupportContent">
+        UPDATE T_SUPPORT_CONTENT SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    
+
+    
+
+
+
+</mapper>

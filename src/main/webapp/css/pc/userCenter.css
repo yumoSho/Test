@@ -1,0 +1,1178 @@
+/*���ñ���*/
+/*������ʽ����*/
+.centerMargin {
+  margin-top: 31px;
+  padding-bottom: 58px;
+}
+.centerMargin .rightWrap {
+  width: 1003px;
+}
+.centerMargin .rightWrap .sameTitle {
+  font-size: 20px;
+  line-height: 100%;
+  font-weight: bold;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #c7c7c7;
+  color: #666;
+}
+.centerMargin .rightWrap .sameTitle a {
+  font-size: 12px;
+  font-weight: normal;
+  height: 30px;
+  line-height: 30px;
+  color: #19aa4b;
+}
+.centerMargin .rightWrap .sameTitle a:hover {
+  border-color: #19aa4b;
+  color: #19aa4b;
+  background-color: #fff;
+}
+.centerMargin .rightWrap .sameTitle.noBorder {
+  border-bottom: none;
+}
+/*tab�л���ť*/
+.tabBtn {
+  margin-top: 16px;
+  margin-bottom: 26px;
+  border-left: 1px solid #ccc;
+}
+.tabBtn p {
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  float: left;
+  border: 1px solid #ccc;
+  color: #666;
+  width: 10%;
+  border-left: none;
+}
+.tabBtn p.on,
+.tabBtn p:hover {
+  background: #19aa4b;
+  color: #fff;
+  border: 1px solid #19aa4b;
+  cursor: pointer;
+  border-left: none;
+}
+/*���ñ���б�*/
+.userPublicTable {
+  width: 100%;
+  text-align: center;
+}
+.userPublicTable th {
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  line-height: 45px;
+  background: #fafafa;
+}
+.userPublicTable th.tl {
+  text-align: left;
+}
+.userPublicTable td {
+  border-bottom: 1px solid #e5e5e5;
+  color: #666;
+}
+.userPublicTable td:first-child {
+  width: 200px;
+  height: 40px;
+  word-break: break-word;
+}
+.userPublicTable td.tl {
+  text-align: left;
+}
+.noCrad {
+  font-size: 18px;
+  color: #999;
+  text-align: center;
+  margin: 150px auto 100px auto;
+}
+/*�����б���(����ҳ����õ�)*/
+.centerTable {
+  width: 100%;
+  margin: 20px 0 -11px;
+  border: #e4e4e4 solid 1px;
+  border-left: none;
+  border-right: none;
+}
+.centerTable td:first-child {
+  text-align: left;
+}
+.centerTable tr:first-child {
+  background: #f2f2f2;
+  border-right: none;
+  border-left: none;
+  height: 45px;
+  text-align: center;
+}
+.centerTable tr:first-child td:first-child {
+  text-indent: 20px ;
+}
+.centerTable tr:first-child th:first-child {
+  text-indent: -125px;
+}
+.centerTable tr {
+  height: 145px;
+  text-align: center;
+  border-bottom-color: #EEEEEE;
+}
+.centerTable tr.tableTitle {
+  background: #f7f7f7;
+  color: #666;
+}
+.centerTable tr.tableTitle td {
+  border: none;
+}
+.centerTable tr td:first-child {
+  border-left: none;
+}
+.centerTable tr td:last-child {
+  border-right: none;
+}
+.centerTable tr .myCentershaoppingImg {
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin: 0 0 0 40px;
+}
+.centerTable tr .myCentershaoppingTitle {
+  display: inline-block;
+  height: 40px;
+  width: 260px;
+  color: #666;
+  text-align: center;
+  line-height: 20px;
+  vertical-align: middle;
+}
+.centerTable tr .myCentershaoppingTitle:hover {
+  color: #19aa4b;
+}
+.centerTable tr .lineLtem {
+  text-align: center;
+}
+.centerTable tr .lineLtem a {
+  display: block;
+}
+.centerTable tr .lineLtem a.on {
+  color: #0000cc;
+  margin-bottom: 3px;
+}
+.centerTable tr .receiving {
+  width: 88px;
+  height: 30px;
+  display: block;
+  background: #19aa4b;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  margin: 0 auto;
+}
+.centerTable tr .receivingBottom {
+  margin-top: 4px;
+  display: block;
+  color: #666;
+}
+/*����������ҳ*/
+.userIndex {
+  /*.centerBottom {
+        margin: 16px 0 58px;
+        color: #666;
+        width:100%;
+        a {
+            color: #666;
+            display: inline-block;
+            width: 700px;
+            height: 20px;
+            line-height: 20px;
+            overflow: hidden;
+            -webkit-line-clamp: 1;
+
+            &:hover {
+                color: @mainColor;
+            }
+        }
+
+        tr {
+
+            td {
+                padding: 3px 25px 3px 31px;
+            }
+
+            td:first-child {
+                text-align: left;
+                background: url(../images/blackD.png) 19px center no-repeat;
+            }
+
+            td:nth-child(2) {
+                text-align: right;
+            }
+        }
+    }*/
+}
+.userIndex .mycenterDiv {
+  padding: 27px 37px 18px;
+  border: 1px solid #19aa4b;
+  background: #eafff1;
+  margin-bottom: 25px;
+}
+.userIndex .mycenterDiv .headImg {
+  display: inline-block;
+  border: 1px solid #EAEAEA;
+  position: relative;
+}
+.userIndex .mycenterDiv .headImg input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  opacity: 0;
+}
+.userIndex .mycenterDivUl {
+  width: 230px;
+  margin-left: 124px;
+  margin-top:-10px;
+}
+.userIndex .mycenterDivUl li {
+  padding: 4px 0;
+}
+.userIndex .userIndexInfo {
+  margin-top: 13px;
+}
+.userIndex .userIndexInfo li {
+  color: #666;
+  padding: 0;
+  margin-top: 8px;
+}
+.userIndex .userIndexInfo li span {
+  color: #e60019;
+}
+.userIndex .userIndexInfo li a {
+  color: #0030ff;
+}
+.userIndex .userIndexInfo li a:hover {
+  text-decoration: underline;
+}
+.userIndex .listUl {
+  font-size: 14px;
+  color: #666;
+  overflow: hidden;
+  border-left: 1px dashed #e9cdc7;
+}
+.userIndex .listUl li {
+  float: left;
+  margin-left: 38px;
+  height: 111px;
+  margin-right: 13px;
+}
+.userIndex .listUl li img {
+  display: block;
+  margin: 19px auto 15px;
+}
+.userIndex .listUl li a {
+  display: block;
+}
+/*�޸�����ҳ*/
+.pwdContent {
+  margin: 20px 0 100px 0;
+}
+.pwdContent .changePwdTable .pwdInput {
+  width: 180px;
+  padding: 0 10px;
+  height: 27px;
+  line-height: 27px;
+  border: 1px solid #d8d8d8;
+}
+.pwdContent .changePwdTable td {
+  padding: 10px 0;
+  position: relative;
+}
+.pwdContent .changePwdTable td:first-child {
+  text-align: right;
+  padding-right: 10px;
+}
+.pwdContent .changePwdTable .wordSpace {
+  letter-spacing: 3px;
+}
+.pwdContent .changePwdTable label.error {
+  left: 230px;
+  top: 16px;
+}
+.pwdContent .submitBtn {
+  display: block;
+  width: 94px;
+  height: 37px;
+  line-height: 37px;
+  background-color: #19aa4b;
+  color: #fff;
+  text-align: center;
+  border: none;
+  margin: 20px auto 0 auto;
+  font-size: 14px;
+}
+.pwdContent .rightNotice {
+  line-height: 23px;
+  letter-spacing: .8px;
+}
+.pwdContent .rightNotice p {
+  font-size: 14px;
+  line-height: 35px;
+}
+.pwdContent .pwdTableWrap {
+  width: 370px;
+  margin: 50px auto 20px auto;
+}
+/*�ջ���ַҳ*/
+.addressBox {
+  margin-top: 28px;
+}
+.addressBox .addressItem:first-child {
+  margin-top: 0;
+}
+.addressItem {
+  border: 1px solid #d8d8d8;
+  margin-top: 16px;
+}
+.addressItem .defaultAddr {
+  display: none;
+  background: #f2f2f2;
+  font-size: 12px;
+  font-family: SimSun;
+  color: #000;
+  padding: 29px 12px 0 13px;
+  width: 15px;
+  height: 90px;
+  text-align: center;
+}
+.addressBox .on .defaultAddr {
+  display: block;
+}
+.addrContent {
+  padding-top: 23px;
+  margin-left: 30px;
+}
+.addrContent li {
+  margin-bottom: 8px;
+}
+.addrContent .name {
+  font-size: 18px;
+  color: #000;
+}
+.addrContent .name span {
+  font-size: 12px;
+  color: #999;
+}
+.addrContent .addrDetails,
+.addrContent .tel {
+  font-size: 12px;
+  color: #000;
+}
+.addrSettingBox td {
+  background: #f2f2f2;
+  border-left: 1px solid #d8d8d8;
+  height: 119px;
+  width: 128px;
+}
+.addrSettingBox td p {
+  text-align: center;
+  color: #000;
+  font-size: 12px;
+  font-family: SimSun;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.addrSettingBox td p:first-child {
+  margin-top: 0;
+}
+.addrSettingBox td p:hover,
+.collectionsTable .operation .cancelCollect:hover {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.addAdd {
+  display: block;
+  font-family: SimSun;
+  width: 86px;
+  height: 28px;
+  line-height: 30px;
+  border: 1px solid #19aa4b;
+  color: #19aa4b;
+  font-size: 12px;
+  text-align: center;
+  margin-top: -5px;
+}
+.addAdd sup {
+  top: 1px;
+}
+.addAdd:hover {
+  background: #19aa4b;
+  color: #fff;
+}
+.addAddrBox .addAdd {
+  margin-top: 35px;
+  width: auto;
+  height: 50px;
+  line-height: 52px;
+  margin-bottom: 35px;
+}
+/*�ҵ��Ż�ȯ*/
+.saleCard .tabBtn p {
+  width: 33.2%;
+}
+.saleCard .saleCardBox {
+ /*  display: none; */
+}
+.saleCartList .name {
+  padding-left: 50px;
+  text-align: left;
+}
+/*�ҵ�Ӷ��*/
+.myBackMoney .userPublicTable {
+  margin-top: 32px;
+}
+.myBackMoney .userPublicTable .userId {
+  text-align: left;
+  padding-left: 115px;
+}
+.myBackMoney .userPublicTable .price {
+  text-align: left;
+  padding-left: 140px;
+}
+/*�ҵ�����*/
+.myInvate .userPublicTable {
+  margin-top: 32px;
+}
+.myInvate .userPublicTable .userId {
+  text-align: left;
+  padding-left: 226px;
+}
+/*�ҵ��ղ�*/
+.collectionsTable {
+  margin-bottom: 80px;
+  margin-top: 28px;
+}
+.collectionsTable tr:first-child {
+  background: #F9F9F9;
+}
+.collectionsTable td,
+.collectionsTable th {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: center;
+}
+.collectionsTable th {
+  height: 44px;
+  font-size: 12px;
+}
+.collectionsTable .chooseAll {
+  color: #333;
+  font-weight: normal;
+}
+.collectionsTable .proInfor {
+  padding: 13px 0;
+}
+.collectionsTable .proInfor img,
+.collectionsTable .proInfor .proTitle {
+  float: left;
+}
+.collectionsTable .proInfor img {
+  width: 81px;
+  height: 93px;
+  border: 1px solid #eee;
+}
+.collectionsTable .proInfor .proTitle {
+  width: 318px;
+  color: #666;
+  font-size: 12px;
+  margin-left: -27px;
+  margin-top: 30px;
+  text-align: center;
+}
+.collectionsTable .proInfor .proTitle:hover {
+  color: #19aa4b;
+}
+.collectionsTable .price {
+  font-family: Arial;
+  font-size: 15px;
+  color: #cc0000;
+  font-weight: bold;
+}
+.collectionsTable .operation span {
+  display: block;
+  cursor: pointer;
+  font-size: 12px;
+  color: #999;
+}
+.collectionsTable .operation span:hover {
+  color: #19aa4b;
+}
+.collectionsTable .operation .addCart {
+  width: 86px;
+  height: 27px;
+  line-height: 29px;
+  display: block;
+  color: #19aa4b;
+  border: 1px solid #19aa4b;
+  text-align: center;
+  margin: 0 auto 10px auto;
+}
+.collectionsTable .operation .addCart:hover,
+.collectionsTable .operationBox span:hover {
+  color: #fff;
+  background: #19aa4b;
+}
+.collectionsTable th.chooseAll {
+  padding-left: 23px;
+}
+.collectionsTable .operationBox {
+  border: none;
+  padding-top: 25px;
+}
+.collectionsTable .operationBox span {
+  float: left;
+  margin-right: 10px;
+  width: 86px;
+  height: 28px;
+  line-height: 30px;
+  color: #19aa4b;
+  border: 1px solid #19aa4b;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+}
+/*�ҵĶ���*/
+.myOrder .tabBtn p {
+  width: 19.9%;
+}
+/*�ն���ҳ*/
+.emptyList {
+  margin: 190px 0 100px 300px;
+}
+.emptyList .emptyUl {
+  margin: 61px 31px;
+  font-size: 18px;
+  color: #666;
+  line-height: 29px;
+}
+.emptyList .emptyUl a {
+  color: #0033ff;
+}
+/*��������*/
+.orderStatus {
+  font-size: 14px;
+  color: #333;
+  margin-top: 19px;
+}
+.megItem .orderMsgItemH5 {
+  margin: 15px 0 16px;
+}
+.megItem h5 {
+  font-size: 14px;
+  color: #333333;
+  margin: 23px 0 10px;
+}
+.logisticsTable .msgTitle,
+.orderMsgTable .orderMsgTitle {
+  background-color: #f2f2f2;
+  width: 188px;
+  text-align: center;
+  color: #333;
+}
+.logisticsTable td,
+.orderMsgTable td {
+  padding: 11px 0;
+  border-top: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+  font-size: 12px;
+}
+.logisticsTable .msgContent {
+  padding: 12px 0 12px 75px;
+  color: #666;
+  width: 727px;
+}
+.orderMsgTable .orderMsgContent {
+  padding: 12px 0 12px 75px;
+  color: #666;
+  width: 218px;
+}
+.logisticsMsg .date {
+  margin-right: 130px;
+}
+.logisticsMsg .logisticsDetail {
+  width: 520px;
+}
+.logisticsMsg li {
+  margin-top: 10px;
+}
+.logisticsMsg li:first-child {
+  margin-top: 0;
+}
+.proMsgTabel {
+  margin-top: 26px;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+.proMsgTabel .delete {
+  color: #333;
+}
+.proMsgTabel th {
+  border-top: 1px solid #dadada;
+  background-color: #f2f2f2;
+  padding: 11px 0;
+  text-align: center;
+}
+/*.proMsgTabel th:first-child {
+            text-indent:-109px;
+        }*/
+.proMsgTabel td {
+  border-top: 1px solid #dadada;
+  text-align: center;
+  padding: 20px 0;
+}
+.proDet .proDetimg {
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin-left: 43px;
+}
+.proDet .myCentershaoppingTitle {
+  display: inline-block;
+  height: 32px;
+  width: 230px;
+  text-align:left;
+  color: #666;
+  margin-top: 20px;
+  margin-left: 27px;
+}
+.proDet .myCentershaoppingTitle:hover {
+  color: #19aa4b;
+}
+.proMsgTabel .proTitle {
+  float: left;
+  width: 136px;
+  color: #666;
+  font-size: 14px;
+  margin-left: 18px;
+  margin-top: 18px;
+  text-align: left;
+}
+/*�ҵ�����*/
+.myRating {
+  margin: 14px 0 0;
+}
+.myRating a {
+  width: 49.9%;
+  height: 29px;
+  float: left;
+  text-align: center;
+  line-height: 29px;
+  color: #666;
+  cursor: pointer;
+  display: inline-block;
+  border: #ccc solid 1px;
+  margin-left: -1px;
+}
+.myRating a.on {
+  background: #19aa4b;
+  border-color: #19aa4b;
+  color: #fff;
+}
+.myRatingTabOneTable {
+  width: 100%;
+}
+.myRatingTabOneTable tr {
+  height: 140px;
+  border-bottom: 1px solid #ccc;
+}
+.myRatingTabOneTable tr .myCentershaoppingImg {
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin-left: 45px;
+}
+.myRatingTabOneTable tr .myCentershaoppingText {
+  display: inline-block;
+  width: 220px;
+  height: 40px;
+  margin-left: 27px;
+  margin-top: 15px;
+  line-height: 20px;
+  color: #666;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.myRatingTabOneTable tr .myCentershaoppingSpan {
+  display: inline-block;
+  width: 300px;
+  margin-left: 27px;
+  color: #e5001e;
+}
+.myRatingTabOneTable tr .myCentershaoppingSpan span {
+  font-size: 18px;
+}
+.twoTable {
+  display: none;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+.myRatingTabTwoTable {
+  width: 100%;
+}
+.myRatingTabTwoTable .starScore {
+  margin-left: 30px;
+}
+.myRatingTabTwoTable tr {
+  height: 131px;
+  border-bottom: 1px solid #ccc;
+}
+.myRatingTabTwoTable tr:first-child {
+  height: 57px;
+}
+.myRatingTabTwoTable td:first-child {
+  width: 170px;
+  background: #F6F6F6;
+  text-align: center;
+  font-weight: bold;
+}
+.myRatingTabTwoTable .textarea {
+  height: 69px;
+  width: 752px;
+  margin-left: 30px;
+  border: 1px solid #C1C1C1;
+  outline: none;
+  padding: 10px;
+  overflow-y: scroll;
+}
+.myRatingTabTwoTable .sheetImg {
+  display: inline-block;
+  margin-left: 30px;
+  position: relative;
+}
+.myRatingTabTwoTable .sheetImg input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 100%;
+  opacity: 0;
+}
+.myRatingTabTwoTable .explain {
+  display: block;
+  margin: 13px 0 0 30px;
+  color: #ccc;
+}
+.evaluation {
+  background: #19aa4b;
+  display: inline-block;
+  width: 88px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  margin-right: 19px;
+}
+.evaluation:hover {
+  color: #fff;
+}
+.evaluation.on {
+  background: #19aa4b url(../../images/pc/evaluationImgbg.png) 66px center no-repeat;
+  text-indent: -15px;
+}
+.evaluationBtton {
+  margin: 43px auto;
+  display: block;
+  font-size: 15px;
+  letter-spacing: 4px;
+}
+/*������*/
+.myRatingTabTwota {
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
+.myRatingTabTwota td {
+  padding: 20px 0;
+}
+.myRatingTabTwota tr:first-child {
+  height: 43px;
+  background: #F9F9F9;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-right: none;
+}
+.myRatingTabTwota tr:first-child td:first-child {
+  text-indent: -127px;
+}
+.myRatingTabTwota tr {
+  height: 131px;
+  border-bottom: 1px solid #ccc;
+}
+.myRatingTabTwota td:last-child {
+  text-align: center;
+}
+.myRatingTabTwota .myCentershaoppingImg {
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin: 0 0 0 23px;
+}
+.myRatingTabTwota .myCentershaoppingTitle {
+  display: inline-block;
+  height: 40px;
+  width: 230px;
+  text-indent: 4px;
+  color: #666;
+  margin-left: 15px;
+  margin-top: 15px;
+  line-height: 20px;
+  text-align: left;
+}
+.myRatingTabTwota .myCentershaoppingTitle:hover {
+  color: #19aa4b;
+}
+.myRatingTabTwota .myCentershaoppingSpan {
+  display: inline-block;
+  width: 200px;
+  margin-left: 15px;
+  color: #e50017;
+}
+.myRatingTabTwota .myCentershaoppingSpan span {
+  font-size: 18px;
+}
+.myRatingTabTwota .introduce {
+  display: block;
+  width: 302px;
+  margin: 0 auto;
+  text-align: left;
+}
+.myRatingTabTwota .icoStarG {
+  margin-left: 2px;
+}
+/*������Ϣ*/
+.headPortrait {
+  padding: 70px 0 50px;
+  text-align: center;
+}
+.headPortrait .headPortraitImg {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #ccc;
+}
+.headPortrait .headPortraitImg input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.headPortrait .uploadPhoto {
+  margin-top: 18px;
+}
+.headPortrait .uploadPhoto a {
+  color: #0018ff;
+  font-size: 14px;
+}
+.headPortraitpadding .headPortraittable {
+  width: 100%;
+}
+.headPortraitpadding .headPortraittable td:first-child {
+  width: 38%;
+  font-size: 14px;
+  line-height: 58px;
+  text-align: right;
+  padding-right: 20px;
+}
+.headPortraitpadding .headPortraittable td:first-child i {
+  font-style: normal;
+  margin-right: 7px;
+  color: #E50220;
+}
+.headPortraitpadding .headPortraittable .inputText {
+  height: 36px;
+  width: 309px;
+  border: 1px solid #ccc;
+  text-indent: 14px;
+  outline: none;
+  color: #666;
+}
+.headPortraitpadding .headPortraittable .radio span {
+  margin-right: 26px;
+}
+.headPortraitpadding .headPortraittable .radio input {
+  width: 19px;
+  height: 19px;
+  outline: none;
+  margin-right: 10px;
+  margin-top: -8px;
+}
+.headPortraitpadding .headPortraittable label.error {
+  position: static;
+  margin-left: 5px;
+}
+.headPortraitpadding .submintBtn {
+  width: 86px;
+  height: 36px;
+  background: #19aa4b;
+  border: none;
+  outline: none;
+  color: #fff;
+  margin: 60px auto;
+  display: block;
+}
+/*�ϴ�ͷ��*/
+.uploadImg {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.uploadImgTitle {
+  border-bottom: #999 solid 1px;
+  font-size: 18px;
+  line-height: 54px;
+  margin-top: 18px;
+  margin-bottom: 20px;
+}
+.uploadImgSubmit {
+  margin-top: 18px;
+}
+.uploadImgSubmit a {
+  display: block;
+  width: 101px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  border: none;
+  background: #19aa4b;
+  color: #fff;
+}
+/* ��ֵҳ�� */
+.userBalanceInfo {
+  text-align: center;
+  padding-top: 42px;
+  padding-bottom: 28px;
+  color: #666;
+  font-size: 14px;
+}
+.userBalanceInfo .userBalanceContent {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  background: url(../../images/pc/userCenterWallet.png) no-repeat;
+  padding-top: 8px;
+}
+.userBalanceInfo .userBalanceContent p {
+  line-height: 26px;
+  text-indent: 62px;
+  text-align: left;
+}
+.rechangeTable {
+  width: 100%;
+  font-size: 14px;
+}
+.rechangeTable td {
+  max-width: 220px;
+  padding-right: 20px;
+  line-height: 56px;
+}
+.rechangeTable .alignR {
+  width: 215px;
+  text-align: right;
+  padding-right: 10px;
+}
+.rechangeTable .rechangeAgree {
+  color: #000;
+  font-size: 12px;
+}
+.rechangeTable .rechangeAgree .rechangeDeal {
+  color: #003cff;
+}
+.rechangeButtomWrap {
+  width: 100%;
+  text-align: center;
+}
+.rechangeButtomWrap .rechangeButtom {
+  display: inline-block;
+  width: 123px;
+  height: 45px;
+  text-align: center;
+  line-height: 45px;
+  background: #19aa4b;
+  font-size: 18px;
+  color: #fff;
+  margin: 25px auto 95px;
+}
+.rechangeButtomWrap .rechangeButtom:hover {
+  color: #fff;
+}
+/* ��ֵ��ʷҳ�� */
+.rechangeHistoryContent {
+  margin: 32px 0 100px 0;
+}
+.rechangeHistoryContent .rechangeHistoryTable {
+  width: 100%;
+}
+.rechangeHistoryContent .rechangeHistoryTable th {
+  width: 334px;
+  line-height: 45px;
+  border: solid 1px #e5e5e5;
+  border-width: 1px 0;
+  background: #fafafa;
+  color: #000;
+}
+.rechangeHistoryContent .rechangeHistoryTable td {
+  width: 334px;
+  max-width: 334px;
+  text-align: center;
+  line-height: 38px;
+  border-bottom: solid 1px #e5e5e5;
+  color: #666;
+}
+.diaShadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #000;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  z-index: 999;
+  display: none;
+  padding-bottom: 20px;
+}
+.diaContent {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -483px;
+  margin-top: -370px;
+  width: 966px;
+  height: 740px;
+  z-index: 9999;
+  background: #fff;
+  display: none;
+}
+.diaContent .diaTitle {
+  height: 54px;
+  line-height: 54px;
+  border-bottom: solid 1px #ccc;
+}
+.diaContent .diaTitle span {
+  font-size: 20px;
+  color: #333;
+  padding-left: 28px;
+}
+.diaContent .diaTitle a {
+  width: 54px;
+  height: 54px;
+  background: url(../../images/pc/closeDialog.png) no-repeat center;
+}
+.diaContent .diaFoot {
+  width: 100%;
+  text-align: center;
+}
+.diaContent .diaFoot input {
+  border: none;
+  background: #19aa4b;
+  width: 214px;
+  height: 39px;
+  color: #fff;
+}
+/*����µ�ַ����*/
+.newAddrPop {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url(../../images/pc/blackBg.png) left top repeat;
+  z-index: 500;
+  overflow: hidden;
+}
+.newAddrWrap,
+.ivericeWrap {
+  width: 853px;
+  position: fixed;
+  left: 50%;
+  top: 70px;
+  margin-left: -427px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+.newAddrWrap .title,
+.ivericeWrap .title {
+  border-bottom: 1px solid #ccc;
+  font-size: 20px;
+  padding: 13px 15px 12px 15px;
+}
+.addAddrTable {
+  margin-left: 150px;
+  margin-top: 49px;
+  font-size: 12px;
+}
+.addAddrTable tr td {
+  position: relative;
+  padding: 8px 0;
+}
+.addAddrTable tr td:first-child {
+  text-align: right;
+  padding-right: 10px;
+}
+.addAddrTable .addrSameInput {
+  width: 160px;
+  padding-left: 10px;
+  padding-right: 5px;
+  height: 23px;
+  line-height: 23px;
+  font-size: 12px;
+  border: 1px solid #cbcbcb;
+}
+.addAddrTable .detaileAddr {
+  width: 410px;
+  height: 23px;
+  line-height: 23px;
+  font-size: 12px;
+  padding-left: 10px;
+  padding-right: 5px;
+  border: 1px solid #cbcbcb;
+}
+.addAddrTable select {
+  width: 139px;
+  height: 24px;
+  line-height: 24px;
+  border: 1px solid #cbcbcb;
+}
+.addrSubmitBtns {
+  width: 300px;
+  margin: 60px auto 110px auto;
+}
+.addrSubmitBtns input,
+.addrSubmitBtns a {
+  width: 107px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #19aa4b;
+  color: #19aa4b;
+  text-align: center;
+  font-size: 14px;
+  background-color: #fff;
+  margin-right: 35px;
+}
+.addrSubmitBtns a {
+  display: block;
+  float: left;
+}
+.addrSubmitBtns input[type=submit],
+.addrSubmitBtns a:first-child {
+  background-color: #19aa4b;
+  color: #fff;
+}
+label.error,
+.correct {
+  top: 10px;
+}
+/*# sourceMappingURL=userCenter.css.map */

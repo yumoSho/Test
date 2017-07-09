@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.FeedbackDao">
+
+    <insert id="save" parameterType="Feedback" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_FEEDBACK (
+        	ID,
+        	PHONE ,
+        	EMAIL,
+            MEMBER_NAME,
+            MEMBER_ID,
+            CREATED_DATE,
+            CONTENT,
+            FLAG,
+            DELETED
+        ) VALUES (
+        #{id},
+        #{phone},
+        #{email},
+        #{memberName},
+        #{memberId},
+        #{createdDate},
+        #{content},
+        0,
+        0
+        )
+    </insert>
+
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultType="Feedback">
+    	SELECT 
+		A.*
+		FROM T_FEEDBACK A
+		WHERE A.ID=#{id}
+    </select>
+	
+
+	<select id="findMany" parameterType="map" resultType="Feedback">
+		<include refid="support.ph"/>
+		SELECT 
+		A.*
+		FROM T_FEEDBACK A
+		<where>
+			<include refid="support.dynamicFilters"/>
+			AND A.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		 <include refid="support.pf"/>
+	</select>
+	
+	<select id="findAllByBankId" parameterType="Long" resultType="Feedback">
+		SELECT 
+		A.*
+		FROM T_FEEDBACK A
+		WHERE DELETED = 0
+		ORDER BY A.ID DESC
+	</select>
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_FEEDBACK A
+		<where>
+			<include refid="support.dynamicFilters"/>
+		</where>
+
+	</select>
+    <update id="update" parameterType="Feedback">
+        UPDATE T_FEEDBACK
+        <set>
+        	<if test="phone != null">
+				PHONE = #{phone},
+	        </if>
+            <if test="email != null">
+				EMAIL = #{email},
+	        </if>
+			<if test="memberName != null">
+				MEMBER_NAME = #{memberName},
+	        </if>
+			<if test="memberId != null">
+				MEMBER_ID = #{memberId},
+			</if>
+	        <if test="deleted != null">
+				DELETED = #{deleted},
+	        </if>
+			<if test="flag != null">
+				FLAG = #{flag}
+			</if>
+
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="Feedback">
+        UPDATE T_FEEDBACK SET DELETED = 1 WHERE ID = #{id}
+    </update>
+</mapper>

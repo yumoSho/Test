@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-25 09:11:01
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.product.ParameterDao">
+    <resultMap id="parameterRM" type="Parameter">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME" />
+        <association property="parent" javaType="Parameter" columnPrefix="P_" >
+        	<id property="id" column="ID" />
+        	<result property="name" column="NAME" />
+        </association>
+        <collection property="children" ofType="Parameter" columnPrefix="C_">
+        	<id property="id" column="ID" />
+        	<result property="name" column="NAME" />
+        	<collection property="parameterValues" ofType="ParameterValue" columnPrefix="V_" >
+	       		<id property="id" column="ID" />
+	       		<result property="value" column="VALUE" />
+       		</collection>
+        </collection>
+    </resultMap>
+    
+    <resultMap id="paramGroupRM" type="Parameter">
+    	<id property="id" column="ID" />
+    	<result property="name" column="NAME" />
+    	<result property="sort" column="SORT" />
+    	<result property="deleted" column="DELETED" />
+    	<collection property="children" ofType="Parameter" columnPrefix="PARAM_">
+    		<id property="id" column="ID" />
+    		<result property="name" column="NAME" />
+    		<result property="sort" column="SORT" />
+    		<result property="deleted" column="DELETED" />
+    	</collection>
+    </resultMap>
+
+
+
+
+    <!-- -->
+    <sql id="baseCols">
+            CREATED_BY,
+            CREATED_DATE,
+            DELETED,
+            ID,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            NAME,
+            SORT,
+            PARENT_ID,
+            MODEL_ID
+    </sql>
+
+    <sql id="baseQuery">
+        SELECT
+            CREATED_BY,
+            CREATED_DATE,
+            DELETED,
+            ID,
+            LAST_MODIFIED_BY,
+            LAST_MODIFIED_DATE,
+            NAME,
+            SORT,
+            PARENT_ID,
+            MODEL_ID
+        FROM
+            T_PARAMETER
+    </sql>
+
+    <sql id="baseFilter">
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="deleted != null">
+            AND DELETED = #{deleted}
+        </if>
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+        <!-- more -->
+    </sql>
+
+    <!-- retrieve by id -->
+    <select id="find"  resultType="Parameter">
+        <include refid="baseQuery"/>
+        WHERE ID = #{id}
+    </select>
+
+    <!-- retrieve a unique entity -->
+    <select id="findOne" parameterType="map" resultType="Parameter">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- retrieve many entities -->
+    <select id="findMany" parameterType="map" resultType="Parameter">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+        <!-- TODO default sort -->
+        ORDER BY CREATE_DATE
+        <!-- ORDER BY ROWID -->
+    </select>
+
+    <!-- count -->
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_PARAMETER
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+    <insert id="save" parameterType="Parameter" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO T_PARAMETER (
+            <include refid="baseCols"/>
+        ) VALUES (
+            #{createdBy},
+            #{createdDate},
+            #{deleted},
+            #{id},
+            #{lastModifiedBy},
+            #{lastModifiedDate},
+            #{name},
+            #{sort},
+            <if test="parent != null">
+              #{parent.id}
+            </if>
+            <if test="parent == null">
+              NULL
+            </if>
+            , #{model.id}
+        )
+    </insert>
+
+    <!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+    <update id="update" parameterType="Parameter">
+        UPDATE T_PARAMETER
+        <set>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+            <if test="parent != null">
+            	PARENT_ID = #{parent.id}
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+
+
+ 	<update id="delete" >
+ 		UPDATE T_PARAMETER SET DELETED = 1 WHERE ID = #{id}
+ 	</update>
+
+
+    <select id="findModelParameterDetail" resultMap="paramGroupRM">
+        SELECT
+            G.ID   		ID,
+            G.NAME 		NAME,
+            G.SORT 		SORT,
+            G.DELETED 	DELETED,
+            P.ID   		PARAM_ID,
+            P.NAME 		PARAM_NAME,
+            P.SORT 		PARAM_SORT,
+            P.DELETED 	PARAM_DELETED
+        FROM T_PARAMETER G
+        LEFT JOIN T_PARAMETER P ON P.PARENT_ID = G.ID AND P.DELETED = 0
+        WHERE G.MODEL_ID = #{mid}
+        AND G.PARENT_ID IS NULL
+        AND G.DELETED = 0
+    </select>
+
+    <delete id="deleteModelParameters" >
+        UPDATE T_PARAMETER SET DELETED = 1 WHERE MODEL_ID = #{id}
+    </delete>
+
+    <delete id="deleteByParentId" >
+        UPDATE T_PARAMETER SET DELETED = 1 WHERE PARENT_ID = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.product.IndexingGoodsDao">
+
+    <select id="count"  resultType="int">
+        SELECT count(1) FROM  T_GOODS G, T_PRODUCT P ,T_PROVINCE_PRODUCT BAP WHERE 	G.PRODUCT_ID = P.ID
+        AND G.DELETED = 0
+        AND P.DELETED = 0
+        AND BAP.PRODUCT_ID= P.ID
+        AND G.PRICE IS NOT NULL
+        AND P.IS_PUTAWAY = 1
+    </select>
+
+    <!-- -->
+    <select id="findMany"  resultMap="allRM">
+        <include refid="hd"/>
+        <include refid="bd" /> LIMIT #{offset}, #{maxResults}
+        <include refid="ft" />
+    </select>
+
+    <!-- copy from all -->
+    <select id="find" resultMap="allRM">
+        <include refid="hd"/>
+        <include refid="bd" /> AND G.ID = #{id}
+        <include refid="ft" />
+    </select>
+
+    <sql id="hd">
+        SELECT
+        GP.*,
+        CAT.NAME          CAT_NAME,
+        CAT.ID            CAT_ID,
+        CAT.PATH          PATH,
+        CAT.PATH_NAMES    PATH_NAMES,
+        PCAT.ID           PCAT_ID,
+        PCAT.NAME         PCAT_NAME,
+        PCAT.PATH         PPATH,
+        PCAT.PATH_NAMES   PPATH_NAMES,
+        BRAND.NAME        BRAND_NAME,
+        TB.ID             PROVINCE_ID,
+        TB.PROVINCE_CODE,
+        TB.PROVINCE_NAME,
+        ATTR.ID 		  ATTRIBUTE_ID,
+        ATTR.NAME 	      ATTRIBUTE_NAME,
+        ATTR.ALIAS	      ATTRIBUTE_ALIAS,
+        AV.ID  			  ATTRIBUTE_VALUE_ID,
+        AV.VALUE 		  ATTRIBUTE_VALUE_NAME,
+        PI.ID             IMG_ID,
+        PI.PATH           IMG_PATH,
+        PI.SORT           IMG_SORT,
+        LL.ID             LID,
+        LL.LABEL_PATH     LABEL_PATH,
+        LL.LABEL_NAME     LABEL_NAME
+        FROM (
+    </sql>
+    <sql id="bd">
+        SELECT
+        G.ID              ID,
+        G.TITLE           TITLE,
+        G.SN              SN,
+        G.IMAGE           IMAGE,
+        P.WEIGHT          WEIGHT,
+        G.PRICE           PRICE,
+        P.SALES	          SALES,
+        G.SV_STR          SV_STR,
+        P.REGISTER_DATE   REGISTER_DATE,
+        P.ID              PRODUCT_ID,
+        P.TITLE           PRODUCT_TITLE,
+        P.INTRO     PRODUCT_INTRO,
+        P.CATEGORY_ID     CAT_ID,
+        P.BRAND_ID        BRAND_ID,
+        P.LABEL_ID
+        FROM T_GOODS G
+        INNER JOIN T_PRODUCT P ON G.PRODUCT_ID = P.ID AND P.DELETED = 0 AND P.IS_PUTAWAY = 1 AND G.PRICE IS NOT NULL
+        WHERE G.DELETED = 0
+    </sql>
+    <sql id="ft">
+        ) GP
+        LEFT JOIN (
+        SELECT ID, GOODS_ID, PATH, SORT
+        FROM T_PRODUCT_IMG
+        WHERE DELETED = 0
+        ORDER BY SORT
+        ) PI ON PI.GOODS_ID = GP.ID
+        LEFT JOIN T_PRODUCT_ATTRIBUTE_VALUE PAV ON PAV.PRODUCT_ID = GP.PRODUCT_ID AND PAV.DELETED = 0
+        LEFT JOIN T_ATTRIBUTE_VALUE AV ON AV.ID = PAV.ATTRIBUTE_VALUE_ID AND AV.DELETED = 0
+        LEFT JOIN T_ATTRIBUTE ATTR ON ATTR.ID = AV.ATTRIBUTE_ID AND ATTR.DELETED = 0 AND ATTR.VISIBLE = 1
+        LEFT JOIN T_CATEGORY CAT ON CAT.ID = GP.CAT_ID AND CAT.DELETED = 0
+        LEFT JOIN T_CATEGORY PCAT ON CAT.PARENT_ID = PCAT.ID AND PCAT.DELETED = 0
+        LEFT JOIN T_BRAND BRAND ON BRAND.ID = GP.BRAND_ID AND BRAND.DELETED = 0
+        INNER JOIN T_PROVINCE_PRODUCT BAP ON  GP.PRODUCT_ID= BAP.PRODUCT_ID
+        LEFT JOIN HAT_PROVINCE TB ON TB.ID=BAP.PROVINCE_ID
+        LEFT JOIN T_LABEL LL ON GP.LABEL_ID =LL.ID AND LL.DELETED=0 AND LL.DISABLED = 0
+        ORDER BY PI.SORT
+    </sql>
+
+    <resultMap id="allRM" type="com.glanway.jty.dto.IndexedGoods">
+        <id property="id" column="ID"/>
+        <result property="sn" column="SN" />
+        <result property="image" column="IMAGE" />
+        <result property="title" column="TITLE"/>
+        <result property="intro" column="PRODUCT_INTRO"/>
+        <result column="PRICE" property="price"/>
+        <result column="SALES" property="sales"/>
+        <result column="REGISTER_DATE" property="onSellDate"/>
+        <result column="WEIGHT" property="weight"/>
+        <result property="productId" column="PRODUCT_ID"/>
+        <result property="productTitle" column="PRODUCT_TITLE"/>
+        <result property="brandId" column="BRAND_ID"/>
+        <result property="brandName" column="BRAND_NAME"/>
+        <association property="label" javaType="Label">
+            <id property="id" column="LID"/>
+            <result property="labelName" column="LABEL_NAME"/>
+            <result property="labelPath" column="LABEL_PATH"/>
+        </association>
+        <collection property="cats" ofType="com.glanway.jty.entity.product.Category">
+            <id property="id" column="CAT_ID" />
+            <result property="name" column="CAT_NAME" />
+            <result property="path" column="PATH"/>
+            <result property="pathNames" column="PATH_NAMES"/>
+            <association property="parent" javaType="com.glanway.jty.entity.product.Category">
+                <id property="id" column="PCAT_ID" />
+                <result property="name" column="PCAT_NAME" />
+                <result property="path" column="PPATH"/>
+                <result property="pathNames" column="PPATH_NAMES"/>
+            </association>
+        </collection>
+
+        <collection property="provinces" ofType="com.glanway.jty.entity.logistics.HatProvince">
+            <id property="id" column="PROVINCE_ID" />
+            <result property="provinceName" column="PROVINCE_NAME" />
+            <result property="provinceCode" column="PROVINCE_CODE" />
+        </collection>
+        <collection property="imgs" ofType="ProductImg">
+            <id property="id" column="IMG_ID" />
+            <result property="path" column="IMG_PATH" />
+            <result property="sort" column="IMG_SORT" />
+        </collection>
+
+        <collection property="propVals" ofType="com.glanway.jty.entity.product.AttributeValue">
+            <id property="id" column="ATTRIBUTE_VALUE_ID"/>
+            <result property="value" column="ATTRIBUTE_VALUE_NAME"/>
+            <association property="attribute" javaType="com.glanway.jty.entity.product.Attribute">
+                <id property="id" column="ATTRIBUTE_ID"/>
+                <result property="name" column="ATTRIBUTE_NAME"/>
+            </association>
+        </collection>
+
+    </resultMap>
+</mapper>

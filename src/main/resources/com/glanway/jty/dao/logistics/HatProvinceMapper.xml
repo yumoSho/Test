@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-17 16:54:02
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.logistics.HatProvinceDao">
+
+    <resultMap id="provinceRM" type="HatProvince">
+        <id column="ID" property="id"/>
+        <result column="PROVINCE_CODE" property="provinceCode"/>
+        <result column="PROVINCE_NAME" property="provinceName"/>
+        <result column="REMARK" property="remark"/>
+        <collection property="hatCities" ofType="HatCity" columnPrefix="C_">
+            <id column="ID" property="id"/>
+            <result column="CITY_CODE" property="cityCode"/>
+            <result column="CITY_NAME" property="cityName"/>
+            <result column="SUPER_CODE" property="superCode"/>
+        </collection>
+    </resultMap>
+
+	<!-- 获取所有省份信息列表（不含城市信息） -->
+    <select id="listAllProvince" resultType="HatProvince">
+        SELECT
+            ID,
+		    PROVINCE_CODE,
+		    PROVINCE_NAME,
+		    REMARK
+        FROM
+        	HAT_PROVINCE
+        ORDER BY ID
+    </select>
+    
+    <!-- 获取所有省份列表 （含有城市信息）  -->
+    <select id="listAllProvinceAndCity" resultMap="provinceRM">
+        SELECT 
+        	HP.ID,
+        	HP.PROVINCE_CODE,
+        	HP.PROVINCE_NAME,
+        	HP.REMARK,
+	        HC.ID C_ID,
+	        HC.CITY_CODE C_CITY_CODE,
+	        HC.CITY_NAME C_CITY_NAME,
+	        HC.SUPER_CODE C_SUPER_CODE
+        FROM 
+        	HAT_PROVINCE HP
+        JOIN HAT_CITY HC
+        ON HC.SUPER_CODE = HP.PROVINCE_CODE
+    </select>
+    
+    <!-- 根据省份编号获取省份信息，以及城市列表 -->
+    <select id="listProvinceInfoByCode" parameterType="string" resultMap="provinceRM">
+        SELECT 
+        	HP.ID,
+        	HP.PROVINCE_CODE,
+        	HP.PROVINCE_NAME,
+        	HP.REMARK,
+        	HC.ID C_ID,
+	        HC.CITY_CODE C_CITY_CODE,
+	        HC.CITY_NAME C_CITY_NAME,
+	        HC.SUPER_CODE C_SUPER_CODE
+        FROM HAT_PROVINCE HP
+        	JOIN HAT_CITY HC
+        ON HC.SUPER_CODE = HP.PROVINCE_CODE 
+        AND HP.PROVINCE_CODE = #{provinceCode}
+    </select>
+    
+    <!-- 获取含有直辖市信息的省份列表 -->
+    <select id="listMunicipalities" resultMap="provinceRM">
+        SELECT 
+        	HP.ID,
+        	HP.PROVINCE_CODE,
+        	HP.PROVINCE_NAME,
+        	HP.REMARK,
+	        HA.ID C_ID,
+	        HA.AREA_CODE C_CITY_CODE,
+	        HA.AREA_NAME C_CITY_NAME,
+	        HA.SUPER_CODE C_SUPER_CODE
+        FROM HAT_PROVINCE HP
+        	 JOIN HAT_CITY HC
+			 ON HC.SUPER_CODE = HP.PROVINCE_CODE
+        JOIN HAT_AREA HA
+        	 ON HA.SUPER_CODE = HC.CITY_CODE
+        AND HP.PROVINCE_CODE IN ('110000','120000','310000','500000')
+    </select>
+    
+    <!-- 根据省份名获取省份信息 -->
+    <select id="queryLikeName" parameterType="string" resultType="HatProvince">
+        SELECT
+        	ID,
+		    PROVINCE_CODE,
+		    PROVINCE_NAME,
+		    REMARK
+        FROM
+        	HAT_PROVINCE
+        WHERE 
+        	HAT_PROVINCE.PROVINCE_NAME LIKE #{provinceName} || '%'
+    </select>
+</mapper>

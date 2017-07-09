@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-07-17 16:54:02
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.perm.PermissionDao">
+
+    <select id="findPermissionByUserId" parameterType="long" resultMap="com.glanway.jty.dao.perm.ModuleDao.moduleRM">
+        SELECT
+          TM.*,
+          TAP.ID P_ID,
+          TAP.NAME P_NAME,
+          TAP.URL P_URL,
+          TAP.SORT P_SORT_ID,
+          TAP.REMARK P_REMARK
+        FROM
+          T_USER TAU
+        JOIN
+          T_USER_ROLE TUR
+        ON TAU.ID = TUR.USER_ID AND TUR.DELETED = 0
+        JOIN
+          T_ROLE_PAGE TRG
+        ON TRG.ROLE_ID = TUR.ROLE_ID AND TRG.DELETED = 0
+        JOIN
+          T_PAGE TAP
+        ON TAP.ID = TRG.PAGE_ID AND TAP.DELETED = 0
+        JOIN
+          T_MODULE TM
+        ON TM.ID = TAP.MODULE_ID AND TM.DELETED = 0
+        WHERE
+        TAU.ID = #{userId}
+        AND TAU.DELETED = 0
+        ORDER BY
+        TM.SORT, TAP.SORT
+    </select>
+
+</mapper>

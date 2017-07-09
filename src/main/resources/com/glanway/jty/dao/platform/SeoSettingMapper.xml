@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.platform.SeoSettingDao">
+    
+    <resultMap id="seoSettingRM" type="SeoSetting">
+        <id property="id" column="ID"/>
+        <result column="ID" property="id"/>
+        <result property="title" column="TITLE"/>
+        <result property="keyWords" column="KEYWORDS"/>
+        <result property="content" column="CONTENT"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="url" column="URL"/>
+
+        <!-- 关联数据字典 页面名称 -->
+        <association property="pageDictionary" javaType="Dictionary" columnPrefix="P_">
+            <id property="id" column="ID"/>
+            <result property="dicName" column="DIC_NAME"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+        
+        <!-- 关联数据字典 平台名称 -->
+        <association property="platformDictionary" javaType="Dictionary" columnPrefix="F_">
+            <id property="id" column="ID"/>
+            <result property="dicName" column="DIC_NAME"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+
+    </resultMap>
+
+
+    
+
+    <insert id="save" parameterType="SeoSetting" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_SEO_SETTING (
+        	ID,
+        	TITLE,
+        	KEYWORDS,
+            CONTENT,
+            DICTIONARY_PAGE_ID,
+            DICTIONARY_PLATFORM_ID,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DELETED,
+            URL
+        ) VALUES (
+        #{id},
+        #{title},
+        #{keyWords},
+        #{content},
+        #{pageDictionary.id},
+        #{platformDictionary.id},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy},
+        #{deleted},
+        #{url}
+        )
+    </insert>
+
+    <sql id="baseQuery">
+            ID,
+            DICTIONARY_ID,
+            CONTENT,
+            DELETED,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            SORT_NUM
+
+    </sql>
+    <sql id="baseFilter">
+        
+        
+        <if test="title != null">
+            AND TITLE = #{title}
+        </if>
+        <if test="keyWords != null">
+            AND KEYWORDS = #{keyWords}
+        </if>
+        <if test="content != null">
+            AND CONTENT = #{content}
+        </if>
+        
+        <if test="pageDictionary != null and pageDictionary.id != null">
+            AND DICTIONARY_PAGE_ID = #{pageDictionary.id}
+        </if>
+        <if test="platformDictionary != null and platformDictionary.id != null">
+            AND DICTIONARY_PLATFORM_ID = #{platformDictionary.id}
+        </if>
+        <if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+	    </if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+
+		<if test="url != null">
+			AND URL = #{url}
+		</if>
+	
+    
+    </sql>
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="seoSettingRM">
+    	SELECT
+		S.*
+		FROM T_SEO_SETTING S
+		WHERE S.ID=#{id}
+    </select>
+	
+	<select id="findMany" parameterType="map" resultMap="seoSettingRM">
+		
+		<include refid="support.ph"/>
+		SELECT
+		S.*
+		FROM T_SEO_SETTING S
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND S.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		<include refid="support.pf"/>
+	</select>
+	
+	<select id="findAllByBankId" parameterType="long" resultMap="seoSettingRM">
+		SELECT 
+		S.*
+		FROM T_SEO_SETTING S
+	</select>
+	
+	
+
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1)
+		FROM T_SEO_SETTING S
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND S.DELETED=0
+		</where>
+
+	</select>
+
+	<select id="findByDicPageIdAndDicplatIdAndBankId" parameterType="SeoSetting" resultMap="seoSettingRM">
+		SELECT
+		S.*
+		FROM T_SEO_SETTING S
+  		WHERE S.DICTIONARY_PAGE_ID=#{pageDictionary.id}
+		AND   S.DICTIONARY_PLATFORM_ID=#{platformDictionary.id}
+		AND   S.DELETED=0
+	</select>
+
+    <update id="update" parameterType="SeoSetting">
+        UPDATE T_SEO_SETTING
+        <set>
+        	<if test="title != null">
+           		 TITLE = #{title},
+	        </if>
+        	<if test="keyWords != null">
+           		 KEYWORDS = #{keyWords},
+	        </if>
+            <if test="content != null">
+           		 CONTENT = #{content},
+	        </if>      
+	        <if test="pageDictionary != null and pageDictionary.id != null">
+	            DICTIONARY_PAGE_ID = #{pageDictionary.id},
+	        </if>
+	        <if test="platformDictionary != null and platformDictionary.id != null">
+	            DICTIONARY_PLATFORM_ID = #{platformDictionary.id},
+	        </if>
+	        <if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+		    </if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="url != null">
+				URL = #{url}
+			</if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="SeoSetting">
+        UPDATE T_SEO_SETTING SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+	<select id="findList"  parameterType="map" resultType="SeoSetting">
+		SELECT * FROM T_SEO_SETTING WHERE DELETED=0
+		<if test="url !=null">
+		  AND URL = #{url}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,6 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<div class="rightFloat">
+    <a href="${ctx}/mobile/shareLink"><img src="${ctx}/images/mobile/indexLinks.png" /></a>
+    <a href="${ctx}/mobile/userSuggest"><img src="${ctx}/images/mobile/rightAsk.png" /></a>
+    <a href="javascript:void(0);" class="goTop"><img src="${ctx}/images/mobile/icon9.png" /></a>
+</div>

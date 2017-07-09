@@ -1,0 +1,75 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@include file="/WEB-INF/view/include/taglibs.jspf" %>
+ <!-- 内页左侧导航 --><c:set var="index" value="1"/>
+                <div class="leftBar fl">
+                    <ul class="leftNavBox">
+                        
+                        <c:forEach items="${supportCategories}" var="supportCategory">
+                            
+                           		     
+                           		     	<li>
+                           					 <p class="title <c:if test="${supportCategory.id==supportContent.supportCategory.id }">titleOn</c:if>">${supportCategory.name }</p>
+                           					 <ul class="leftSecNav">
+                                
+	                                			<li>
+		                                			<c:forEach items="${supportContents}" var="sptContent">
+		                                				<c:if test="${supportCategory.id==sptContent.supportCategory.id }">
+			                                    			<a href="${ctx}/contentManagement/helpDetail?id=${sptContent.id }" <c:if test="${sptContent.id==supportContent.id }">class="on"</c:if>> ${sptContent.title }</a>
+														</c:if>
+														
+														<c:if test="${index ==1 }">
+															<%-- <c:if test="${supportCategory.id==dictionaryCommonPro.remark }"> --%>
+															<c:if test="${supportCategory.name==simpleDictionaryCommonPro.remark }"> 
+				                                    			<a href="${ctx}/contentManagement/helpCenterCommonPro" <c:if test="${commonProPage==true }">class="on"</c:if>> ${dictionaryCommonPro.dicName }</a>
+																<c:set var="index" value="${index+1}" />
+															</c:if>
+														</c:if>
+													</c:forEach>			
+	                                            </li>
+                            				</ul>
+                        				</li>
+                           		     
+                           
+                        </c:forEach>
+                        <%-- <li>
+                            <p class="title titleOn">新手帮助</p>
+                            <ul class="leftSecNav">
+                                
+                                <li>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 新手入门</a>
+                                     <a href="${ctx}/contentManagement/helpCenter">- 服务流程</a>
+                                   <!--  <a href="${ctx}/contentManagement/content/dynamic/contactUs">- 联系我们</a>-->
+                                   <a href="${ctx}/contentManagement/helpCenter">- 配送服务</a>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 常见问题</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="title">售后服务</p>
+                            <ul class="leftSecNav">
+                                <li>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 订单状态</a>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 物流配送</a>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 退款/退货</a>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 客户投诉</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="title">购物与支付</p>
+                            <ul class="leftSecNav">
+                                <li>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 支付注意事项</a>
+                                    <a href="${ctx}/contentManagement/helpCenter">- 购物指南</a>
+                                </li>
+                            </ul>
+                        </li> --%>
+                    </ul>
+                </div>
+                
+                
+                
+                 
+<script type="text/javascript">
+	
+</script>

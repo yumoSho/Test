@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2015-10-13
+
+ @author zhuhaodong
+-->
+<mapper namespace="com.glanway.jty.dao.perm.ModuleDao">
+	
+	<resultMap id="moduleRM" type="Module">
+        <id column="ID" javaType="long" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="SORT" property="sort"/>
+        <result column="REMARK" property="remark"/>
+        <result column="LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+        <result column="CREATED_DATE" property="createdDate"/>
+        <collection property="pages" ofType="Page" columnPrefix="P_">
+            <id column="ID" javaType="long" property="id"/>
+            <result column="NAME" property="name"/>
+            <result column="URL" property="url"/>
+        </collection>
+    </resultMap>
+	
+    <sql id="baseCols">
+            ID
+        <if test="name != null">
+            ,
+            NAME
+        </if>
+        <if test="sort != null">
+            ,
+            SORT
+        </if>
+        <if test="remark != null">
+            ,
+            REMARK
+        </if>
+        <if test="deleted != null">
+            ,
+            DELETED
+        </if>
+        <if test="createdDate != null">
+            ,
+            CREATED_DATE
+        </if>
+        <if test="createdBy != null">
+            ,
+            CREATED_BY
+        </if>
+    </sql>
+
+    <sql id="baseFilter">
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+        <if test="remark != null">
+            AND REMARK = #{remark}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        AND DELETED = 0
+    </sql>
+
+    <insert id="save" parameterType="Module" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_MODULE(
+          <include refid="baseCols"/>
+        )VALUES(
+            #{id}
+        <if test="name != null">
+            ,
+            #{name}
+        </if>
+        <if test="sort != null">
+            ,
+            #{sort}
+        </if>
+        <if test="remark != null">
+            ,
+            #{remark}
+        </if>
+        <if test="deleted != null">
+            ,
+            #{deleted}
+        </if>
+        <if test="createdDate != null">
+            ,
+            #{createdDate}
+        </if>
+        <if test="createdBy != null">
+            ,
+            #{createdBy}
+        </if>
+        )
+    </insert>
+
+    <update id="update" parameterType="Module">
+        UPDATE T_MODULE
+        <set>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy}
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="Module">
+        UPDATE T_MODULE SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <select id="findMany" parameterType="map" resultType="Module">
+    	<include refid="support.ph"/>
+        SELECT * FROM T_MODULE
+        <where>
+           <trim prefixOverrides="AND">
+           		<include refid="support.dynamicFilters"/>
+           		<include refid="baseFilter"/>
+           </trim>
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+
+        <include refid="support.pf"/>
+    </select>
+
+    <select id="find" parameterType="long" resultMap="moduleRM">
+        SELECT M.*,
+        TP.ID P_ID,
+        TP.NAME P_NAME,
+        TP.URL P_URL
+        FROM
+        T_MODULE M
+        LEFT JOIN
+        T_PAGE TP
+        ON
+        TP.MODULE_ID = M.ID
+        AND
+        TP.DELETED = 0
+        WHERE
+        M.ID = #{id}
+        AND
+        M.DELETED = 0
+    </select>
+
+    <select id="getBaseModule" parameterType="map" resultType="Module">
+        SELECT *
+        FROM
+        T_MODULE
+        <where>
+        	<trim prefixOverrides="AND">
+            	<include refid="baseFilter"/>
+            </trim>
+        </where>
+    </select>
+    
+    <select id="getModuleByName" parameterType="string" resultType="Module">
+    	SELECT * FROM T_MODULE WHERE NAME = #{name} AND DELETED = 0
+    </select>
+
+    <select id="findAll" resultMap="moduleRM">
+        SELECT M.*,
+        TP.ID P_ID,
+        TP.NAME P_NAME,
+        TP.URL P_URL
+        FROM
+        T_MODULE M
+        LEFT JOIN
+        T_PAGE TP
+        ON
+        TP.MODULE_ID = M.ID
+        AND
+        TP.DELETED = 0
+        ORDER BY M.SORT
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT
+          COUNT(1)
+        FROM
+          T_MODULE 
+        <where>
+        	<trim prefixOverrides="AND">
+            	<include refid="baseFilter"/>
+            </trim>
+        </where>
+    </select>
+
+    <select id="countPageByModuleId" parameterType="long" resultType="int">
+      SELECT COUNT(1) FROM T_PAGE WHERE MODULE_ID = #{moduleId} AND DELETED = 0
+    </select>
+
+
+</mapper>

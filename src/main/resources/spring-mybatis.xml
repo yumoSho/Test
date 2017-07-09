@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <description>Spring MyBatis 整合配置</description>
+
+    <!-- 主配置(导入该配置的文件中加载占位符和配置扫描后,这里就不用了
+    <context:property-placeholder location="classpath:etc/config.properties"
+                                  ignore-resource-not-found="true"
+                                  ignore-unresolvable="true"/>
+    -->
+
+    <!-- mybatis SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 如果 Mapper 和 xml 不在同一目录或名称不同, 需要 -->
+        <!-- 多个路径这里用,分隔不行 -->
+        <property name="mapperLocations">
+            <array>
+                <value>classpath*:dao/support/mbt/SupportMapper.xml</value>
+                <value>classpath:com/glanway/jty/dao/**/*Mapper.xml</value>
+            </array>
+        </property>
+        <property name="typeAliasesPackage" value="com.glanway.jty.entity"/>
+        <property name="databaseIdProvider" ref="mybatisDbIdProvider" />
+    </bean>
+    <bean id="mybatisDbIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+        <property name="properties">
+            <props>
+                <prop key="Oracle">oracle</prop>
+                <prop key="MySQL">mysql</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!-- mybatis mapper scan -->
+    <!--
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="org.test.dao"/>
+        <property name="annotationClass" value="org.vacoor.mux.dao.support.mbt.MyBatisMapper"/>
+    </bean>
+    -->
+    <!-- mybatis spring schema ext -->
+    <mybatis:scan base-package="com.glanway.jty.dao"
+                  factory-ref="sqlSessionFactory"/>
+
+    <!-- mybatis transaction manager -->
+    <bean id="mybatisTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 必须和 sqlSessionFactory 是同一数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="mybatisTransactionManager"/>
+</beans>

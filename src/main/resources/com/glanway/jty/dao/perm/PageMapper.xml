@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.perm.PageDao">
+
+    <resultMap id="PageRM" type="Page">
+        <id column="TP_ID" property="id"/>
+        <result column="TP_NAME" property="name"/>
+        <result column="TP_URL" property="url"/>
+        <result column="TP_MODULE_ID" property="moduleId"/>
+        <result column="TP_DELETED" property="deleted"/>
+        <result column="TP_REMARK" property="remark"/>
+        <result column="TP_CREATED_BY" property="createdBy"/>
+        <result column="TP_CREATED_DATE" property="createdDate"/>
+        <result column="TP_LAST_MODIFIED_By" property="lastModifiedBy"/>
+        <result column="TP_LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+        <result column="TP_SORT" property="sort"/>
+        <association property="module" javaType="Module">
+            <id column="TP_TM_ID" property="id"/>
+            <result column="TP_TM_NAME" property="name"/>
+            <result column="TP_TM_SORT" property="sort"/>
+            <result column="TP_TM_REMARK" property="remark"/>
+            <result column="TP_TM_DELETED" property="deleted"/>
+        </association>
+    </resultMap>
+	
+    <sql id="baseCols">
+        ID,
+        NAME,
+        URL,
+        MODULE_ID,
+        REMARK,
+        DELETED,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE,
+        SORT
+    </sql>
+
+    <sql id="baseFilter">
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="url != null">
+            AND URL = #{url}
+        </if>
+        <if test="moduleId != null">
+            AND MODULE_ID = #{moduleId}
+        </if>
+        <if test="remark != null">
+            AND REMARK = #{remark}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="lastModifiedDy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+         <if test="sort != null">
+            AND SORT = #{sort}
+        </if>
+    </sql>
+
+	<sql id="pageDynamicFilters">
+        <if test="_page_filters != null">
+            <foreach item="filter" collection="_page_filters" separator=" AND ">
+              <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                <!-- 忽略大小写时记得建立大/小写索引 -->
+                <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                <!-- LIKE 索引失效问题求解决 -->
+                <choose>
+                    <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                        UPPER(TP.${filter.property}) ${filter.operator} UPPER(#{value})
+                    </when>
+                    <otherwise>
+                        TP.${filter.property} ${filter.operator} #{value}
+                    </otherwise>
+                </choose>
+              </foreach>
+            </foreach>
+        </if>
+    </sql>
+    
+    <!-- 模块动态条件 -->
+    <sql id="moduleDynamicFilters">
+        <if test="_module_filters != null">
+            <foreach item="filter" collection="_module_filters" separator=" AND ">
+                <foreach item="value" collection="filter" open="(" close=")" separator=" OR ">
+                    <!-- 忽略大小写时记得建立大/小写索引 -->
+                    <!-- 大写索引的创建 CREATE INDEX WS_NAME_IDX ON T_WEBSITE(UPPER(NAME)); -->
+                    <!-- LIKE 索引失效问题求解决 -->
+                    <choose>
+                        <when test="filter.operator == @com.glanway.gone.spring.bind.domain.Filters$Operator@LK">
+                            UPPER(TM.${filter.property}) ${filter.operator} UPPER(#{value})
+                        </when>
+                        <otherwise>
+                            TM.${filter.property} ${filter.operator} #{value}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </foreach>
+        </if>
+    </sql>
+    
+    <insert id="save" parameterType="Page" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_PAGE(ID,NAME,URL,MODULE_ID,REMARK,DELETED,CREATED_DATE,CREATED_BY,SORT) VALUES(
+			#{id},
+			#{name},
+			#{url},
+			#{moduleId},
+			#{remark},
+			#{deleted},
+			#{createdDate},
+			#{createdBy},
+			#{sort}
+		)
+	</insert>
+
+    <update id="update" parameterType="Page">
+        UPDATE T_PAGE
+        <set>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="url != null">
+                URL = #{url},
+            </if>
+            <if test="moduleId != null">
+                MODULE_ID = #{moduleId},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort},
+            </if>
+                LAST_MODIFIED_DATE = NOW()
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="Page">
+        UPDATE T_PAGE SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <select id="getBasePage" parameterType="map" resultType="Page">
+        SELECT *
+        FROM
+        T_PAGE
+        <where>
+            <include refid="baseFilter"/>
+        </where>
+        AND DELETED=0
+    </select>
+    
+    <select id="findOne" parameterType="map" resultType="Page">
+        SELECT *
+        FROM
+        T_PAGE
+        <where>
+        	DELETED=0
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+    
+    <select id="find" resultMap="PageRM" parameterType="long">
+    	SELECT 
+        TP.ID TP_ID,
+        TP.NAME TP_NAME,
+        TP.URL TP_URL,
+        TP.REMARK TP_REMARK,
+        TP.SORT TP_SORT,
+        TP.MODULE_ID TP_MODULE_ID,
+        TP.DELETED TP_DELETED,
+        TP.CREATED_DATE TP_CREATED_DATE,
+        TP.CREATED_BY TP_CREATED_BY,
+        TP.LAST_MODIFIED_DATE TP_LAST_MODIFIED_DATE,
+        TP.LAST_MODIFIED_BY TP_LAST_MODIFIED_BY,
+        TM.ID TP_TM_ID,
+        TM.NAME TP_TM_NAME
+    	FROM T_PAGE TP 
+    	INNER JOIN 
+    	T_MODULE TM 
+    	ON
+    	TP.MODULE_ID = TM.ID 
+    	WHERE 
+    	TP.ID = #{id} 
+    	AND 
+    	TP.DELETED = 0
+    </select>
+    
+    <select id="count" resultType="int" parameterType="map">
+    	SELECT count(1) FROM(
+        SELECT TP.*,
+        TM.ID M_ID,
+        TM.NAME M_NAME,
+        TM.SORT M_SORT,
+        TM.REMARK M_REMARK
+        FROM
+        T_PAGE TP
+        INNER JOIN
+        T_MODULE TM
+        ON
+        TM.ID = TP.MODULE_ID
+        AND
+        TP.DELETED = 0
+        AND
+        TM.DELETED = 0
+        <trim suffixOverrides="AND"> AND <include refid="moduleDynamicFilters" /></trim>
+        <where>
+            <trim prefixOverrides="AND">
+                <include refid="pageDynamicFilters"/>
+                <include refid="baseFilter"/>
+            </trim>
+        </where>
+        )  R
+        WHERE
+        R.DELETED=0
+
+    </select>
+    
+    <select id="findMany" parameterType="map" resultMap="PageRM" >
+        <include refid="support.ph"/>
+        SELECT * FROM(
+        SELECT 
+        TP.ID TP_ID,
+        TP.NAME TP_NAME,
+        TP.URL TP_URL,
+        TP.REMARK TP_REMARK,
+        TP.SORT TP_SORT,
+        TP.DELETED TP_DELETED,
+        TP.CREATED_DATE TP_CREATED_DATE,
+        TP.CREATED_BY TP_CREATED_BY,
+        TP.LAST_MODIFIED_DATE TP_LAST_MODIFIED_DATE,
+        TP.LAST_MODIFIED_BY TP_LAST_MODIFIED_BY,
+        TM.ID TP_TM_ID,
+        TM.NAME TP_TM_NAME,
+        TM.SORT TP_TM_SORT,
+        TM.REMARK TP_TM_REMARK,
+        TM.DELETED TP_TM_DELETED
+        FROM
+        T_PAGE TP
+        INNER JOIN
+        T_MODULE TM
+        ON
+        TM.ID = TP.MODULE_ID
+        AND
+        TM.DELETED = 0
+        AND
+        TP.DELETED = 0
+        <trim suffixOverrides="AND"> AND <include refid ="moduleDynamicFilters" /></trim>
+              <where>
+                  <trim prefixOverrides="AND">
+                      <include refid="pageDynamicFilters"/>
+                      <include refid="support.dynamicFilters"/>
+                      <include refid="baseFilter"/>
+                  </trim>
+              </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <bind name="_sortPrefix" value="'TP_'" />
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+           )  R
+        WHERE
+          R.TP_DELETED=0
+        <include refid="support.pf"/>
+        
+    </select>
+    
+    <select id="getPagesByRoleId" parameterType="long" resultType="Page">
+    	SELECT 
+    		T_PAGE.ID FROM T_PAGE,T_ROLE,T_ROLE_PAGE 
+		WHERE 
+			T_ROLE.ID = T_ROLE_PAGE.ROLE_ID AND T_ROLE_PAGE.PAGE_ID = T_PAGE.ID 
+		AND 
+			T_ROLE.ID = #{roleId} AND T_ROLE_PAGE.DELETED = 0
+    </select>
+
+    <!--根据页面id 删除 角色- 页面 对应关系-->
+    <update id="delRolePageByPageId" parameterType="long">
+        DELETE FROM T_ROLE_PAGE WHERE PAGE_ID = #{pageId}
+    </update>
+</mapper>

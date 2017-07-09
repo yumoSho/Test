@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.content.NewsDao">
+    <resultMap id="newsRM" type="News">
+        <id property="id" column="ID"/>
+        <result column="ID" property="id"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="hitNum" column="HIT_NUM"/>
+        <result property="isShow" column="IS_SHOW"/>
+		<result property="nType" column="N_TYPE"/>
+        <result property="image" column="IMAGE"/>
+        <result property="sortNum" column="SORT_NUM"/>
+			<result property="newsTypeId" column="NEWS_TYPE_ID"/>
+        <result property="newsTypeName" column="NEWS_TYPE_NAME"/>
+
+        <result property="deleted" column="DELETED"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+    </resultMap>
+
+
+    
+
+    <insert id="save" parameterType="News" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_NEWS (
+        	ID,
+        	TITLE,
+            CONTENT,
+            HIT_NUM,
+            IS_SHOW,
+            IMAGE,
+            IS_HOT,
+            SORT_NUM,
+            NEWS_TYPE_ID,
+            NEWS_TYPE_NAME,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DELETED
+        ) VALUES (
+        #{id},
+        #{title},
+        #{content},
+        #{hitNum},
+        #{isShow},
+        #{image},
+        #{isHot},
+        #{sortNum},
+        #{newsTypeId},
+        #{newsTypeName},
+        #{createdDate},
+        #{createdBy},
+        #{lastModifiedDate},
+        #{lastModifiedBy},
+        #{deleted}
+        )
+    </insert>
+
+    <sql id="baseQuery">
+      
+         	ID,
+        	TITLE,
+            CONTENT,
+            HIT_NUM,
+            IS_SHOW,
+            IMAGE,
+            SORT_NUM,
+            NEWS_TYPE_ID,
+            NEWS_TYPE_NAME,
+            CREATED_DATE,
+            CREATED_BY,
+            LAST_MODIFIED_DATE,
+            LAST_MODIFIED_BY,
+            DELETED
+
+    </sql>
+    <sql id="baseFilter">
+        <if test="content != null">
+            AND CONTENT = #{content}
+        </if>
+        <if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+	    </if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="sortNum != null">
+			AND SORT_NUM = #{sortNum}
+	    </if>
+		<if test="newsTypeId != null">
+			AND NEWS_TYPE_ID = #{newsTypeId}
+		</if>
+		<if test="newsTypeName != null">
+			AND NEWS_TYPE_NAME = #{newsTypeName}
+		</if>
+        
+    
+    </sql>
+
+	 <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultMap="newsRM">
+    	SELECT 
+		A.*
+		FROM T_NEWS A
+		WHERE A.ID=#{id}
+    </select>
+	
+
+	<select id="findMany" parameterType="map" resultMap="newsRM">
+		<include refid="support.ph"/>
+		SELECT A.* FROM(
+		SELECT
+		N.*,
+		NT.ID N_TYPE_ID,
+		NT.NAME N_TYPE
+		FROM T_NEWS N, T_NEWS_TYPE NT
+		WHERE N.NEWS_TYPE_ID = NT.ID
+		) A
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND A.DELETED=0
+		</where>
+		ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+        </trim> 
+		 <include refid="support.pf"/>
+	</select>
+	
+	<select id="findAllByBankId" parameterType="Long" resultMap="newsRM">
+		SELECT 
+		A.*
+		FROM T_NEWS A
+		WHERE DELETED = 0
+		ORDER BY A.CREATED_DATE DESC
+	</select>
+   
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM(
+		SELECT
+		N.*,
+		NT.ID N_TYPE_ID,
+		NT.NAME N_TYPE
+		FROM T_NEWS N, T_NEWS_TYPE NT
+		WHERE N.NEWS_TYPE_ID = NT.ID
+		) A
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+			AND A.DELETED=0
+		</where>
+
+	</select>
+    <update id="update" parameterType="News">
+        UPDATE T_NEWS
+        <set>
+        	<if test="title != null">
+           		 TITLE = #{title},
+	        </if>
+            <if test="content != null">
+           		 CONTENT = #{content},
+	        </if>      
+	        <if test="isShow != null">
+	            IS_SHOW = #{isShow},
+	        </if>
+	        
+	        <if test="image != null">
+	            IMAGE = #{image},
+	        </if>
+			<if test="isHot != null">
+				IS_HOT = #{isHot},
+			</if>
+	        <if test="sortNum != null">
+	            SORT_NUM = #{sortNum},
+	        </if>
+	        <if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+		    </if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="hitNum != null">
+				HIT_NUM = #{hitNum}
+		    </if>
+			<if test="newsTypeId != null">
+				NEWS_TYPE_ID = #{newsTypeId},
+			</if>
+			<if test="newsTypeName != null">
+				NEWS_TYPE_NAME = #{newsTypeName}
+			</if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="News">
+        UPDATE T_NEWS SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+
+	<select id="findAllByTypeId" parameterType="Long" resultType="News">
+		SELECT
+		A.*
+		FROM T_NEWS A
+		WHERE DELETED = 0
+		AND NEWS_TYPE_ID = #{typeId}
+		ORDER BY A.CREATED_DATE DESC
+	</select>
+</mapper>

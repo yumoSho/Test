@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.marketing.ActivityGoodsDao">
+	<!-- if need -->
+	<resultMap id="activityGoodsRM" type="ActivityGoods">
+		<result column="ID" property="id"/>
+		<!--<result column="ACTIVITY_ID" property="activityId"/>-->
+		<!--<result column="GOODS_ID" property="goodsId"/>-->
+		<result column="SORT" property="sort"/>
+		<result column="DELETED" property="deleted"/>
+		<result column="CREATED_BY" property="createdBy"/>
+		<result column="CREATED_DATE" property="createdDate"/>
+		<result column="LAST_MODIFIED_BY" property="lastModifiedBy"/>
+		<result column="LAST_MODIFIED_DATE" property="lastModifiedDate"/>
+		<association property="activity" javaType="ActivityMgr">
+			<id column="AM_ID" property="id"/>
+			<result property="activityName" column="ACTIVITY_NAME" />
+			<result property="activityImgPath" column="ACTIVITY_IMG_PATH" />
+			<result property="activityBannerPath" column="ACTIVITY_BANNER_PATH" />
+			<result property="startDate" column="AM_START_DATE" />
+			<result property="endDate" column="AM_END_DATE" />
+			<result property="sort" column="AM_SORT" />
+			<result property="discount" column="AM_DISCOUNT"/>
+		</association>
+		<association property="goods" javaType="Goods">
+			<id property="id" column="G_ID"/>
+			<result property="sn" column="G_SN"/>
+			<result property="title" column="G_TITLE"/>
+			<result property="intro" column="G_INTRO" />
+			<result property="stock" column="G_STOCK" />
+			<result property="alertStock" column="G_ALERT_STOCK" />
+			<result column="G_IMAGE" property="image"/>
+			<result column="G_PRICE" property="price"/>
+			<association property="product" javaType="Product" columnPrefix="P_">
+				<id property="id" column="ID"/>
+				<result column="PRICE" property="price"/>
+				<result column="WEIGHT" property="weight"/>
+				<association property="category" javaType="Category">
+					<id property="id" column="C_ID"/>
+					<result property="name" column="NAME"/>
+				</association>
+			</association>
+		</association>
+	</resultMap>
+
+	<!--sql -->
+	<sql id="baseCols">
+		ID,
+		ACTIVITY_ID,
+		GOODS_ID,
+		SORT,
+		DELETED,
+		CREATED_BY,
+		CREATED_DATE,
+		LAST_MODIFIED_BY,
+		LAST_MODIFIED_DATE
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+		<include refid="baseCols" />
+		FROM
+		T_ACTIVITY_GOODS
+	</sql>
+
+
+
+	<sql id="baseFilter">
+		<if test="activity != null and activity.id != null">
+			AND ACTIVITY_ID = #{activity.id}
+		</if>
+		<if test="goods != null and goodsId != null">
+			AND GOODS_ID = #{goods.id}
+		</if>
+		<if test="sort != null">
+			AND SORT = #{sort}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		AND DELETED = 0
+		<!-- more -->
+	</sql>
+	<!-- retrieve by id -->
+	<select id="find" parameterType="long" resultMap="activityGoodsRM">
+		SELECT
+			R.*
+		FROM (
+		<include refid="baseQuery" />
+		WHERE ID = #{id} AND DELETED = 0
+		) R
+
+	</select>
+
+	<!-- retrieve a unique entity -->
+	<select id="findOne" parameterType="map" resultType="ActivityGoods">
+		<include refid="baseQuery" />
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultMap="activityGoodsRM">
+		SELECT
+			R.*,
+			AM.ID				AM_ID,
+			AM.SORT				AM_SORT,
+			TG.ID				G_ID,
+			TG.SN 				G_SN,
+			TG.TITLE			G_TITLE,
+			TP.ID				P_ID,
+			TC.ID				C_ID,
+			TC.NAME
+		FROM (
+        <include refid="support.ph" />
+		<include refid="baseQuery" />
+		<where>
+			<include refid="support.dynamicFilters" />
+			<include refid="baseFilter" />
+		</where>
+		ORDER BY
+		<trim prefixOverrides=",">
+			<include refid="support.dynamicSort" />
+			, CREATED_DATE DESC
+		</trim>
+        <include refid="support.pf" />
+		) R
+		INNER JOIN T_ACTIVITY_MGR AM  ON AM.ID= R.ACTIVITY_ID AND AM.DELETED=0
+		INNER JOIN T_GOODS TG ON R.GOODS_ID = TG.ID AND TG.DELETED=0
+		INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0
+		LEFT JOIN T_CATEGORY TC ON TP.CATEGORY_ID = TC.ID AND TC.DELETED=0
+	</select>
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT
+		COUNT(1)
+		FROM (
+		<include refid="baseQuery" />
+		<where>
+			<include refid="support.dynamicFilters" />
+			<include refid="baseFilter" />
+		</where>
+		) R
+		INNER JOIN T_ACTIVITY_MGR AM  ON AM.ID= R.ACTIVITY_ID AND AM.DELETED=0
+		INNER JOIN T_GOODS TG ON R.GOODS_ID = TG.ID AND TG.DELETED=0
+		INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0
+		LEFT JOIN T_CATEGORY TC ON TP.CATEGORY_ID = TC.ID AND TC.DELETED=0
+	</select>
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="ActivityGoods"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO T_ACTIVITY_GOODS (
+		<include refid="baseCols" />
+		) VALUES (
+		#{id},
+		#{activity.id},
+		#{goods.id},
+		#{sort},
+		#{deleted},
+		#{createdBy},
+		#{createdDate},
+		#{lastModifiedBy},
+		#{lastModifiedDate}
+		)
+	</insert>
+
+
+
+	<!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+	<update id="update" parameterType="ActivityGoods">
+		UPDATE T_ACTIVITY_GOODS
+		<set>
+			<if test="activity != null and activity.id != null">
+				 ACTIVITY_ID = #{activity.id}
+			</if>
+			<if test="goods != null and  goods.id != null">
+				 GOODS_ID = #{goods.id},
+			</if>
+			<if test="sort != null">
+				 SORT = #{sort},
+			</if>
+			<if test="deleted != null">
+				 DELETED = #{deleted},
+			</if>
+
+			<if test="lastModifiedBy != null">
+				 LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null">
+				 LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+	<!-- - - - - - - - - - - Delete - - - - - - - - - -->
+
+	<update id="delete" parameterType="ActivityMgr">
+		UPDATE T_ACTIVITY_GOODS SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+	<update id="deleteByActivityId" parameterType="long">
+		UPDATE T_ACTIVITY_GOODS SET DELETED = 1 WHERE ACTIVITY_ID = #{id}
+	</update>
+
+	<select id="calcPrice"  resultMap="activityGoodsRM">
+		SELECT
+		R.*,
+		AM.ID				AM_ID,
+		AM.SORT				AM_SORT,
+		AM.DISCOUNT			AM_DISCOUNT,
+		AM.START_DATE		AM_START_DATE,
+		AM.END_DATE			AM_END_DATE,
+		TG.ID				G_ID,
+		TG.SN 				G_SN,
+		TG.PRICE			G_PRICE,
+		TG.TITLE			G_TITLE,
+		TP.ID				P_ID,
+		TC.ID				C_ID,
+		TC.NAME
+		FROM (
+		SELECT * FROM T_ACTIVITY_GOODS  WHERE ID=#{id} AND GOODS_ID=#{goodsId} AND DELETED=0
+		) R
+		INNER JOIN T_ACTIVITY_MGR AM  ON AM.ID= R.ACTIVITY_ID AND AM.DELETED=0 AND AM.START_DATE <![CDATA[<]]> NOW() AND AM.END_DATE <![CDATA[>]]> NOW()
+			INNER JOIN T_GOODS TG ON R.GOODS_ID = TG.ID AND TG.DELETED=0
+		INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID =TP.ID AND TP.DELETED=0 AND TP.IS_PUTAWAY=1
+		LEFT JOIN T_CATEGORY TC ON TP.CATEGORY_ID = TC.ID AND TC.DELETED=0
+	</select>
+
+</mapper>

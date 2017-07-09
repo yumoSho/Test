@@ -1,0 +1,46 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@include file="/WEB-INF/view/include/taglibs.jspf" %>
+ <!-- 个人中心内页左侧导航 -->
+                <div class="leftBar fl">
+                    <ul class="leftNavBox">
+                        <li>
+                            <p class="title titleOn">我的交易</p>
+                            <ul class="leftSecNav">
+                                <li>
+                                    <a href="${ctx}/personalcenter/orderList" <c:if test="${personalCenterNav=='orderList' }">class="on"</c:if>>我的订单</a>
+                                    <a href="${ctx}/person-center/comment" <c:if test="${personalCenterNav=='comment' }">class="on"</c:if>>我的评论</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="title">我的资产</p>
+                            <ul class="leftSecNav">
+                                <li>
+                                    <a href="${ctx}/person-center/coupon" <c:if test="${personalCenterNav=='coupon' }">class="on"</c:if>>我的优惠券</a>
+                                    <a href="${ctx}/person-center/myInvate" <c:if test="${personalCenterNav=='myInvate' }">class="on"</c:if>>我的邀请</a>
+                                    <a href="${ctx}/person-center/myBackMoney" <c:if test="${personalCenterNav=='myBackMoney' }">class="on"</c:if>>我的提佣</a>
+                                    <a href="${ctx}/person-center/myRechargeRecord" <c:if test="${personalCenterNav=='myRechargeRecord' }">class="on"</c:if>>充值记录</a>
+                                    <a href="${ctx}/person-center/recharge" <c:if test="${personalCenterNav=='recharge' }">class="on"</c:if>>充值</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="title">个人中心</p>
+                            <ul class="leftSecNav">
+                                <li>
+                                    <a href="${ctx }/person-center/info" <c:if test="${personalCenterNav=='info' }">class="on"</c:if>>个人信息</a>
+                                    <a href="${ctx }/person-center/change-password" <c:if test="${personalCenterNav=='change-password' }">class="on"</c:if>>修改密码</a>
+                                    <a href="${ctx }/person-center/address" <c:if test="${personalCenterNav=='address' }">class="on"</c:if>>收货地址</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="title">我的关注</p>
+                            <ul class="leftSecNav">
+                                <li>
+                                    <a href="${ctx }/person-center/collected" <c:if test="${personalCenterNav=='collected' }">class="on"</c:if>>商品收藏</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>

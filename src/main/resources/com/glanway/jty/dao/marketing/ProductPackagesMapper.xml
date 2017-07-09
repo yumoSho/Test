@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Created on 2014-10-30 17:10:16
+
+ @author crud generated
+-->
+<mapper namespace="com.glanway.jty.dao.marketing.ProductPackagesDao">
+
+    <sql id="packageDynamicFilters">
+        <if test="_product_filters != null">
+            <foreach item="filter" collection="_product_filters" separator=" AND ">
+                <include refid="support.foreachFilter" />
+            </foreach>
+        </if>
+    </sql>
+
+    <!-- - - - - - - - - - Retrieve  - - - - - - - - - -->
+    <!-- retrieve by id -->
+    <select id="find" parameterType="long" resultMap="packagesRM">
+        <include refid="baseQuery"/>
+        WHERE ID = #{id}
+    </select>
+
+    <!-- retrieve a unique entity -->
+    <select id="findOne" parameterType="map" resultMap="packagesRM">
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>
+        </where>
+    </select>
+
+    <!-- retrieve many entities -->
+    <select id="findMany" parameterType="map" resultMap="packagesRM">
+        <!-- paging header sql -->
+        <include refid="support.ph"/>
+        <include refid="baseQuery"/>
+        <where>
+            <include refid="support.dynamicFilters"/>
+            <include refid="baseFilter"/>
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>
+            , ID DESC <!-- TODO modify SORT -->
+        </trim>
+        <!-- paging footer sql -->
+        <include refid="support.pf"/>
+    </select>
+
+    <!-- count -->
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        T_PRODUCT_PACKAGE TPP
+        INNER JOIN
+        T_GOODS TG
+        ON TPP.PRIMARY_GOODS = TG.ID AND TG.DELETED = 0
+        INNER JOIN
+        T_PRODUCT TP
+        ON TG.PRODUCT_ID = TP.ID AND TP.DELETED = 0
+        WHERE
+        TPP.DELETED = 0
+        <trim suffixOverrides="AND">AND <include refid="packageDynamicFilters" /></trim>
+
+    </select>
+
+    <!-- - - - - - - - - - - Create - - - - - - - - - -->
+    <insert id="save" parameterType="ProductPackage"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_PRODUCT_PACKAGE (
+        <include refid="dbCols"/>
+        ) VALUES (
+            #{id},
+            #{name},
+            #{saveMoney},
+            #{primaryProduct.id},
+            #{primaryGoods.id},
+            #{enable},
+            #{deleted},
+            #{type},
+            #{createdBy},
+            #{createdDate},
+            #{lastModifiedBy},
+            #{lastModifiedDate}
+        )
+    </insert>
+    <!-- - - - - - - - - - - - Update - - - - - - - - - -->
+    <!-- update already exists entity -->
+    <update id="update" parameterType="ProductPackage">
+        UPDATE T_PRODUCT_PACKAGE
+        <set>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="saveMoney != null">
+                SAVE_MONEY = #{saveMoney},
+            </if>
+            <if test="type != null">
+                TYPE = #{type},
+            </if>
+            <if test="primaryProduct != null and primaryProduct.id != null">
+                PRIMARY_PRODUCT = #{primaryProduct.id},
+            </if>
+            <if test="primaryGoods != null and primaryGoods.id != null">
+                PRIMARY_GOODS = #{primaryGoods.id},
+            </if>
+            <if test="enable != null">
+                ENABLE = #{enable}
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY = #{lastModifiedBy},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE = #{lastModifiedDate},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - -  Delete - - - - - - - - - -->
+    <!--
+    <delete id="delete" parameterType="Allocate">
+        DELETE FROM T_ALLOCATE WHERE ID = #{id}
+    </delete>
+    -->
+    <update id="delete" parameterType="ProductPackage">
+        UPDATE T_PRODUCT_PACKAGE SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+    <!-- - - - - - - - - - Result Map - - - - - - - - - -->
+    <resultMap id="packagesRM" type="ProductPackage">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME" />
+        <result property="saveMoney" column="SAVE_MONEY" />
+        <result property="type" column="TYPE"/>
+        <result property="enable" column="ENABLE" />
+        <result property="deleted" column="DELETED" />
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdDate" column="CREATED_DATE" />
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY" />
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE" />
+        <association property="primaryProduct" javaType="Product" columnPrefix="P_">
+            <id property="id" column="ID" />
+            <result property="title" column="TITLE" />
+            <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+                <id property="id" column="ID"/>
+                <result property="path" column="PATH"/>
+            </collection>
+        </association>
+        <association property="primaryGoods" javaType="Goods" columnPrefix="G_">
+            <id property="id" column="ID" />
+            <result property="title" column="TITLE" />
+            <result property="price" column="PRICE" />
+            <result property="image" column="IMAGE" />
+            <association property="product" javaType="Product" columnPrefix="P_">
+                <id property="id" column="ID" />
+                <result property="title" column="TITLE" />
+                <result property="isPutaway" column="IS_PUTAWAY" />
+                <association property="brand" javaType="Brand" columnPrefix="B_">
+                    <id property="id" column="ID"/>
+                    <result property="name" column="NAME"/>
+                </association>
+                <association property="category" javaType="Category" columnPrefix="C_">
+                    <id property="id" column="ID"/>
+                    <result property="name" column="NAME"/>
+                </association>
+                <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+                    <id property="id" column="ID"/>
+                    <result property="path" column="PATH"/>
+                </collection>
+            </association>
+        </association>
+        <collection property="packageDetails" ofType="ProductPackageDetail" columnPrefix="PD_">
+            <id property="id" column="ID"/>
+            <association property="product" javaType="Product" columnPrefix="P_" >
+                <id property="id" column="ID" />
+                <result property="title" column="TITLE" />
+                <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+                    <id property="id" column="ID"/>
+                    <result property="path" column="PATH"/>
+                </collection>
+            </association>
+            <association property="goods" javaType="Goods" columnPrefix="G_">
+                <id property="id" column="ID" />
+                <result property="title" column="TITLE" />
+                <result property="price" column="PRICE" />
+                <result property="image" column="IMAGE" />
+                <association property="product" javaType="Product" columnPrefix="P_">
+                    <id property="id" column="ID" />
+                    <result property="title" column="TITLE" />
+                    <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+                        <id property="id" column="ID"/>
+                        <result property="path" column="PATH"/>
+                    </collection>
+                    <collection property="areas" ofType="HatProvince">
+                        <id property="id" column="PID"/>
+                        <result property="provinceName" column="PROVINCE_NAME"/>
+                        <result property="provinceCode" column="PROVINCE_CODE"/>
+                    </collection>
+                </association>
+                <collection property="productImgs" ofType="ProductImg" columnPrefix="I_">
+                    <id property="id" column="ID"/>
+                    <result property="path" column="PATH"/>
+                </collection>
+            </association>
+        </collection>
+    </resultMap>
+
+    <!-- full database table columns -->
+    <sql id="dbCols">
+        ID,
+        NAME,
+        SAVE_MONEY,
+        PRIMARY_PRODUCT,
+        PRIMARY_GOODS,
+        ENABLE,
+        DELETED,
+        TYPE,
+        CREATED_BY,
+        CREATED_DATE,
+        LAST_MODIFIED_BY,
+        LAST_MODIFIED_DATE
+    </sql>
+
+    <!-- non condition sql fragement -->
+    <sql id="baseQuery">
+        SELECT
+        *
+        FROM (
+        SELECT
+        A.*
+        FROM (
+        SELECT
+        <include refid="dbCols"/>FROM
+        T_PRODUCT_PACKAGE
+        ) A
+        )
+    </sql>
+
+
+    <!-- full database table columns condition -->
+    <sql id="baseFilter">
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="saveMoney != null">
+            AND SAVE_MONEY = #{saveMoney}
+        </if>
+        <if test="primaryProduct != null">
+            AND PRIMARY_PRODUCT = #{primaryProduct}
+        </if>
+        <if test="primaryGoods != null">
+            AND PRIMARY_GOODS = #{primaryGoods}
+        </if>
+        <if test="enable != null">
+            AND ENABLE = #{enable}
+        </if>
+        <if test="deleted != null">
+            AND DELETED = #{deleted}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+    </sql>
+
+    <select id="listAllPryGoods" resultMap="packagesRM" parameterType="map">
+        SELECT
+            R.*,
+            D_TG.ID PD_G_ID,
+        D_TG.TITLE PD_G_TITLE,
+            D_TP.ID PD_G_P_ID,
+            D_TP.TITLE PD_G_P_TITLE
+        FROM
+        (
+          <include refid="support.ph"/>
+            SELECT
+              TPP.*,
+              TG.ID     G_ID,
+              TG.TITLE  G_TITLE,
+              TP.ID     G_P_ID,
+              TP.TITLE  G_P_TITLE
+            FROM
+                T_PRODUCT_PACKAGE TPP
+            INNER JOIN T_GOODS TG ON TPP.PRIMARY_GOODS = TG.ID AND TG.DELETED = 0
+            INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID = TP.ID AND TP.DELETED = 0
+            WHERE TPP.DELETED = 0
+            <trim suffixOverrides="AND">AND <include refid="packageDynamicFilters" /></trim>
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+                , TPP.CREATED_DATE DESC
+            </trim>
+        <include refid="support.pf"/>
+        )R
+        INNER JOIN T_PRODUCT_PACKAGE_DETAIL TPPD ON TPPD.PACKAGE_ID = R.ID AND TPPD.DELETED = 0
+        INNER JOIN T_GOODS D_TG ON D_TG.ID = TPPD.GOODS_ID AND D_TG.DELETED = 0
+        INNER JOIN T_PRODUCT D_TP ON D_TP.ID = D_TG.PRODUCT_ID AND D_TP.DELETED = 0
+    </select>
+
+    <select id="getPackageById" resultMap="packagesRM" parameterType="long">
+        SELECT
+          TPP.*,
+          TG.ID G_ID,
+          TG.TITLE G_TITLE,
+          TG.IMAGE G_IMAGE,
+          TP.ID G_P_ID,
+          TP.TITLE G_P_TITLE,
+          TPI.ID G_P_I_ID,
+          TPI.PATH G_P_I_PATH,
+          TPPD.ID PD_ID,
+          D_TG.ID PD_G_ID,
+          D_TG.TITLE PD_G_TITLE,
+          D_TG.IMAGE PD_G_IMAGE,
+          D_TP.TITLE PD_G_P_TITLE,
+          D_TP.ID PD_G_P_ID,
+          D_TP.ID PD_P_ID,
+          D_TPI.ID PD_G_P_I_ID,
+          D_TPI.PATH PD_G_P_I_PATH
+        FROM
+          T_PRODUCT_PACKAGE TPP
+        /* LEFT JOIN
+        T_PRODUCT_PACKAGE_DETAIL TPPD
+        ON
+        TPPD.PACKAGE_ID = TPP.ID AND TPPD.DELETED = 0*/
+        LEFT JOIN T_GOODS TG ON TPP.PRIMARY_GOODS = TG.ID AND TG.DELETED = 0
+        LEFT JOIN T_PRODUCT TP ON TG.PRODUCT_ID=TP.ID AND TP.DELETED = 0
+        LEFT JOIN T_PRODUCT_IMG TPI ON TPI.PRODUCT_ID = TPP.PRIMARY_PRODUCT AND TPI.DELETED = 0
+        LEFT JOIN T_PRODUCT_PACKAGE_DETAIL TPPD ON TPPD.PACKAGE_ID = TPP.ID AND TPPD.DELETED = 0
+        INNER JOIN T_GOODS D_TG ON TPPD.GOODS_ID = D_TG.ID AND D_TG.DELETED = 0
+        LEFT JOIN T_PRODUCT D_TP ON TPPD.PRODUCT_ID = D_TP.ID AND D_TP.DELETED = 0
+        LEFT JOIN T_PRODUCT_IMG D_TPI ON D_TPI.PRODUCT_ID = D_TP.ID AND TPI.DELETED = 0
+        WHERE
+        TPP.ID = #{packageId}
+        AND
+        TPP.DELETED = 0
+    </select>
+
+
+
+    <select  id="findProductPackageByProductGoodsId" parameterType="map" resultMap="packagesRM">
+        SELECT
+	      TPP.ID              ID,
+	      TPP.SAVE_MONEY      SAVE_MONEY,
+	      TPP.TYPE            TYPE,
+	      TPP.NAME            NAME,
+	      TPPD.ID             PD_ID,
+	      TP.ID               PD_G_P_ID,
+	      TG.ID               PD_G_ID,
+	      TG.TITLE            PD_G_TITLE,
+	      TG.IMAGE            PD_G_IMAGE,
+	      TG.PRICE            PD_G_PRICE,
+	      HP.ID               PD_G_P_PID,
+	      HP.PROVINCE_CODE    PD_G_P_PROVINCE_CODE,
+	      HP.PROVINCE_NAME    PD_G_P_PROVINCE_NAME
+        FROM T_PRODUCT_PACKAGE TPP
+        INNER JOIN T_PRODUCT_PACKAGE_DETAIL TPPD ON TPP.PRIMARY_GOODS =#{goodsId} AND TPP.TYPE=#{type} AND TPP.DELETED=0 AND TPPD.DELETED=0 AND TPP.ID=TPPD.PACKAGE_ID
+        INNER JOIN T_GOODS TG ON TPPD.GOODS_ID = TG.ID AND TG.DELETED=0
+        INNER JOIN T_PRODUCT TP ON TG.PRODUCT_ID= TP.ID AND TP.DELETED=0 AND TP.IS_PUTAWAY=1
+        INNER JOIN T_PROVINCE_PRODUCT TPR ON TP.ID= TPR.PRODUCT_ID
+        INNER JOIN HAT_PROVINCE HP ON TPR.PROVINCE_ID= HP.ID
+    </select>
+</mapper>

@@ -1,0 +1,206 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<%@include file="/WEB-INF/view/include/taglibs.jspf" %>
+<div class="head">
+    <div class="headBar">
+        <div class="samewidth clearfix">
+            <div class="headAddr fl">
+                送至：<span class="addrChecked" data-id="${sessionScope.provinceId}">不限</span><img src="${ctx}/images/pc/icon2.png" width="12" height="7" />
+                <div class="headAddrList clearfix">
+                    <div class="addrItem"><a href="javascript:void(0);" data-id="0" data-code="0">不限</a></div>
+                    <c:forEach items="${allProvince}" var="p">
+                    <div class="addrItem" ><a href="javascript:void(0);" data-id="${p.id}" data-code="${p.provinceCode}">${p.remark}</a></div>
+                    </c:forEach>
+                    <%--<div class="addrItem"><a href="javascript:void(0);">上海</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">天津</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">重庆</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">河北</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">陕西</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">北京</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">上海</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">天津</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">黑龙江</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">河北</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">陕西</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">北京</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">上海</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">天津</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">重庆</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">河北</a></div>
+                    <div class="addrItem"><a href="javascript:void(0);">陕西</a></div>--%>
+                </div>
+            </div>
+            <div class="loginWelcome fl">
+                <span>嘿，欢迎来到${simpleWebsite.name}</span>
+               
+                <c:choose>
+                	<c:when test="${sessionScope.member ==null }">
+                		 <a href="${ctx }/login">请登录</a>
+               	         <a href="${ctx }/reg">免费注册</a>
+                	</c:when>
+                	<c:otherwise>
+                		 <a href="${ctx }/person-center/index">${sessionScope.member.memberName }</a>
+               	         <a href="${ctx }/login/out">退出</a>
+                	</c:otherwise>
+                </c:choose>
+            </div>
+            <div class="headLinks fr clearfix">
+                <a href="${ctx }/personalcenter/orderList">我的订单</a>
+                <a href="${ctx }/person-center/index">我的账户</a>
+                <a href="${ctx }/person-center/recharge">充值</a>
+                <a href="${ctx }/contentManagement/content/partner">合作入驻</a>
+                <a href="#" class="erweimaWrap">
+                    <img src="${ctx}/images/pc/icon3.png" width="9" height="13" />手机网站
+                    <img src="${ctx}/payment/createImage?qrcode=${simpleWebsite.url}/mobile/" width="100" height="100" class="erweima" />
+                </a>
+                <a href="${ctx }/contentManagement/helpCenterCommonPro"><img src="${ctx}/images/pc/icon4.png" width="14" height="15" />帮助中心</a>
+            </div>
+        </div>
+    </div>
+    <div class="headAdverties">
+        <c:if test="${not empty top}">
+        <a href="${top.field1}" class="advImg" style="background:url(${ctx}/${top.image}) center no-repeat;"></a>
+
+        <div class="samewidth">
+            <a href="javascript:void(0);" class="fr closeAdv"><img src="${ctx}/images/pc/closeAdv.png" width="13" height="13" /></a>
+        </div>
+        </c:if>
+    </div>
+    <div class="logoPart samewidth clearfix">
+        <a href="${ctx}/" class="logo fl"><img src="${ctx}/${simpleWebsite.logo}_176x96" width="176" height="96" /></a>
+        <div class="searchPart fl">
+
+            <div class="quickLinks clearfix">
+                <c:if test="${fn:length(categoryRecommends)>0}">
+                <span class="fl">热门搜索：</span>
+                <div class="linkItems fl">
+                    <c:forEach items="${categoryRecommends}" var="cr">
+                    <a href="${cr.url}">${cr.title}</a>
+                    </c:forEach>
+                </div>
+                </c:if>
+            </div>
+            <div class="searchWrap clearfix">
+                <div class="searchType fl">
+                    <span data-type="0">商品</span><img src="${ctx}/images/pc/icon5.png" width="8" height="5" />
+                    <a href="javascript:void(0);" class="searchSelect" data-type="1">
+                        文章
+                    </a>
+                </div>
+                <input type="text" class="searchInput" placeholder="请输入您要搜索的关键字" />
+                <a href="javascript:void(0);" class="searchBtn"><img src="${ctx}/images/pc/icon6.png" widht="15" height="15" />搜索</a>
+            </div>
+        </div>
+        <div class="imgPart fl">
+            <a href="javascript:void(0);">
+                <img src="${ctx}/images/pc/headIcon1.png" widht="42" height="42" />
+                <p>有机认证</p>
+            </a>
+            <a href="javascript:void(0);">
+                <img src="${ctx}/images/pc/headIcon2.png" widht="42" height="42" />
+                <p>全程品控</p>
+            </a>
+            <a href="javascript:void(0);">
+                <img src="${ctx}/images/pc/headIcon3.png" widht="42" height="42" />
+                <p>产品保险</p>
+            </a>
+        </div>
+        <a href="<c:if test="${sessionScope.member.id == null }">${ctx }/cookieCart</c:if><c:if test="${sessionScope.member.id != null }">${ctx }/cart</c:if>" class="goForCart fr"><img src="${ctx}/images/pc/icon7.png" width="20" height="20" />我的购物车<span class="cartNumSmall">0</span></a>
+    </div>
+    <div class="navPart clearfix">
+        <div class="samewidth">
+            <div class="allKind fl">
+                <a href="${ctx}/search" class="allKindBtn">全部商品分类</a>
+                <ul class="slideNav">
+                   <%-- <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon1.png) 25% 7px no-repeat;">有机蔬菜</a>
+                        <ul class="righNav">
+                            <li>
+                                <a href="#" class="subNavTitle">绿色蔬菜</a>
+                                <div class="navLinks">
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="subNavTitle">绿色蔬菜</a>
+                                <div class="navLinks">
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon2.png) 25% 7px no-repeat;">特色专区</a>
+                        <ul class="righNav">
+                            <li>
+                                <a href="#" class="subNavTitle">特色蔬菜</a>
+                                <div class="navLinks">
+                                    <a href="../product/productList.html">青菜</a>
+                                    <a href="../product/productList.html">菠菜</a>
+                                    <a href="../product/productList.html">西葫芦</a>
+                                    <a href="../product/productList.html">西红柿</a>
+                                    <a href="../product/productList.html">黄瓜</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                    <a href="../product/productList.html">牛奶饮料</a>
+                                    <a href="../product/productList.html">饼干糕点</a>
+                                    <a href="../product/productList.html">冲调饮品</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon3.png) 25% 7px no-repeat;">禽肉蛋奶</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon4.png) 25% 7px no-repeat;">粮油副食</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon5.png) 25% 7px no-repeat;">菌菇干货</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon6.png) 25% 7px no-repeat;">健康零食</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon7.png) 25% 7px no-repeat;">滋补养生</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon8.png) 25% 7px no-repeat;">生态用品</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon9.png) 25% 7px no-repeat;">地标产品</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon10.png) 25% 7px no-repeat;">私人订制</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon11.png) 25% 7px no-repeat;">礼品套餐</a>
+                    </li>
+                    <li>
+                        <a href="#" style="background:url(${ctx}/images/pc/navIcon12.png) 25% 7px no-repeat;">其他商品</a>
+                    </li>--%>
+                </ul>
+            </div>
+            <div class="nav fl">
+                <a href="${ctx}/" <c:if test="${nav eq 0}">class="on"</c:if>>首页</a>
+                <a href="${ctx}/timed-panic-buying/index" <c:if test="${nav eq 1}">class="on"</c:if>>限时抢购</a>
+                <a href="${ctx}/activity" <c:if test="${nav eq 2}">class="on"</c:if>>活动专区</a>
+                <a href="${ctx}/contentManagement/newsList?type=18" <c:if test="${nav eq 3}">class="on"</c:if>>直播农场</a>
+            </div>
+        </div>
+    </div>
+</div><!-- //head -->

@@ -1,0 +1,123 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<script type="x-tmpl-mustache" id="tpl-packages">
+    <tr class="packagesTr">
+        <td>
+        <div class="em_list" data-composes="productId">
+            <h2 class="clearfix">
+                <span class="fl">套餐名：<b>{{packagesName}}</b></span>
+                <span style="margin-left: 100px;">优惠金额：<b>{{saveMoney}}</b></span>
+                <span class="fr">
+                    <input type="hidden" value="{{packagesId}}"/>
+                    <a href="javascript:void(0);" class="deletePackages">移除</a>
+                </span>
+            </h2>
+            <div class="suits suits_2">
+               <ul>
+                    {{#accessories}}
+                        <li>
+                            <s></s>
+                              <div class="p-img">
+                                  <a href="#">
+                                      <img src="${ctx}/{{detailImages}}" width="99" height="99" />
+                                  </a>
+                              </div>
+                              <div class="p-name">
+                                  <a href="#">
+                                  {{title}}
+                                  {{#specValues.length}}({{#specValues}} {{name}} {{/specValues}}){{/specValues.length}}
+                                  </a>
+                              </div>
+                        </li>
+                    {{/accessories}}
+                  </ul>
+             </div>
+         </div>
+       </td>
+    </tr>
+</script>
+
+<script type="x-tmpl-mustache" id="tpl-packageDetail">
+            <div class="em_list">
+                <div class="suits suits_2">
+                    <ul id="recoul">
+                        {{#accessories}}
+                            <li>
+                                <s></s>
+                                  <div class="p-img" >
+                                      <input type="hidden" name="composes[].accessories[{{index}}].productId" value="{{product.id}}" >
+                                      <input type="hidden" name="composes[].accessories[{{index}}].goodsId" value="{{id}}" >
+                                      <a href="#">
+                                          <img src="${ctx}/{{detailImages}}" width="99" height="99" />
+                                      </a>
+                                  </div>
+                                  <div class="p-name">
+                                      <a href="#">
+                                          {{title}}
+                                          {{#specValues.length}}
+                                                ({{#specValues}}
+                                                    {{name}}
+                                                 {{/specValues}})
+                                           {{/specValues.length}}
+                                      </a>
+                                  </div>
+                            </li>
+                        {{/accessories}}
+                    </ul>
+                </div>
+             </div>
+</script>
+
+<script type="x-tmpl-mustache" id="tpl-primary">
+        <div class="suits">
+           <ul>
+                <li>
+                      <div class="p-img">
+                          <input type="hidden" name="composes[].accessories[{{index}}].productId" value="{{product.id}}" >
+                          <input type="hidden" name="composes[].accessories[{{index}}].goodsId" value="{{id}}" >
+                          <a href="#">
+                              <img src="${ctx}/{{detailImages}}" width="99" height="99" />
+                          </a>
+                      </div>
+                      <div class="p-name">
+                          <a href="#">
+                          {{title}}
+                          {{#specValues.length}}
+                            ({{#specValues}}
+                                {{name}}
+                            {{/specValues}})
+                          {{/specValues.length}}
+                          </a>
+                      </div>
+                </li>
+           </ul>
+         </div>
+</script>
+
+<script type="x-tmpl-mustache" id="tpl-packageEdit">
+            <div class="em_list">
+                <div class="suits suits_2">
+                    <ul id="recoul">
+                        {{#packageDetails}}
+                            <li>
+                                <s></s>
+                                  <div class="p-img">
+                                      <a href="#">
+                                          <img src="${ctx}/{{goods.image}}{{path}}" width="99" height="99" />
+                                      </a>
+                                  </div>
+                                  <div class="p-name">
+                                      <a href="#">
+                                          {{goods.name}}
+                                          {{#specValues.length}}
+                                                ({{#specValues}}
+                                                    {{name}}
+                                                 {{/specValues}})
+                                           {{/specValues.length}}
+                                      </a>
+                                  </div>
+                            </li>
+                        {{/packageDetails}}
+                    </ul>
+                </div>
+             </div>
+</script>

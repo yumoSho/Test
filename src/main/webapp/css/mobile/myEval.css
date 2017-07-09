@@ -1,0 +1,235 @@
+﻿/*公用变量*/
+/*公用样式函数*/
+.myAsk {
+  font-size: 0.24rem;
+}
+.myAsk .module-list-01 {
+  overflow: hidden;
+}
+.myAsk .module-list-01 dl {
+  padding: 0.2rem 0.15rem;
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  overflow: hidden;
+  margin-bottom: 0.12rem;
+}
+.myAsk .module-list-01 dl a {
+  color: #666;
+}
+.myAsk .module-list-01 dl .askNews {
+  margin-top: 0.2rem;
+}
+.myAsk .module-list-01 dl .askNews p {
+  line-height: 0.38rem;
+}
+.myAsk .module-list-01 dl .askNews p.askP {
+  color: #666;
+}
+.myAsk .module-list-01 dl .askNews .qestion {
+  width: 90%;
+}
+.myAsk .module-list-01 dl:first-child {
+  border-top: 0;
+}
+.myAsk .module-list-01 dt {
+  float: left;
+  width: 1.2rem;
+  height: 1.3rem;
+  margin-right: 0.15rem;
+  text-align: center;
+  line-height: 1.3rem;
+}
+.myAsk .module-list-01 dt img {
+  vertical-align: middle;
+  border: 1px solid #dcdcdc;
+  width: 1.2rem;
+  height: 1.3rem;
+}
+.myAsk .module-list-01 dd {
+  padding: 0.17rem 0;
+  overflow: hidden;
+}
+.myAsk .module-list-01 dd p {
+  font-size: 0.22rem;
+  line-height: 0.33rem;
+}
+.myAsk .module-list-01 dd p.askP {
+  color: #666;
+}
+.myAsk .module-list-01 dd p.askP a {
+  color: #666;
+}
+.myAsk .module-list-01 dd p.askRed {
+  color: #e60019;
+  font-size: 0.26rem;
+}
+.bgblack {
+  background: #fff;
+}
+.askNews {
+  background: url('../images/close.png') right 20% no-repeat;
+  background-size: 0.3rem;
+}
+.askNews.on {
+  background: url('../images/open.png') right 20% no-repeat;
+  background-size: 0.3rem;
+}
+/*会员中心-提交评价页面*/
+.evalBtns {
+  font-size: 0;
+}
+.evalBtns a {
+  display: inline-block;
+  font-size: .26rem;
+  color: #191919;
+  width: 50%;
+  text-align: center;
+  padding: .1rem 0;
+  background: #fff;
+}
+.evalBtns a.on {
+  color: #19aa4b;
+}
+.evalItem {
+  border-top: 1px solid #dfdfdf;
+  font-size: 0;
+  padding: .2rem .15rem;
+  border-bottom: 1px solid #dfdfdf;
+  margin-top: .1rem;
+}
+.evalItem .evalText a img {
+  width: 1.43rem;
+  height: 1.43rem;
+  border: 1px solid #dcdcdc;
+}
+.evalItem .evalText textarea {
+  width: 5.5rem;
+  height: 1.15rem;
+  padding: .1rem;
+  font-size: .22rem;
+  border: none;
+}
+.evalItem .evalImgs .evalUpload {
+  display: block;
+  width: 1.2rem;
+  height: 1.16rem;
+  background: url(../images/evalIcon.png) center no-repeat;
+  background-size: 1.2rem;
+  margin-top: .2rem;
+}
+.evalItem .evalImgs input {
+  width: 1.2rem;
+  height: 1.16rem;
+  opacity: 0;
+}
+.evalAllNum {
+  border-top: 1px solid #dedede;
+  border-bottom: 1px solid #dedede;
+  font-size: 0;
+  padding: .2rem .15rem;
+  margin-top: .15rem;
+  margin-bottom: 1.2rem;
+}
+.evalAllNum span {
+  font-size: .22rem;
+  padding-top: .08rem;
+}
+.evalAllNum .evalStar {
+  width: 3rem !important;
+}
+.evalAllNum .evalStar img {
+  float: left;
+  width: .4rem;
+  margin-left: .1rem;
+}
+.submitEval {
+  width: 100%;
+  background: #19aa4b;
+  border-radius: 50rem;
+  height: 0.95rem;
+  border: none;
+  font-size: 0.35rem;
+  color: #fff;
+  vertical-align: middle;
+  margin-top: -0.25rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 0.95rem;
+}
+/*已评价页面*/
+.evaledItem {
+  position: relative;
+  padding: .2rem .15rem;
+  border-top: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  margin-top: .1rem;
+}
+.evaledItem:first-child {
+  margin-top: 0;
+}
+.evaledItem .evalTop a img {
+  width: 1.2rem;
+  border: 1px solid #dcdcdc;
+}
+.evaledItem .evalTop .evalRight {
+  width: 80%;
+}
+.evaledItem .evalTop .evalRight a {
+  font-size: .2rem;
+  color: #666;
+  margin-top: .25rem;
+  height: .7rem;
+  line-height: .38rem;
+  margin-bottom: .1rem;
+}
+.evaledItem .evalTop .evalRight p {
+  font-size: .22rem;
+  color: #666;
+  font-weight: normal;
+}
+.evaledItem .evalText {
+  font-size: .22rem;
+  padding-top: .2rem;
+  overflow: hidden;
+}
+.evaledItem .evaledImgs {
+  font-size: 0;
+  margin-right: -0.3rem;
+}
+.evaledItem .evaledImgs img {
+  width: 1.43rem;
+  height: 1.43rem;
+  margin: .1rem .3rem .1rem 0;
+}
+.evaledItem .evaledImgs img:first-child {
+  margin-left: 0;
+}
+.evaledItem .goEval {
+  position: absolute;
+  right: .2rem;
+  bottom: .2rem;
+  font-size: .22rem;
+  display: block;
+  width: 1.2rem;
+  height: .4rem;
+  line-height: .4rem;
+  text-align: center;
+  border: 0.02rem solid #19aa4b;
+  border-radius: .5rem;
+  color: #19aa4b;
+}
+/*未评价页*/
+.storeMessage {
+  padding: .1rem .15rem;
+  border-top: 1px solid #dfdfdf;
+}
+.storeMessage .storeName {
+  line-height: .45rem;
+}
+.storeMessage .orderMessage {
+  line-height: .45rem;
+}
+.storeMessage .orderMessage .orderState {
+  color: #19aa4b;
+}
+/*# sourceMappingURL=myEval.css.map */

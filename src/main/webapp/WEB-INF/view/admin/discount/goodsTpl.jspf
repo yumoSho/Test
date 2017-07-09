@@ -1,0 +1,33 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- 属性条目 --%>
+<script type="x-tmpl-mustache" id="tpl-goods-item">
+<tr>
+    <th width="19%">
+        <input name="discountGoods[{{index}}].id" type="hidden" value="">
+        <input name="discountGoods[{{index}}].goods.id" type="hidden" value="{{id}}">
+        <input name="" type="text" disabled value="{{title}}">
+    </th>
+    <th width="19%">
+        <input name=""  type="text" disabled value="{{catName}}">
+    </th>
+    <th width="19%">
+        <input name="discountGoods[{{index}}].sort" type="text" class="digits required" value="">
+    </th>
+    <th width="19%">
+         <input type="text" name="discountGoods[{{index}}].discount" class="required" min="0.01" max="10.00" value=""/>
+    </th>
+    <td width="19%">
+        <input name="discountGoods[{{index}}].startDate" class="Wdate required"  type="text" placeholder="开始时间"
+               onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', autoPickDate:true, maxDate:'2099-12-31'})"/>
+        <label for="discountGoods[{{index}}].startDate" generated="true" class="error" style="display:none">此项为必填项</label>
+        <input name="discountGoods[{{index}}].endDate" class="Wdate required"  type="text" placeholder="结束时间"
+               onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', maxDate:'2099-12-31'})"/>
+        <label for="discountGoods[{{index}}].endDate" generated="true" class="error" style="display:none">此项为必填项</label>
+    </td>
+    <th width="5%">
+        <div class="operateBox"  style="padding-top:4px;">
+            <img src="${ctx}/images/admin/icon-delete01.png" onclick="removeTr(this);" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </th>
+</tr>
+</script>

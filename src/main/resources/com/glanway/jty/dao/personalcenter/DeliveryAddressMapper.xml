@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.personalcenter.DeliveryAddressDao">
+
+    <select id="find" parameterType="long" resultType="DeliveryAddress">
+     SELECT
+	DA.*,
+	HP.PROVINCE_NAME AS "fieldOne",
+	HC.CITY_NAME AS "fieldTwo",
+	HA.AREA_NAME AS "fieldThree"
+    FROM
+	T_DELIVERY_ADDRESS DA,
+	HAT_CITY HC,
+	HAT_PROVINCE HP,
+	HAT_AREA HA
+    WHERE
+	DA.DELETED = 0
+    AND DA.ID = #{id}
+    AND DA.CITY_CODE = HC.CITY_CODE
+    AND DA.AREA_CODE = HA.AREA_CODE
+    AND DA.PRIVINCE_CODE = HP.PROVINCE_CODE
+    </select>
+
+    <select id="findOne" parameterType="map" resultType="DeliveryAddress">
+    SELECT
+	DA.*
+    FROM
+	T_DELIVERY_ADDRESS DA
+    WHERE
+	DA.DELETED = 0
+    AND DA.IS_DEFAULT = 1
+    AND DA.MEMBER_ID = #{memberId}
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="DeliveryAddress">
+        <include refid="support.ph"/>
+          SELECT  * FROM (  SELECT
+            DA.*,
+            HP.PROVINCE_NAME AS "fieldOne",
+            HC.CITY_NAME AS "fieldTwo",
+            HA.AREA_NAME AS "fieldThree"
+            FROM
+            T_DELIVERY_ADDRESS DA,
+            HAT_CITY HC,
+            HAT_PROVINCE HP,
+            HAT_AREA HA
+            WHERE
+            DA.DELETED = 0
+            AND DA.CITY_CODE = HC.CITY_CODE
+            AND DA.AREA_CODE = HA.AREA_CODE
+            AND DA.PRIVINCE_CODE = HP.PROVINCE_CODE
+          ) DA
+        <where>
+            <!-- 兼容通用动态过滤 -->
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+            </trim>
+        </where>
+        ORDER BY
+        <trim prefixOverrides=",">
+            <include refid="support.dynamicSort"/>, IS_DEFAULT DESC ,ID DESC
+        </trim>
+        <include refid="support.pf"/>
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT  COUNT(1) FROM (  SELECT
+        DA.*,
+        HP.PROVINCE_NAME AS "fieldOne",
+        HC.CITY_NAME AS "fieldTwo",
+        HA.AREA_NAME AS "fieldThree"
+        FROM
+        T_DELIVERY_ADDRESS DA,
+        HAT_CITY HC,
+        HAT_PROVINCE HP,
+        HAT_AREA HA
+        WHERE
+        DA.DELETED = 0
+        AND DA.CITY_CODE = HC.CITY_CODE
+        AND DA.AREA_CODE = HA.AREA_CODE
+        AND DA.PRIVINCE_CODE = HP.PROVINCE_CODE
+        ) DA
+        <where>
+            <!-- 兼容通用动态过滤 -->
+            <trim prefixOverrides="AND">
+                <include refid="support.dynamicFilters"/>
+            </trim>
+        </where>
+    </select>
+
+    <select id="findAllByMemberId" parameterType="long" resultType="DeliveryAddress">
+    SELECT
+	DA.*,
+	HP.PROVINCE_NAME AS "fieldOne",
+	HC.CITY_NAME AS "fieldTwo",
+	HA.AREA_NAME AS "fieldThree"
+    FROM
+	T_DELIVERY_ADDRESS DA,
+	HAT_CITY HC,
+	HAT_PROVINCE HP,
+	HAT_AREA HA
+    WHERE
+	DA.DELETED = 0
+    AND DA.MEMBER_ID = #{memberId}
+    AND DA.CITY_CODE = HC.CITY_CODE
+    AND DA.AREA_CODE = HA.AREA_CODE
+    AND DA.PRIVINCE_CODE = HP.PROVINCE_CODE
+    ORDER BY
+	IS_DEFAULT = 1 DESC,
+	ID DESC;
+  </select>
+
+    <insert id="save" parameterType="DeliveryAddress" useGeneratedKeys="true" keyProperty="id">
+		insert into T_DELIVERY_ADDRESS(ID,PRIVINCE_CODE,CITY_CODE,
+		AREA_CODE,ADDRESS,CONSIGNEE,CONSIGNEE_PHONE,
+		TELEPHONE,IS_DEFAULT,DELETED,MEMBER_ID)
+        values(#{id},#{privinceCode},#{cityCode},#{areaCode},
+        #{address},#{consignee},#{consigneePhone},#{telephone},
+        #{isDefault},0,#{memberId})
+	</insert>
+
+
+    <update id="update" parameterType="DeliveryAddress">
+        UPDATE T_DELIVERY_ADDRESS
+        <set>
+            <if test="privinceCode != null">
+                PRIVINCE_CODE = #{privinceCode},
+            </if>
+            <if test="cityCode != null">
+                CITY_CODE = #{cityCode},
+            </if>
+            <if test="areaCode != null">
+                AREA_CODE = #{areaCode},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address},
+            </if>
+            <if test="consignee != null">
+                CONSIGNEE = #{consignee},
+            </if>
+            <if test="consigneePhone != null">
+                CONSIGNEE_PHONE = #{consigneePhone},
+            </if>
+            <if test="telephone != null">
+                TELEPHONE = #{telephone},
+            </if>
+            <if test="isDefault != null">
+                IS_DEFAULT = #{isDefault},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+            <if test="memberId != null">
+                MEMBER_ID = #{memberId},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="defaultCancel" parameterType="long">
+        UPDATE T_DELIVERY_ADDRESS SET IS_DEFAULT = 0 WHERE MEMBER_ID = #{memberId} AND IS_DEFAULT = 1;
+    </update>
+
+    <update id="delete" parameterType="DeliveryAddress">
+        UPDATE T_DELIVERY_ADDRESS SET DELETED = 1 WHERE ID = #{id}
+    </update>
+
+</mapper>

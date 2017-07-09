@@ -1,0 +1,7 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<div class="head">
+    <div class="pageTitle writeWrap samePadding clearfix headTop">
+        <a href="javascript:history.go(-1);" class="back fleft"><img src="${ctx}/images/mobile/icon14.png" /></a>
+        <span>${requestScope.commonText}</span>
+    </div>
+</div><!-- //head -->

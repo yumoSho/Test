@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.customer.StoreDao">
+    <select id="find" parameterType="long" resultType="Store">
+      SELECT * FROM T_STORE
+        WHERE ID = #{id}
+    </select>
+
+    <select id="fondOne" parameterType="map" resultType="Store">
+        SELECT * FROM T_STORE
+        <where>
+            <if test="null != code">
+                CODE = ${code}
+            </if>
+            <if test="null !=  deleted">
+               AND DELETED = ${deleted}
+            </if>
+        </where>
+    </select>
+
+    <select id="isExist" parameterType="map" resultType="int">
+            SELECT COUNT(*) FROM T_STORE
+            <where>
+                    NAME =  #{name}
+            </where>
+    </select>
+
+    <select id="findMany" parameterType="map" resultType="Store">
+        <include refid="support.ph"/>
+        SELECT
+        *
+        FROM
+        T_STORE
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM T_STORE
+        <where>
+            <include refid="support.dynamicFilters"/>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="Store" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			T_STORE(
+					ID,NAME,CODE,LOGO
+					,RECOMMEND_IMG,CREATED_DATE
+					,RECOMMEND,PHONE,PRIVINCE_CODE
+					,CITY_CODE,AREA_CODE,ADDRESS
+					,EMAIL,INTRO
+					,DETAILED_INTRO,CONTACT,CREATED_BY
+					,LAST_MODIFIED_DATE,LAST_MODIFIED_BY,DELETED)
+ 		values(#{id},#{name},#{code},#{logo},#{recommendImg}
+ 		,NOW(),#{recommend},#{phone},#{privinceCode},#{cityCode}
+ 		,#{areaCode},#{address},#{email},#{intro},#{detailedIntro}
+ 		,#{contact},#{createdBy},#{lastModifiedDate},#{lastModifiedBy},0)
+	</insert>
+
+    <update id="update" parameterType="Store">
+        update T_STORE
+        <set>
+            <if test="name != null">
+                NAME=#{name},
+            </if>
+            <if test="code != null">
+                CODE=#{code},
+            </if>
+            <if test="logo != null">
+                LOGO=#{logo},
+            </if>
+            <if test="recommendImg != null">
+                RECOMMEND_IMG=#{recommendImg},
+            </if>
+            <if test="recommend != null">
+                RECOMMEND=#{recommend},
+            </if>
+            <if test="phone != null">
+                PHONE=#{phone},
+            </if>
+
+            <if test="privinceCode != null">
+                PRIVINCE_CODE=#{privinceCode},
+            </if>
+            <if test="cityCode != null">
+                CITY_CODE=#{cityCode},
+            </if>
+            <if test="areaCode != null">
+                AREA_CODE=#{areaCode},
+            </if>
+            <if test="address != null">
+                ADDRESS=#{address},
+            </if>
+            <if test="email != null">
+                EMAIL=#{email},
+            </if>
+
+            <if test="intro != null">
+                INTRO=#{intro},
+            </if>
+            <if test="detailedIntro != null">
+                DETAILED_INTRO=#{detailedIntro},
+            </if>
+            <if test="contact != null">
+                CONTACT=#{contact},
+            </if>
+            <if test="lastModifiedDate != null">
+                LAST_MODIFIED_DATE=#{lastModifiedDate},
+            </if>
+            <if test="lastModifiedBy != null">
+                LAST_MODIFIED_BY=#{lastModifiedBy},
+            </if>
+            <if test="deleted != null">
+                DELETED=#{deleted},
+            </if>
+        </set>
+        where ID=#{id} AND DELETED = 0
+    </update>
+
+
+    <update id="delete" parameterType="long">
+		UPDATE T_STORE SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+
+    <!--批量删除-->
+    <update id="deleteBatch">
+        UPDATE T_STORE SET DELETED = 1 WHERE ID IN
+        <foreach item="id" index="index" collection="array" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--select2 根据名称检索店铺-->
+    <select id="findByName" parameterType="map" resultType="Store">
+        <include refid="support.ph"/>
+        SELECT
+        *
+        FROM
+        T_STORE
+        <where>
+            DELETED = 0
+            <if test="name != null">
+              AND  NAME LIKE #{name}
+            </if>
+        </where>
+
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="findListForMobile" resultType="map">
+        SELECT ID id,NAME name FROM T_STORE WHERE DELETED = 0 ORDER BY ID DESC
+    </select>
+</mapper>

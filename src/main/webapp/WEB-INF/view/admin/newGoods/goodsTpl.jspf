@@ -1,0 +1,22 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- 属性条目 --%>
+<script type="x-tmpl-mustache" id="tpl-goods-item">
+<tr>
+    <th width="25%">
+        <input name="newGoods[{{index}}].id" type="hidden" value="">
+        <input name="newGoods[{{index}}].goods.id" type="hidden" value="{{id}}">
+        <input name="" type="text" disabled value="{{title}}">
+    </th>
+    <th width="25%">
+        <input name=""  type="text" disabled value="{{catName}}">
+    </th>
+    <th width="25%">
+        <input name="newGoods[{{index}}].sort" type="text" class="digits required" value="">
+    </th>
+    <th width="25%">
+        <div class="operateBox"  style="padding-top:4px;">
+            <img src="${ctx}/images/admin/icon-delete01.png" onclick="removeTr(this);" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </th>
+</tr>
+</script>

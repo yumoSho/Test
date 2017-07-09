@@ -1,0 +1,17 @@
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
+<link rel="stylesheet" href="${ctx}/css/pc/normalize.css">
+<link rel="stylesheet" href="${ctx}/css/pc/common.css">
+<link rel="stylesheet" href="${ctx}/css/pc/base.css">
+
+<%--
+<script type="text/javascript" src="${ctx }/js/lib/ueditor/third-party/zeroclipboard/ZeroClipboard.js"></script>
+--%>
+
+<script type="text/javascript" src="${ctx }/js/pc/zero/ZeroClipboard.js"></script>
+
+<script type="text/javascript" src="${ctx}/js/jquery-1.7.2.min.js"></script>
+
+<script src="${ctx}/js/pc/modernizr-2.6.2.min.js"></script>
+<script src="${ctx}/js/jquery.validate.js"></script>
+<script src="${ctx}/js/pc/common.js"></script>
+<script>window.contextPath = "${ctx}"</script>

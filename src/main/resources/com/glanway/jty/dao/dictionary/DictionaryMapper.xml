@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glanway.jty.dao.dictionary.DictionaryDao">
+
+    <resultMap id="DictionaryRM" type="Dictionary">
+        <id property="id" column="ID"/>
+        <result property="superId" column="SUPER_ID"/>
+        <result property="dicCode" column="DIC_CODE"/>
+        <result property="dicName" column="DIC_NAME"/>
+        <result property="remark" column="REMARK"/>
+        <result property="sortNum" column="SORT_NUM"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="lastModifiedBy" column="LAST_MODIFIED_BY"/>
+        <result property="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+        <result property="deleted" column="DELETED"/>
+		<result property="content" column="CONTENT"/>
+    </resultMap>
+
+	<!-- -->
+	<sql id="baseCols">
+		ID,
+		SUPER_ID,
+		DIC_CODE,
+		DIC_NAME,
+		REMARK,
+		SORT_NUM,
+		CREATED_DATE,
+		CREATED_BY,
+		LAST_MODIFIED_DATE,
+		LAST_MODIFIED_BY,
+		DELETED
+	</sql>
+
+	<sql id="baseQuery">
+		SELECT
+		<include refid="baseCols" />
+		FROM
+		T_DICTIONARY
+	</sql>
+
+	<sql id="baseFilter">
+		<if test="id != null">
+			AND ID = #{id}
+		</if>
+		<if test="superId != null">
+			AND SUPER_ID = #{superId}
+		</if>
+		<if test="dicCode != null">
+			AND DIC_CODE = #{dicCode}
+		</if>
+		<if test="dicName != null">
+			AND DIC_NAME = #{dicName}
+		</if>
+		<if test="sortNum != null">
+			AND SORT_NUM = #{sortNum}
+		</if>
+		<if test="remark != null">
+			AND REMARK = #{remark}
+		</if>
+		<if test="createdDate != null">
+			AND CREATED_DATE = #{createdDate}
+		</if>
+		<if test="lastModifiedDate != null">
+			AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+		</if>
+		<if test="createdBy != null">
+			AND CREATED_BY = #{createdBy}
+		</if>
+		<if test="lastModifiedBy != null">
+			AND LAST_MODIFIED_BY = #{lastModifiedBy}
+		</if>
+			AND DELETED = 0
+		<!-- more -->
+	</sql>
+    
+    <!-- 删除 -->
+    <update id="delete" parameterType="Dictionary">
+    	UPDATE T_DICTIONARY SET DELETED = 1 WHERE ID = #{id}
+    </update>
+    
+    <!-- 按id搜索 -->
+    <select id="find" parameterType="long" resultType="Dictionary">
+    	SELECT 
+    		ID,
+			SUPER_ID,
+			DIC_CODE,
+			DIC_NAME,
+			REMARK,
+			SORT_NUM,
+			CREATED_DATE,
+			CONTENT
+    	FROM 
+    		T_DICTIONARY WHERE ID = #{id} AND DELETED = 0
+    </select>
+    
+    <!-- 根据superId搜索字典列表 -->
+    <select id="findBySuperId" parameterType="long" resultMap="DictionaryRM">
+    	SELECT 
+    		ID,
+			SUPER_ID,
+			DIC_CODE,
+			DIC_NAME,
+			REMARK,
+			SORT_NUM,
+			CREATED_DATE
+    	FROM 
+    		T_DICTIONARY WHERE SUPER_ID = #{superId} AND DELETED = 0
+    </select>
+    
+    <!-- 根据父类编码查询子类字典列表 -->
+    <select id="findBySuperDicCode" parameterType="string" resultMap="DictionaryRM">
+    	SELECT
+		    C.ID,
+		    C.SUPER_ID,
+		    C.DIC_CODE,
+		    C.DIC_NAME,
+		    C.REMARK,
+		    C.SORT_NUM,
+		    C.CREATED_DATE,
+		    C.CREATED_BY,
+		    C.LAST_MODIFIED_DATE,
+		    C.LAST_MODIFIED_BY,
+		    C.DELETED
+		FROM
+		    T_DICTIONARY S
+		JOIN
+		    T_DICTIONARY C
+		ON  C.SUPER_ID = S.ID
+		WHERE 
+			S.DIC_CODE = #{dicCode}
+		AND C.DELETED = 0
+    </select>
+
+
+	<!-- retrieve many entities -->
+	<select id="findMany" parameterType="map" resultMap="DictionaryRM">
+		SELECT
+			ID,
+			SUPER_ID,
+			DIC_CODE,
+			DIC_NAME,
+			REMARK,
+			SORT_NUM,
+			CREATED_DATE,
+			CREATED_BY,
+			LAST_MODIFIED_DATE,
+			LAST_MODIFIED_BY,
+			DELETED
+		FROM
+			T_DICTIONARY
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+
+	<!-- count -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM T_DICTIONARY
+		<where>
+			<include refid="support.dynamicFilters"/>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+	<!-- - - - - - - - - - - Create - - - - - - - - - -->
+
+	<insert id="save" parameterType="Dictionary">
+		INSERT INTO T_DICTIONARY (
+			SUPER_ID,
+			DIC_CODE,
+			DIC_NAME,
+			REMARK,
+			SORT_NUM,
+			CREATED_DATE,
+			CREATED_BY,
+			DELETED
+		) VALUES (
+			#{superId},
+			#{dicCode},
+			#{dicName},
+			#{remark},
+			#{sortNum},
+			#{createdDate},
+			#{createdBy},
+			#{deleted}
+		)
+	</insert>
+
+	<!-- - - - - - - - - - - - Update - - - - - - - - - -->
+
+	<update id="update" parameterType="Dictionary">
+		UPDATE T_DICTIONARY
+		<set>
+			<if test="dicCode != null">
+				DIC_CODE = #{dicCode},
+			</if>
+			<if test="dicName != null">
+				DIC_NAME = #{dicName},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark},
+			</if>
+			<if test="superId != null">
+				SUPER_ID = #{superId},
+			</if>
+			<if test="createdDate != null">
+				CREATED_DATE = #{createdDate},
+			</if>
+			<if test="lastModifiedDate != null">
+				LAST_MODIFIED_DATE = #{lastModifiedDate},
+			</if>
+			<if test="createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test="lastModifiedBy != null">
+				LAST_MODIFIED_BY = #{lastModifiedBy},
+			</if>
+			<if test="deleted != null">
+				DELETED = #{deleted},
+			</if>
+			<if test="content != null">
+				CONTENT = #{content}
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+
+	<select id="listFindMany" parameterType="map" resultMap="DictionaryRM">
+		SELECT
+			ID,		
+			SUPER_ID,	
+			DIC_CODE,	
+			DIC_NAME,
+			REMARK,	
+			SORT_NUM,	
+			CREATED_DATE
+		FROM
+			T_DICTIONARY
+		<where>
+			<include refid="baseFilter" />
+		</where>
+	</select>
+
+	<select id="findOne" parameterType="map" resultMap="DictionaryRM">
+		SELECT
+		R.*
+		FROM
+		T_DICTIONARY R
+		<where>
+			<include refid="baseFilter"/>
+		</where>
+	</select>
+
+</mapper>

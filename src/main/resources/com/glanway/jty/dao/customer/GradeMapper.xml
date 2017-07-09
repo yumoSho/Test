@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glanway.jty.dao.customer.GradeDao">
+    <resultMap id="gradeMap" type="Grade" autoMapping="true">
+        <id column="ID" property="id"></id>
+        <collection property="details" ofType="GradeDetail" column="id" select="findDetailByGradeId" />
+    </resultMap>
+
+    <select id="find" parameterType="long" resultMap="gradeMap">
+        SELECT
+        M.*
+        FROM
+          T_GRADE M
+        WHERE M.DELETED = 0
+        AND M.ID = #{id}
+    </select>
+
+
+
+    <select id="findMany" parameterType="map" resultType="Grade">
+        <include refid="support.ph"/>
+        SELECT * FROM
+        T_GRADE M
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND M.DELETED = 0
+        </where>
+        <if test="_sort != null">
+            ORDER BY
+            <trim prefixOverrides=",">
+                <include refid="support.dynamicSort"/>
+            </trim>
+        </if>
+        <include refid="support.pf"/>
+
+    </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM
+        T_GRADE M
+        <where>
+            <include refid="support.dynamicFilters"/>
+            AND M.DELETED = 0
+        </where>
+
+    </select>
+
+    <insert id="save" parameterType="Grade" useGeneratedKeys="true" keyProperty="id">
+		insert into T_GRADE(ID,NAME,CREATED_BY,CREATED_DATE,LAST_MODIFIED_BY,LAST_MODIFIED_DATE,DELETED)
+ values(#{id},#{name},#{createdBy},NOW(),#{lastModifiedBy},#{lastModifiedDate},0)
+	</insert>
+
+    <update id="update" parameterType="Grade">
+        update T_GRADE
+        <set>
+            <if test="name != null">
+                NAME=#{name},
+            </if>
+            <if test="deleted != null">
+                DELETED = #{deleted},
+            </if>
+        </set>
+        where ID=#{id} AND DELETED = 0
+    </update>
+
+    <update id="delete" parameterType="long">
+		UPDATE T_GRADE SET DELETED = 1 WHERE ID = #{id}
+	</update>
+
+    <select id="findDetailByGradeId" parameterType="long" resultType="GradeDetail">
+        SELECT * FROM T_GRADE_DETAIL WHERE GRADE_ID = #{id}
+    </select>
+</mapper>

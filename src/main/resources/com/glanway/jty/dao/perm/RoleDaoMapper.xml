@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.glanway.jty.dao.perm.RoleDao">
+
+	<sql id="baseFilter">
+        <if test="name != null">
+            AND NAME = #{name}
+        </if>
+        <if test="remark != null">
+            AND REMARK = #{remark}
+        </if>
+        <if test="createdBy != null">
+            AND CREATED_BY = #{createdBy}
+        </if>
+        <if test="createdDate != null">
+            AND CREATED_DATE = #{createdDate}
+        </if>
+        <if test="lastModifiedBy != null">
+            AND LAST_MODIFIED_BY = #{lastModifiedBy}
+        </if>
+        <if test="lastModifiedDate != null">
+            AND LAST_MODIFIED_DATE = #{lastModifiedDate}
+        </if>
+        AND DELETED = 0
+    </sql>
+    
+    <sql id="roleToPageCols">
+        ID,
+        ROLE_ID,
+        PAGE_ID,
+        DELETED,
+        CREATED_BY,
+        CREATED_DATE
+    </sql>
+
+	<select id="findAll" resultType="Role">
+    	SELECT * FROM T_ROLE WHERE DELETED = 0 ORDER BY CREATED_DATE DESC
+    </select>
+
+    <!--添加角色时,保存其权限信息-->
+    <insert id="saveRoleToPage" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_ROLE_PAGE(
+          <include refid="roleToPageCols"/>
+        )VALUES(
+          #{id},
+          #{roleId},
+          #{pageId},
+          #{deleted},
+          #{createdBy},
+          #{createdDate}
+        )
+    </insert>
+    
+    <insert id="save" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO T_ROLE(ID,NAME,REMARK,DELETED,CREATED_DATE,CREATED_BY)
+         VALUES(
+          	#{id},
+	    	#{name},
+	    	#{remark},
+	    	#{deleted},
+            NOW(),
+	    	#{createdBy}
+        )
+    </insert>
+ 
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        T_ROLE
+        <where>
+            <trim prefixOverrides="AND">
+           		<include refid="support.dynamicFilters"/>
+           		<include refid="baseFilter"/>
+            </trim>
+        </where>
+    </select>
+    
+    <select id="findMany" parameterType="map" resultType="Role">
+    	<include refid="support.ph"/>
+        	SELECT * FROM T_ROLE 
+        	<where>
+               <trim prefixOverrides="AND">
+               		<include refid="support.dynamicFilters"/>
+               		<include refid="baseFilter"/>
+               </trim>
+            </where>
+            ORDER BY
+	        <trim prefixOverrides=",">
+	            <include refid="support.dynamicSort"/>
+	        </trim>
+        <include refid="support.pf"/>
+        
+    </select>
+    
+    <select id="find" parameterType="long" resultType="Role">
+    	SELECT * FROM T_ROLE WHERE ID = #{id} AND DELETED = 0 
+    </select>
+    
+    <update id="delete" parameterType="Role">
+    	UPDATE T_ROLE SET DELETED = 1 WHERE ID = #{id}
+    </update>
+    
+    <select id="getBaseRole" parameterType="string" resultType="Role">
+    	SELECT * FROM T_ROLE WHERE NAME = #{name} AND DELETED = 0
+    </select>
+    
+    <update id="update" parameterType="Role">
+    	UPDATE T_ROLE SET 
+	    	NAME = #{name},
+	    	REMARK = #{remark},
+	    	LAST_MODIFIED_DATE = NOW(),
+	    	LAST_MODIFIED_BY = #{lastModifiedBy}
+	    WHERE ID = #{id}
+    </update>
+
+    <!--根据角色id 删除 角色- 页面 对应关系-->
+    <update id="deleteByRoleId" parameterType="long">
+    	DELETE FROM T_ROLE_PAGE WHERE ROLE_ID = #{roleId}
+    </update>
+
+    <!--根据角色id删除 用户-角色对应关系-->
+    <update id="deleteUserRoleByRoleId" parameterType="long">
+        DELETE FROM T_USER_ROLE WHERE ROLE_ID = #{roleId}
+    </update>
+</mapper>

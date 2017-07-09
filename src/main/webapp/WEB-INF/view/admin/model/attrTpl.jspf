@@ -1,0 +1,131 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- 属性条目 --%>
+<script type="x-tmpl-mustache" id="tpl-attr-item">
+<tr>
+    <td valign="top">
+        <input type="text" name="attributes[{{index}}].name" class="required repeatAttrValidate attr" maxlength="5">
+    </td>
+    <td valign="top">
+        <input type="text" name="attributes[{{index}}].alias" >
+    </td>
+    <td valign="top">
+        <select name="attributes[{{index}}].displayType" style="width: 100%;">
+            <option value="0">选择</option>
+            <option value="1" selected>文本</option>
+            <option value="2">区间</option>
+        </select>
+    </td>
+    <td valign="top" style="text-align:left;">
+        <input type="hidden" name="attributes[{{attrIndex}}].attributeValues[0].id">
+        <input type="hidden" name="attributes[{{attrIndex}}].attributeValues[0].value" style="width:120px;">
+    </td>
+    <td valign="top">
+        <span class="spinner">
+            <input type="text" name="attributes[{{index}}].sort" class="required digits" max="999">
+            <span class="spin-buttons">
+                <span class="btn-up"></span>
+                <span class="btn-down"></span>
+            </span>
+        </span>
+    </td>
+    <td valign="top">
+        <select name="attributes[{{index}}].visible" style="width: 100%;">
+            <option value="1">可见</option>
+            <option value="0">隐藏</option>
+        </select>
+    </td>
+    <td valign="top">
+        <div class="operateBox" >
+            <img src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </td>
+</tr>
+</script>
+<%-- 属性值 文本 --%>
+<script type="x-tmpl-mustache" id="tpl-attr-val-text">
+    <input type="hidden" name="attributes[{{attrIndex}}].attributeValues[0].id">
+    <input type="hidden" name="attributes[{{attrIndex}}].attributeValues[0].value" style="width:120px;">
+</script>
+<%-- 属性值 选择 --%>
+<script type="x-tmpl-mustache" id="tpl-attr-val-sel">
+<select size="999999" style="width: 142px; height: 50px;"></select>
+<button type="button" class="btn-sure" data-act="edit-s" style="display:block;margin-top:10px;">编辑</button>
+</script>
+<%-- 属性选择对话框 --%>
+<script type="x-tmpl-mustache" id="tpl-sel-dlg">
+<div style="padding: 10px;">
+    <button type="button" class="btn-sure">添加值</button>
+    <table class="table-module01 table-module02">
+        <thead>
+            <tr>
+                <th>选项值</th>
+                <th>排序</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</script>
+<%-- --%>
+<script type="x-tmpl-mustache" id="tpl-sel-dlg-item">
+<tr>
+    <td>
+        <input type="hidden" name="attributes[{{attrIndex}}].attributeValues[{{index}}].id" value="{{id}}">
+        <input type="text" name="attributes[{{attrIndex}}].attributeValues[{{index}}].value" class="required" value="{{value}}">
+        <span class="valueError" style="color:red;display:none">该项为必填项</span>
+    </td>
+    <td><input type="text" name="attributes[{{attrIndex}}].attributeValues[{{index}}].sort" class="required digits" value={{sort}}><span class="sortError" style="color:red;display:none">请填写合法的排序值</span></td>
+    <td>
+        <div class="operateBox">
+            <img src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </td>
+</tr>
+</script>
+<%-- 属性值 区间 --%>
+<script type="x-tmpl-mustache" id="tpl-attr-val-range">
+<select size="999999" style="width: 142px; height: 50px;"></select>
+<button type="button" class="btn-sure" data-act="edit-r" style="display:block;margin-top:10px;">编辑</button>
+</script>
+<%-- 属性值 区间编辑对话框 --%>
+<script type="x-tmpl-mustache" id="tpl-range-dlg">
+<div data-options="closed: true">
+    <button type="button" class="btn-sure">添加Value</button>
+    <table class="table-module01 table-module02">
+        <thead>
+            <tr>
+                <th>最小值</th>
+                <th>最大值</th>
+                <th>排序</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</script>
+<script type="x-tmpl-mustache" id="tpl-range-dlg-item">
+ <tr>
+    <td>
+        <input type="hidden" name="attributes[{{attrIndex}}].attributeValues[{{index}}].id" value="{{id}}">
+        <input type="text" style="width:auto" name="attributes[{{attrIndex}}].attributeValues[{{index}}].firstValue" class="required" value="{{firstValue}}">
+        <span class="error" style="color:red;display:none">请填写此区间值</span>
+        <input type="hidden" class="value" name="attributes[{{attrIndex}}].attributeValues[{{index}}].value" value="{{value}}">
+    </td>
+    <td>
+        <input type="text" style="width:auto" name="attributes[{{attrIndex}}].attributeValues[{{index}}].secondValue" class="required" value="{{secondValue}}">
+        <span class="error" style="color:red;display:none">请填写此区间值</span>
+    </td>
+    <td>
+        <input type="text" style="width:auto" name="attributes[{{attrIndex}}].attributeValues[{{index}}].sort" class="required digits" value="{{sort}}">
+        <span style="color:red;display:none" class="error">请填写正确的排序</span></td>
+    <td>
+        <div class="operateBox">
+            <img src="${ctx}/images/admin/icon-delete01.png" width="15" height="15" title="Delete" alt="Delete">
+        </div>
+    </td>
+</tr>
+</script>
