@@ -159,7 +159,7 @@
 		<httpclient.version>3.1</httpclient.version>
 		<bean.validation.version>1.1.0.Final</bean.validation.version>
 		<solr.version>4.10.0</solr.version>
-		<quartz.version>2.2.1</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
         <zxing.version>3.2.1</zxing.version>
 		<ponly.version>0.1-SNAPSHOT</ponly.version>
 
