@@ -154,7 +154,7 @@
 		<!-- junit -->
 		<junit.version>4.11</junit.version>
 		<jsoup.version>1.8.2</jsoup.version>
-		<h2.version>1.4.177</h2.version>
+		<h2.version>2.1.210</h2.version>
 		<poi.version>3.9</poi.version>
 		<httpclient.version>3.1</httpclient.version>
 		<bean.validation.version>1.1.0.Final</bean.validation.version>
