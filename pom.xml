@@ -125,7 +125,7 @@
 		<!-- aop -->
 		<aspectj.version>1.7.2</aspectj.version>
 		<!-- spring -->
-		<spring.version>4.1.4.RELEASE</spring.version>
+		<spring.version>5.3.19</spring.version>
 		<!-- mybatis -->
 		<mybatis.version>3.2.8</mybatis.version>
 		<mybatis.spring.version>1.2.2</mybatis.spring.version>
